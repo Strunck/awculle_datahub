@@ -1,0 +1,72 @@
+package view
+
+import (    
+	"strunck/awculle_datahub/globals"
+    "fmt"
+	"github.com/starfederation/datastar-go/datastar"
+	
+)
+
+//<!-- <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"></script> -->
+templ Base(gs *globals.GlobalState) {
+
+<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ gs.Cfg.Plc.Base + "-UV4 v" + gs.Stats.Version }</title>            
+            <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js"></script>
+            <link rel="stylesheet" href="/middleware/assets/uv4.css">
+		</head>
+		<body>
+			{ children... }
+		</body>
+	</html>
+
+}
+
+templ Layout(gs *globals.GlobalState) {
+    @Base(gs) {    
+        <main>
+            <h1>Middleware Di Datahub {gs.Stats.Version}</h1>
+            <br>                        
+            <hr> what
+            @LinksToRouteTo()
+            <hr>
+            <h3>JSON Signals</h3>
+            <pre data-json-signals></pre>
+            <hr>
+            <div data-init={ datastar.GetSSE("/middleware/ds/latestmsg") }>
+                <h3>Nats Messages</h3>
+                <h5>Session Name {gs.SessionName}</h5>
+                <p>
+                    <code id=nats-latest-string >Latest NATS message: xxxxxxxxxxx </code>
+                </p>
+            </div>
+            <hr>
+            <hr>
+                @ShowSymbolDev("R01", "BA", "Temp")
+            <br>
+    </main>
+    }
+}
+
+templ ServerTime(t string) {
+
+    <div>Server time: { t }</div>
+    
+}
+
+
+
+templ ShowSymbolDev(scope string, grp string, sym string){
+    {{ id := fmt.Sprintf("%s-%s-%s", scope, grp, sym) }}    
+    <div >
+        <h3>Symbol Info</h3>
+        <button data-on:click={ fmt.Sprintf("@get('/middleware/ds/%s')", id) }>{ id }</button>
+        <p>
+            <code id={ id }>🚀🚀🚀</code>
+        </p>
+    </div>
+}

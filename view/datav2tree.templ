@@ -1,0 +1,15 @@
+package view
+
+import (    
+    "strunck/awculle_datahub/globals"
+)
+
+templ DataV2Tree(gs *globals.GlobalState, scope string, group string, short string) {
+    <div>
+        <h2>Data V2 Tree View</h2>
+        <p>Scope: { scope }</p>
+        <p>Group: { group }</p>
+        <p>Short: { short }</p>
+        <div id="data-v2-tree" data-datav2-tree="{scope}|{group}|{short}"></div>
+    </div>
+}

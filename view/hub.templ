@@ -1,0 +1,17 @@
+package view
+
+import (
+    "strunck/awculle_datahub/initialize"
+)
+
+var loc = "Entwicklung"
+
+templ ShowHub(cfg *initialize.Config) {
+
+    <div>
+        <h2>Hub</h2>
+        <p>Connected to OPC UA Server at { loc }</p>
+        <div id="server-time"></div>
+    </div>
+
+}

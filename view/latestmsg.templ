@@ -1,0 +1,19 @@
+package view
+
+type LatestNatsMessage struct {
+    Subject string
+    Data    string
+}
+
+templ LatestNatsMessages(messages []LatestNatsMessage ) {
+    <div id=nats-latest-string >        
+        <code>
+            for _, msg := range messages {
+             
+                    <strong>{ msg.Subject }</strong>: { msg.Data } <br>
+             
+            }
+        </code>
+    </div>
+   
+}

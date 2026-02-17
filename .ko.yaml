@@ -1,0 +1,10 @@
+defaultPlatforms:
+- linux/arm64
+- linux/amd64
+
+builds:
+- id: uv4-middleware  
+  dir: .
+  main: ./cmd/entrypoint/main.go
+  tags:
+  - strunck/uv4-middleware:0.0.25

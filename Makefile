@@ -9,7 +9,7 @@ templ:
 run:
 	KO_DATA_PATH=kodata \
 	go run -ldflags="-X 'main.Version=${VERSION}'" \
-	main.go
+	cmd/entrypoint/main.go
 
 dev: 
 	@zsh ./devContainer.sh $(VERSION)
@@ -22,14 +22,14 @@ ko: systemctl
 	KO_DOCKER_REPO=${KO_DOCKER_REPO} \
 	DATA_PATH=kodata \
 	GOFLAGS="-ldflags=-X=main.Version=${VERSION}" \
-	ko build --local -B .
+	ko build --local -B cmd/entrypoint
 
 koarm: systemctl
 	DOCKER_HOST=unix:///run/user/1000/podman/podman.sock \
 	KO_DOCKER_REPO=${KO_DOCKER_REPO} \
 	DATA_PATH=kodata \
 	GOFLAGS="-ldflags=-X=main.Version=${VERSION}" \
-	ko build --local -B --platform=linux/arm64 --tags=arm64 .
+	ko build --local -B --platform=linux/arm64 --tags=arm64 cmd/entrypoint
 
 login:
 	podman login docker.io	
@@ -45,6 +45,10 @@ release: koarm ko
 
 vet:
 	go vet ./...
+
+kacke: 
+	KO_DOCKER_REPO=${KO_DOCKER_REPO} ko build
+
 
 all: templ vet run
 

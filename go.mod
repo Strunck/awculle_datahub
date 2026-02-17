@@ -1,9 +1,9 @@
-module strunck/awculle_datahub
+module strunck/uv4-middleware
 
 go 1.24.7
 
 require (
-	github.com/a-h/templ v0.3.960
+	github.com/a-h/templ v0.3.977
 	github.com/awcullen/opcua v1.4.0
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/go-co-op/gocron/v2 v2.17.0

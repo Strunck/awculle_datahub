@@ -22,14 +22,14 @@ ko: systemctl
 	KO_DOCKER_REPO=${KO_DOCKER_REPO} \
 	DATA_PATH=kodata \
 	GOFLAGS="-ldflags=-X=main.Version=${VERSION}" \
-	ko build --local -B cmd/entrypoint
+	ko build --local -B 
 
 koarm: systemctl
 	DOCKER_HOST=unix:///run/user/1000/podman/podman.sock \
 	KO_DOCKER_REPO=${KO_DOCKER_REPO} \
 	DATA_PATH=kodata \
 	GOFLAGS="-ldflags=-X=main.Version=${VERSION}" \
-	ko build --local -B --platform=linux/arm64 --tags=arm64 cmd/entrypoint
+	ko build --local -B --platform=linux/arm64 --tags=arm64 
 
 login:
 	podman login docker.io	
@@ -39,16 +39,11 @@ systemctl:
 
 release: koarm ko
 	buildah manifest create ${FNAME}:$(VERSION)
-	buildah manifest add ${FNAME}:$(VERSION) ${KO_DOCKER_REPO}/${GNAME}:arm64
-	buildah manifest add ${FNAME}:$(VERSION) ${KO_DOCKER_REPO}/${GNAME}:latest
+	buildah manifest add ${FNAME}:$(VERSION) ${KO_DOCKER_REPO}/${FNAME}:arm64
+	buildah manifest add ${FNAME}:$(VERSION) ${KO_DOCKER_REPO}/${FNAME}:latest
 	buildah manifest push --all --rm ${FNAME}:$(VERSION) docker://docker.io/strunck/${FNAME}:$(VERSION)
 
 vet:
 	go vet ./...
 
-kacke: 
-	KO_DOCKER_REPO=${KO_DOCKER_REPO} ko build
-
-
 all: templ vet run
-

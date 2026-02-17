@@ -3,7 +3,7 @@ package web
 import (
 	"log"
 	"net/http"
-	"strunck/awculle_datahub/initialize"
+	"strunck/uv4-middleware/initialize"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"

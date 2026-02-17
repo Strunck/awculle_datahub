@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 	"github.com/starfederation/datastar-go/datastar"
-	"strunck/awculle_datahub/globals"
+	"strunck/uv4-middleware/globals"
 )
 
 // <!-- <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"></script> -->

@@ -6,8 +6,8 @@ package web
 import (
 	"log"
 	"net/http"
-	"strunck/awculle_datahub/globals"
-	"strunck/awculle_datahub/initialize"
+	"strunck/uv4-middleware/globals"
+	"strunck/uv4-middleware/initialize"
 	"time"
 
 	"github.com/gorilla/websocket"

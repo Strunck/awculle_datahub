@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"strunck/awculle_datahub/globals"
+	"strunck/uv4-middleware/globals"
 )
 
 func DataV2Tree(gs *globals.GlobalState, scope string, group string, short string) templ.Component {

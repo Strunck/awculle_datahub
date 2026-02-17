@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strunck/awculle_datahub/globals"
-	"strunck/awculle_datahub/view"
+	"strunck/uv4-middleware/globals"
+	"strunck/uv4-middleware/view"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/nats-io/nats.go"

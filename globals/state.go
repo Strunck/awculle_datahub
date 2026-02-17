@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"strunck/awculle_datahub/initialize"
+	"strunck/uv4-middleware/initialize"
 
 	"github.com/awcullen/opcua/client"
 	"github.com/nats-io/nats.go"
@@ -110,7 +110,7 @@ func (gs GlobalState) printState() {
 
 	case RETRY_WAIT:
 		log.Println("RETRY_WAIT")
-	
+
 	default:
 		log.Println("UNKNOWN")
 	}

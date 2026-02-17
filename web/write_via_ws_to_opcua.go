@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"strunck/awculle_datahub/globals"
+	"strunck/uv4-middleware/globals"
 
 	"github.com/awcullen/opcua/ua"
 )

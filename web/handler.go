@@ -3,9 +3,9 @@ package web
 import (
 	"encoding/json"
 	"net/http"
-	"strunck/awculle_datahub/globals"
-	"strunck/awculle_datahub/initialize"
-	"strunck/awculle_datahub/view"
+	"strunck/uv4-middleware/globals"
+	"strunck/uv4-middleware/initialize"
+	"strunck/uv4-middleware/view"
 	"time"
 )
 

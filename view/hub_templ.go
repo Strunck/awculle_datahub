@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"strunck/awculle_datahub/initialize"
+	"strunck/uv4-middleware/initialize"
 )
 
 var loc = "Entwicklung"

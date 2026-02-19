@@ -36,9 +36,9 @@ func (gs *GlobalState) InitTelegramBot() (err error) {
 		return err
 	}
 	gs.Telegram.Bot.Debug = true
-	log.Printf("Authorized on account %s", gs.Telegram.Bot.Self.UserName)
+	log.Printf("📨 Authorized on account %s 📨", gs.Telegram.Bot.Self.UserName)
 
-	log.Println("📨 Telegram Bot initialized")
+	log.Println("📨 Telegram Bot initialized 📨")
 
 	// Test the preconfigured ChatID
 	txt := fmt.Sprintf("📨 Middleware gestartet. Site: %s - SPS: %s", gs.Cfg.Plc.Base, gs.Cfg.Plc.IPAddress)

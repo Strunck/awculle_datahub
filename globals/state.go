@@ -73,7 +73,7 @@ func (gs *GlobalState) SetState(state LoopState) {
 func (gs GlobalState) printState() {
 	switch gs.Loop {
 	case INIT_STATE:
-		log.Println("🥅 INIT_STATE")
+		log.Println("🥅 INIT_STATE 🥅")
 	case SETUP_ENV:
 		log.Println("🪬 SETUP_ENV 🪬")
 	case SETUP_FILES:
@@ -87,32 +87,32 @@ func (gs GlobalState) printState() {
 		log.Println("💢 DISCONNECTED 💢")
 
 	case INIT_CLIENT:
-		log.Println("INIT_CLIENT")
+		log.Println("🥅 INIT_CLIENT")
 	case PLC_CONFIG_READ:
-		log.Println("PLC_CONFIG_READ")
+		log.Println("🪑 PLC_CONFIG_READ 🪑")
 	case PLC_CONFIG_ALARMS:
-		log.Println("PLC_CONFIG_ALARMS")
+		log.Println("🪑 PLC_CONFIG_ALARMS 🪑")
 	case PLC_CONFIG_DONE:
-		log.Println("PLC_CONFIG_DONE")
+		log.Println("🪑 PLC_CONFIG_DONE 🪑")
 	case SETUP_DONE:
 		log.Println("🥅 SETUP_DONE 🥅")
 
 	case REQ_MONITORING:
-		log.Println("REQ_MONITORING")
+		log.Println("👀 REQ_MONITORING 👀")
 	case MONITORING:
-		log.Println("MONITORING")
+		log.Println("👀 MONITORING 👀")
 
 	case SHUTDOWN:
-		log.Println("SHUTDOWN")
+		log.Println("💀 SHUTDOWN 💀")
 
 	case RETRY:
-		log.Println("RETRY")
+		log.Println("🔄 RETRY 🔄")
 
 	case RETRY_WAIT:
-		log.Println("RETRY_WAIT")
+		log.Println("⏳ RETRY_WAIT ⏳")
 
 	default:
-		log.Println("UNKNOWN")
+		log.Println("❓ UNKNOWN ❓")
 	}
 }
 

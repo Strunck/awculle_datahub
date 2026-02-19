@@ -1,6 +1,5 @@
-VERSION := 0.0.25
+VERSION := 0.0.26
 FNAME := uv4-middleware
-GNAME := awculle_datahub
 KO_DOCKER_REPO := strunck
 
 templ:

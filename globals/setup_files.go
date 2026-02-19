@@ -1,4 +1,4 @@
-package initialize
+package globals
 
 import (
 	"encoding/json"
@@ -11,10 +11,10 @@ import (
 )
 
 // 🪑
-func SetupFiles(cfg *Config) (err error) {
+func (gs *GlobalState) SetupFiles() (err error) {
 
-	settingsFileName := cfg.KoDataPath + "/" + cfg.SettingsFile
-	symbolConfigFileName := cfg.KoDataPath + "/" + cfg.Opcua.XmlFileName
+	settingsFileName := gs.Cfg.KoDataPath + "/" + gs.Cfg.SettingsFile
+	symbolConfigFileName := gs.Cfg.KoDataPath + "/" + gs.Cfg.Opcua.XmlFileName
 
 	//settings.json
 	fs, err := os.ReadFile(settingsFileName)
@@ -23,17 +23,17 @@ func SetupFiles(cfg *Config) (err error) {
 		return fmt.Errorf("🪑 failed to read file %s: %w", settingsFileName, err)
 	}
 
-	if err := json.Unmarshal(fs, &cfg); err != nil {
+	if err := json.Unmarshal(fs, &gs.Cfg); err != nil {
 		return fmt.Errorf("🪑 failed to unmarshal file %s: %w", settingsFileName, err)
 	}
 
 	// Load Codesys Symbolkonfiguration
-	if err := cfg.Opcua.Symbole.parse(symbolConfigFileName); err != nil {
+	if err := gs.Cfg.Opcua.Symbole.parse(symbolConfigFileName); err != nil {
 		return fmt.Errorf("🪑 Konnte Symbolkonfiguration nicht parsen %w", err)
 	}
 
 	// Parse XML-Nodes, that are relevant for the HMI
-	for _, grp_node := range cfg.Opcua.Symbole.NodeList.Node.Node {
+	for _, grp_node := range gs.Cfg.Opcua.Symbole.NodeList.Node.Node {
 		//log.Printf("🪑 DEBUG Gruppe: %s\t%s\n", grp_node.Name, grp_node.Comment)
 
 		// Statistik über die Anzahl der Knoten in der Gruppe
@@ -55,9 +55,9 @@ func SetupFiles(cfg *Config) (err error) {
 
 			// if c.Group is in config.Nats.GroupIds.
 			// if there is comment that does not start with "#short=" -> ignore this node
-			if contains(cfg.Nats.GroupIds, comment.Group) && len(comment.Short) > 0 {
+			if contains(gs.Cfg.Nats.GroupIds, comment.Group) && len(comment.Short) > 0 {
 
-				so := fmt.Sprintf("%s%s.%s", cfg.Opcua.Prefix, comment.Group, comment.CDName)
+				so := fmt.Sprintf("%s%s.%s", gs.Cfg.Opcua.Prefix, comment.Group, comment.CDName)
 				natstopic_lastpart := fmt.Sprintf("%s.%s", comment.Group, comment.Short)
 
 				top := OPCtopic{
@@ -78,15 +78,15 @@ func SetupFiles(cfg *Config) (err error) {
 					Descr:     comment.Descr,
 				}
 
-				cfg.Nats.Topics = append(cfg.Nats.Topics, top)
+				gs.Cfg.Nats.Topics = append(gs.Cfg.Nats.Topics, top)
 				grp.Count++ // Statistik for Debug, How many Nodes in this group
 			}
 		}
-		cfg.Plc.Stats.Group = append(cfg.Plc.Stats.Group, grp)
+		gs.Cfg.Plc.Stats.Group = append(gs.Cfg.Plc.Stats.Group, grp)
 	}
 
 	// Make a map of metrics name to setting
-	if err := cfg.makeMetricMap(); err != nil {
+	if err := gs.Cfg.makeMetricMap(); err != nil {
 		return fmt.Errorf("🪑 error creating metric map: %w", err)
 	}
 

@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"log"
 
-	"strunck/uv4-middleware/initialize"
-
 	"github.com/awcullen/opcua/client"
 	"github.com/nats-io/nats.go"
 )
@@ -16,7 +14,7 @@ type GlobalState struct {
 	OpcClient   *client.Client
 	Loop        LoopState
 	SessionName string
-	Cfg         initialize.Config
+	Cfg         Config
 	NatsClient  *nats.Conn
 	Plc         PlcState
 	DataV2      DataV2

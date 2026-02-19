@@ -1,4 +1,4 @@
-package initialize
+package globals
 
 import (
 	"encoding/xml"

@@ -1,4 +1,4 @@
-package initialize
+package globals
 
 import (
 	"encoding/json"
@@ -49,7 +49,7 @@ type PlcConfig struct {
 	IPAddress   string                      `json:"IPAddress"`   // IP Address of the PLC
 	OpcUaPort   string                      `json:"OpcPort"`     // Port of the OPCUA server on the PLC, usually 4840
 	DimMap      map[string]DimScopeArray    `json:"DimMap"`      // DimMap is used to map the dimension of the array to the scope of the plc program loop
-	Stats       Stats                       `json:"Stats"`       // How many node id get processed, helps to debug
+	Stats       StatsSub                    `json:"Stats"`       // How many node id get processed, helps to debug
 	Konfig      map[string]any              `json:"Konfig"`      // Konfig is used to configure the plc program loop
 	Tmp         []string                    `json:"Tmp"`         // Can I delete this?
 	SWSettings  SWSettings                  `json:"SWSettings"`  // SWSettings is needed for the frontend to start
@@ -150,7 +150,7 @@ func (cfg *Config) ToJson() []byte {
 	return res
 }
 
-type Stats struct {
+type StatsSub struct {
 	TotalSubcriptions uint32
 	Group             []Group
 }

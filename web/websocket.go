@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"strunck/uv4-middleware/globals"
-	"strunck/uv4-middleware/initialize"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -56,7 +55,7 @@ func WSPathAlarms(gs *globals.GlobalState) http.HandlerFunc {
 		ticker := time.NewTicker(2 * time.Second)
 		defer ticker.Stop()
 
-		alarmList := make([]initialize.Alarm, 0)
+		alarmList := make([]globals.Alarm, 0)
 		var count int = 0
 		for _, one := range gs.Alarms.Actual {
 			count++

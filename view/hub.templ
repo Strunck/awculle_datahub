@@ -1,12 +1,12 @@
 package view
 
 import (
-    "strunck/uv4-middleware/initialize"
-)
+    "strunck/uv4-middleware/globals"
+)   
 
 var loc = "Entwicklung"
 
-templ ShowHub(cfg *initialize.Config) {
+templ ShowHub(gs *globals.GlobalState) {
 
     <div>
         <h2>Hub</h2>

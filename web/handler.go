@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"strunck/uv4-middleware/globals"
-	"strunck/uv4-middleware/initialize"
 	"strunck/uv4-middleware/view"
 	"time"
 )
@@ -35,17 +34,17 @@ func PathStats(gs *globals.GlobalState) http.HandlerFunc {
 }
 
 // Path /setup
-func PathSetup(cfg *initialize.Config) http.HandlerFunc {
+func PathSetup(gs *globals.GlobalState) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(cfg.ToJson())
+		w.Write(gs.Cfg.ToJson())
 	}
 }
 
-func PathSWSettings(cfg *initialize.Config) http.HandlerFunc {
+func PathSWSettings(gs *globals.GlobalState) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		j, err := json.Marshal(cfg.Plc.SWSettings)
+		j, err := json.Marshal(gs.Cfg.Plc.SWSettings)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -54,11 +53,11 @@ func PathSWSettings(cfg *initialize.Config) http.HandlerFunc {
 	}
 }
 
-func PathKonfig(cfg *initialize.Config) http.HandlerFunc {
+func PathKonfig(gs *globals.GlobalState) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		j, err := json.Marshal(cfg.Plc.Konfig)
+		j, err := json.Marshal(gs.Cfg.Plc.Konfig)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -67,9 +66,9 @@ func PathKonfig(cfg *initialize.Config) http.HandlerFunc {
 	}
 }
 
-func PathHub(cfg *initialize.Config) http.HandlerFunc {
+func PathHub(gs *globals.GlobalState) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		view.ShowHub(cfg).Render(r.Context(), w)
+		view.ShowHub(gs).Render(r.Context(), w)
 	}
 }
 

@@ -28,16 +28,16 @@ func ServeHttp(gs *globals.GlobalState) (r *chi.Mux, err error) {
 
 		r.Get("/middleware/", PathRoot(gs))
 		r.Get("/middleware/healthcheck", PathHealthcheck(gs))
-		r.Get("/middleware/setup", PathSetup(&gs.Cfg))
+		r.Get("/middleware/setup", PathSetup(gs))
 		r.Get("/middleware/clock", PathClock())
-		r.Get("/middleware/hub", PathHub(&gs.Cfg))
+		r.Get("/middleware/hub", PathHub(gs))
 		r.Get("/middleware/stats", PathStats(gs))
 
 		// Setup Info
-		r.Handle("/middleware/konfig", PathKonfig(&gs.Cfg))
-		r.Handle("/middleware/Konfig", PathKonfig(&gs.Cfg))
-		r.Handle("/middleware/SWSettings", PathSWSettings(&gs.Cfg))
-		r.Handle("/middleware/swsettings", PathSWSettings(&gs.Cfg))
+		r.Handle("/middleware/konfig", PathKonfig(gs))
+		r.Handle("/middleware/Konfig", PathKonfig(gs))
+		r.Handle("/middleware/SWSettings", PathSWSettings(gs))
+		r.Handle("/middleware/swsettings", PathSWSettings(gs))
 
 		// Helper for Debugging
 		r.Route("/middleware/data", func(r chi.Router) {
@@ -62,7 +62,7 @@ func ServeHttp(gs *globals.GlobalState) (r *chi.Mux, err error) {
 	})
 
 	// Serve prometheus metrics
-	r.Handle("/middleware/metrics", MetricsEndpoint(&gs.Cfg)) // No logging for metrics endpoint
+	r.Handle("/middleware/metrics", MetricsEndpoint(gs)) // No logging for metrics endpoint
 
 	// Websockets -------------
 	// Echo incoming messages, for debug

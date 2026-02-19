@@ -7,7 +7,6 @@ import (
 	"log"
 	"strconv"
 	"strings"
-	"strunck/uv4-middleware/initialize"
 	"time"
 )
 
@@ -21,7 +20,7 @@ type Alarms struct {
 type ActiveAlarm struct {
 	Start time.Time
 	End   time.Time
-	Alarm initialize.Alarm
+	Alarm Alarm
 	Text  string
 	Send  bool
 }
@@ -39,7 +38,7 @@ func (hal *Alarms) pushHistory(act ActiveAlarm) {
 	hal.History = append(hal.History, act)
 }
 
-func (al *Alarms) addOrPersistAlarm(alarmList []initialize.Alarm, gs *GlobalState) {
+func (al *Alarms) addOrPersistAlarm(alarmList []Alarm, gs *GlobalState) {
 	for _, act := range alarmList {
 		if al.Actual == nil {
 			al.Actual = make(map[string]ActiveAlarm)
@@ -81,7 +80,7 @@ func (al *Alarms) addOrPersistAlarm(alarmList []initialize.Alarm, gs *GlobalStat
 }
 
 // Extracs the 4. char from the symbol
-func (gs *GlobalState) GetAlarmTextFromSymbol(al initialize.Alarm) string {
+func (gs *GlobalState) GetAlarmTextFromSymbol(al Alarm) string {
 	// get 4. char from Key
 	if len(al.Key) < 4 {
 		log.Printf("⚠️ GetAlarmTextFromSymbol: Key too short: %s", al.Key)
@@ -134,8 +133,8 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 	}
 
 	// Process the response and populate AlarmList
-	activeAlSet := make(map[string]initialize.Alarm)
-	var oneAlarm initialize.Alarm
+	activeAlSet := make(map[string]Alarm)
+	var oneAlarm Alarm
 
 	for i, resp := range response.Results {
 		if resp.StatusCode.IsBad() {
@@ -170,7 +169,7 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 	}
 
 	// Update the alarm list in the configuration
-	//gs.Cfg.Plc.AlarmList = make([]initialize.Alarm, 0, len(activeAlSet))
+	//gs.Cfg.Plc.AlarmList = make([]Alarm, 0, len(activeAlSet))
 	for _, alarm := range activeAlSet {
 		if len(alarm.Key) > 0 {
 			gs.Cfg.Plc.AlarmList = append(gs.Cfg.Plc.AlarmList, alarm)
@@ -202,7 +201,7 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 // Examples:
 //   - For "GTB.Wn[5].xAlarm" with vlen=20, idx=4: creates alarm with Ort="5", Id="xAlarm.5"
 //   - For "Al.AL_KaelteDetektor" with vlen=0: creates alarm with Ort="0", Id="AL_KaelteDetektor"
-func (gs *GlobalState) setAlarm(nodeID string, vlen int, idx int) (alarm initialize.Alarm, err error) {
+func (gs *GlobalState) setAlarm(nodeID string, vlen int, idx int) (alarm Alarm, err error) {
 
 	// example nodeid:
 	// "ns=4;s=|var|EXOR ARM32-Linux QT5.Application.GTB.Wn[5].xAlarm" -> Plc.Dict[nodeID]
@@ -213,7 +212,7 @@ func (gs *GlobalState) setAlarm(nodeID string, vlen int, idx int) (alarm initial
 	alarm.Message, ok = gs.Cfg.Plc.AlarmDict[nodeID]
 	if !ok {
 		err = fmt.Errorf("⚠️ could not find a message for %s", nodeID)
-		return initialize.Alarm{}, err
+		return Alarm{}, err
 	}
 
 	s := strings.Split(nodeID, ".")
@@ -251,13 +250,16 @@ func (gs *GlobalState) StartPeriodicAlarmReader(bgctx context.Context) {
 				if err := gs.ReadAlarms(bgctx); err != nil {
 					log.Printf("⚠️ Error reading alarms: %v", err)
 					if gs.OpcClient != nil {
-						// gs.OpcClient.Cancel() .Close(bgctx)
-						log.Println("⚠️ Closing Session for Alarm Reader")
+						// gs.OpcClient.Close(bgctx)
+						log.Println("⚠️ Aborted session for Alarm Reader")
 						// return
 					} else {
-						log.Println("⚠️ No OPC UA client to close session")
+						log.Fatalf("⚠️ No OPC UA client to close session. Exiting...")
+						return
 					}
 				}
+
+				return
 			case <-bgctx.Done():
 				log.Println("⚠️ Stopping periodic alarm reader")
 				return

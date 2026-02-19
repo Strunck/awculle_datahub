@@ -9,7 +9,6 @@ import (
 	"os"
 	"os/signal"
 	"strunck/uv4-middleware/globals"
-	"strunck/uv4-middleware/initialize"
 	"strunck/uv4-middleware/web"
 	"time"
 
@@ -24,15 +23,13 @@ func main() {
 
 	log.Printf("Starting datahub in a Container Version: %s ...", Version)
 
-	var cfg initialize.Config
-	cfg.SettingsFile = globals.SETTINGSJSON
-	cfg.Opcua.XmlFileName = globals.SYMBOLXML
-
 	gs := globals.GlobalState{
 		Loop:        globals.INIT_STATE,
 		SessionName: "uv4_" + fmt.Sprintf("%d", time.Now().Unix()),
-		Cfg:         cfg,
 	}
+	gs.Cfg.SettingsFile = globals.SETTINGSJSON
+	gs.Cfg.Opcua.XmlFileName = globals.SYMBOLXML
+
 	gs.Stats.InitDone = false
 	gs.Stats.Version = Version
 	if Version == "development" {
@@ -60,7 +57,7 @@ func main() {
 	}
 
 	gs.SetState(globals.SETUP_FILES)
-	if err := initialize.SetupFiles(&gs.Cfg); err != nil {
+	if err := gs.SetupFiles(); err != nil {
 		log.Fatalf("🪑 Error reading from setup files: %v\nExiting...", err)
 	}
 
@@ -91,6 +88,7 @@ func main() {
 	gs.Stats.InitDone = true
 	gs.Stats.Reportdatum = "Noch nicht implementiert"
 	gs.Stats.Uv4Version = gs.Cfg.Opcua.XmlFileName
+
 	//*****************************************************************
 	//***************************   MAIN LOOP   ***********************
 	//*****************************************************************

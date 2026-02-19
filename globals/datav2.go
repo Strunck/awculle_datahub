@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"strings"
-	"strunck/uv4-middleware/initialize"
 	"time"
 )
 
@@ -46,7 +45,7 @@ func (v DataValue) MarshalJSON() ([]byte, error) {
 }
 
 // Setvalue and timestamp of DataV2 structure, create maps if needed
-func (d *DataV2) SetLeafValue(v initialize.VariantToMessage, sval string) (err error) {
+func (d *DataV2) SetLeafValue(v VariantToMessage, sval string) (err error) {
 
 	leaf := DataLeaf{
 		Origin: v.FlatRef,

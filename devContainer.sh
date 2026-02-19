@@ -21,12 +21,12 @@ echo "dev Container für middleware $VERSION starten...."
 podman run -it --rm \
     --name middelware-dev \
     --pod=uv4pod \
-    --workdir="/go/src/github.com/strunck/awculle_datahub" \
+    --workdir="/go/src/github.com/strunck/uv4-middleware" \
     -e "VERSION=$VERSION" \
-    -e "air_wd=/go/src/github.com/strunck/awculle_datahub/" \
-    -e "KO_DATA_PATH=/go/src/github.com/strunck/awculle_datahub/kodata" \
+    -e "air_wd=/go/src/github.com/strunck/uv4-middleware/" \
+    -e "KO_DATA_PATH=/go/src/github.com/strunck/uv4-middleware/kodata" \
     -v "/opt/uv4/shared:/shared:z" \
-    -v $(pwd):/go/src/github.com/strunck/awculle_datahub:Z \
+    -v $(pwd):/go/src/github.com/strunck/uv4-middleware:Z \
     localhost/swair:v1.63.4 -c air-in-pod.toml
     
     # cosmtrek/air -c air-in-pod.toml

@@ -9,7 +9,7 @@ templ:
 run:
 	KO_DATA_PATH=kodata \
 	go run -ldflags="-X 'main.Version=${VERSION}'" \
-	cmd/entrypoint/main.go
+	main.go
 
 dev: 
 	@zsh ./devContainer.sh $(VERSION)

@@ -35,7 +35,6 @@ func (gs *GlobalState) FetchReportFiles() (err error) {
 
 	sharedFolderAvailable := sharedFolderAvailable()
 
-	// log.Println("FTP Raumanzahl:", gs.Cfg.Plc.SWSettings.Raumanzahl)
 	for i := 1; i <= gs.Cfg.Plc.SWSettings.Raumanzahl; i++ {
 		fileName := fmt.Sprintf("/sdcard/Reporte/Rohdaten/logData_Raum%d.csv", i)
 		r, err := c.Retr(fileName)
@@ -43,7 +42,6 @@ func (gs *GlobalState) FetchReportFiles() (err error) {
 			return fmt.Errorf("📄 Error retrieving file: %s, %w", fileName, err)
 		}
 
-		// buf := make([]byte, 50000)
 		buf, err := io.ReadAll(r)
 		if err != nil {
 			return fmt.Errorf("📄 Error reading file: %s, %w", fileName, err)

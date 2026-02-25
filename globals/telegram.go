@@ -12,14 +12,17 @@ import (
 )
 
 type Telegram struct {
-	Bot       *tgbotapi.BotAPI
-	ChatID    int64
-	Token     string
-	Reachable bool
+	Bot                *tgbotapi.BotAPI
+	ChatID             int64
+	Token              string
+	Reachable          bool
+	SkipStartupMessage bool
+	err                error
 }
 
-func (gs *GlobalState) InitTelegramBot() (err error) {
+func (gs *GlobalState) InitTelegramBot(SkipTelegramStartup bool) (err error) {
 	gs.Telegram.Reachable = false
+	gs.Telegram.SkipStartupMessage = SkipTelegramStartup
 
 	gs.Telegram.Token = os.Getenv("TELGRAMM_API")
 	cid := os.Getenv("TELGRAMM_CHATID")
@@ -40,12 +43,18 @@ func (gs *GlobalState) InitTelegramBot() (err error) {
 
 	log.Println("📨 Telegram Bot initialized 📨")
 
+	if gs.Telegram.SkipStartupMessage {
+		log.Println("📨 Skipping startup message (--skip-telegram-startup flag enabled)")
+		gs.Telegram.Reachable = true
+		return nil
+	}
+
 	// Test the preconfigured ChatID
 	txt := fmt.Sprintf("📨 Middleware gestartet. Site: %s - SPS: %s", gs.Cfg.Plc.Base, gs.Cfg.Plc.IPAddress)
 	msg := tgbotapi.NewMessage(gs.Telegram.ChatID, txt)
 	_, err = gs.Telegram.Bot.Send(msg)
 	if err != nil {
-		log.Println("📨 Error sending test message to preconfigured ChatID:", err)
+		return fmt.Errorf("📨 Error sending test message to preconfigured ChatID: %w", err)
 	} else {
 		gs.Telegram.Reachable = true
 	}
@@ -99,7 +108,7 @@ func PostTelegramMsg(gs *GlobalState) http.HandlerFunc {
 		r.Body.Read(msg)
 		log.Printf("Received Telegram message: %s", string(msg))
 		if len(msg) == 0 {
-			http.Error(w, "emty message in body", http.StatusBadRequest)
+			http.Error(w, "empty message in body", http.StatusBadRequest)
 			return
 		}
 		ok := gs.SendTelegramMessage(string(msg))

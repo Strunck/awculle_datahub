@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func (gs *GlobalState) Run_Init(ctx context.Context) (err error) {
+func (gs *GlobalState) Run_Init(ctx context.Context, skipTelegramStartup bool) (err error) {
 
 	gs.SetState(SETUP_ENV)
 	if err := gs.Cfg.Environment(gs.Stats.Developer); err != nil {
@@ -16,7 +16,7 @@ func (gs *GlobalState) Run_Init(ctx context.Context) (err error) {
 		return fmt.Errorf("string Version from GOFLAGS, probably: %w", err)
 	}
 
-	if err := gs.InitTelegramBot(); err != nil {
+	if err := gs.InitTelegramBot(skipTelegramStartup); err != nil {
 		gs.Telegram.err = err
 		log.Printf("📨 Error initializing Telegram Bot: %v\nContinuing without Telegram...", err)
 	}

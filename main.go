@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"strunck/uv4-middleware/globals"
@@ -35,9 +36,13 @@ func main() {
 		gs.Stats.Developer = false
 	}
 
+	// Parse command-line flags
+	skipTelegramStartup := flag.Bool("skip-telegram-startup", false, "Skip Telegram startup message")
+	flag.Parse()
+
 	ctx := context.Background()
 
-	if err := gs.Run_Init(ctx); err != nil {
+	if err := gs.Run_Init(ctx, *skipTelegramStartup); err != nil {
 		log.Fatalf("Error Run_Init: %v\nCrash Exit..", err)
 	}
 

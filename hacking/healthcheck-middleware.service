@@ -1,0 +1,27 @@
+[Unit]
+Description=Healthcheck für container-middleware (ruft /middleware/healthcheck auf)
+Wants=container-middleware.service
+
+[Service]
+Type=oneshot
+# Environment-Variablen:
+# - INSECURE=1 erlaubt selbstsignierte Zertifikate
+# - CURL_CA_BUNDLE=/etc/ssl/certs/internal-ca.pem für eigene CA
+# - URL=... oder SYSTEMD_SERVICE=... zum Überschreiben
+# Environment=INSECURE=0
+Environment=URL=https://localhost/middleware/healthcheck
+Environment=SYSTEMD_SERVICE=container-middleware.service
+
+ExecStart=/home/soenke/middleware-healthcheck.sh
+
+# Optional: Begrenzen, damit der Timer nicht staut
+TimeoutStartSec=30
+
+# Härtung (optional; anpassen falls Script z.B. Netz oder Dateien braucht)
+# ProtectSystem=strict
+# ProtectHome=true
+# PrivateTmp=true
+# NoNewPrivileges=true
+# RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+# RestrictSUIDSGID=true
+# CapabilityBoundingSet=CAP_SYSLOG CAP_NET_RAW CAP_NET_BIND_SERVICE

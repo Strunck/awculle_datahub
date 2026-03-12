@@ -17,9 +17,9 @@ cmd = "go build -o ./build/main main.go main_runner.go"
 # Binary file yields from 'cmd', will be deprecated soon, recommend using entrypoint.
 bin = "build/main"
 # Entrypoint binary relative to root. First item is the executable, more items are default arguments.
-entrypoint = ["./build/main"]
+entrypoint = ["./build/main", "--skip-telegram-startup"]
 # Customize binary, can setup environment variables when run your app.
-full_bin = "APP_ENV=dev APP_USER=air ./build/main"
+full_bin = "APP_ENV=dev APP_USER=air ./build/main --skip-telegram-startup"
 # Add additional arguments when running binary (bin/full_bin). Will run './tmp/main hello world'.
 # args_bin = ["hello", "world"]
 # Watch these filename extensions.

@@ -141,6 +141,8 @@ func ConvertSymbol(v ua.Variant, typ string) (res any) {
 		res = v
 	case "T_ARRAY__1__40__OF_PVMOD":
 		res = v.([]int)
+	case "T_PVMOD":
+		res = v.(int16)
 	case "T_ARRAY__1__20__OF_TYPE_Warnung":
 		res = v
 	case "T_ARRAY__1__100__OF_TYPE_Verbraucher":

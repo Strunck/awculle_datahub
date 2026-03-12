@@ -33,6 +33,8 @@ func (v *VariantToMessage) ToString(msg ua.MonitoredItemNotification) (s string,
 		s = fmt.Sprintf("%f", msg.Value.Value.(float64))
 	case "TIME":
 		s = fmt.Sprintf("%v", msg.Value.Value)
+	case "PVMOD":
+		s = fmt.Sprintf("%d", msg.Value.Value.(int16))
 
 	default:
 		return "", fmt.Errorf("ToString for node %s has unknown type %s", v.NodeID, v.Type)

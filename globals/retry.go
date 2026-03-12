@@ -10,7 +10,7 @@ func (gs *GlobalState) Retry(ctx context.Context) {
 
 	gs.SetState(RETRY)
 
-	if err := gs.InitOpcClient(ctx); err != nil {
+	if err := gs.GetOpcPrefix(ctx); err != nil {
 		log.Printf("Error requesting connection: %v\nExiting...", err)
 	}
 

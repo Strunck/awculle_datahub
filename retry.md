@@ -1,21 +1,21 @@
 States 
 
-	INIT_STATE        / Initialize global variables
-	SETUP_FILES       // Setup configuration files, setup.json
+	INIT_STATE        // Initialize global variables
 	SETUP_ENV         // Setup environment variables
-	SETUP_DONE        // Setup from files and env is done
-	INIT_CLIENT       // Initialize the OPC UA client
-	REQ_CONNECTION    // Request connection to the OPC UA server
+	SETUP_FILES       // Setup configuration files, settings.json and parse Symbolconfiguration
+	INIT_TOPICS       // Initialize the OPC UA client
+	DIAL_OPCUA_SRV    // Dial OPCUA Server (PLC)
 	CONNECTED         // Connected to the OPC UA server
 	PLC_PREFIX        // Read PLC prefix from the OPC UA server
 	PLC_CONFIG_READ   // Read PLC configuration
-    PLC_CONFIG_ALARMS 
+    PLC_CONFIG_ALARMS // Setup alarm messages
 	PLC_CONFIG_DONE   // PLC configuration is read
+	SETUP_DONE        // Setup from files and env is done
 	REQ_MONITORING    // Request monitoring of nodes
 	MONITORING        // Monitoring nodes
 	DISCONNECTED      // Disconnected from the OPC UA server
 	RETRY             // Retry connection to the OPC UA server
-    RETRY_WAIT         
+    RETRY_WAIT        // Waits, for connection with exponential backup
 	SHUTDOWN          // Shutdown the OPC UA client
 
 
@@ -34,7 +34,7 @@ stateDiagram-v2
 
     SETUP_ENV --> FATAL
 
-    FATAL --> REQ_CONNECTION
+    FATAL --> DIAL_OPCUA_SRV
 
     SETUP_FILES --> FATAL
 
@@ -42,15 +42,17 @@ stateDiagram-v2
     
     CRASH --> [*]: Exit
     
-    REQ_CONNECTION --> CONNECT_OK
+    DIAL_OPCUA_SRV --> CONNECT_OK
 
     CONNECT_OK --> CONNECTED
 
-    CONNECTED --> INIT_CLIENT
+    CONNECTED --> INIT_TOPICS
     
-    INIT_CLIENT -->  PLC_CONFIG_READ
+    INIT_TOPICS -->  PLC_CONFIG_READ
 
-    PLC_CONFIG_READ --> PLC_CONFIG_DONE
+    PLC_CONFIG_READ --> PLC_CONFIG_ALARMS
+    
+    PLC_CONFIG_ALARMS --> PLC_CONFIG_DONE
 
     PLC_CONFIG_READ --> ERROR : timeout
 

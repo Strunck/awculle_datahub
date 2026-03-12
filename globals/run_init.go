@@ -21,20 +21,24 @@ func (gs *GlobalState) Run_Init(ctx context.Context, skipTelegramStartup bool) (
 		log.Printf("📨 Error initializing Telegram Bot: %v\nContinuing without Telegram...", err)
 	}
 
-	gs.SetState(REQ_CONNECTION)
-	if err := gs.InitOpcClient(ctx); err != nil {
-		gs.SetState(DISCONNECTED)
-		return fmt.Errorf("error initializing OPC UA client: %w", err)
-	}
-
-	gs.SetState(SETUP_FILES)
 	if err := gs.SetupFiles(); err != nil {
 		return fmt.Errorf("🪑 Error reading from setup files: %v\nExiting...", err)
 	}
 
+	if err := gs.Dial_OPCUA(ctx); err != nil {
+		return fmt.Errorf("error connecting to OPC UA server: %w", err)
+	}
+
+	if err := gs.GetOpcPrefix(ctx); err != nil {
+		return fmt.Errorf("error initializing OPC UA client: %w", err)
+	}
+
+	if err := gs.SetupTopics(); err != nil {
+		return fmt.Errorf("🪑 Error setting up topics: %v\nExiting...", err)
+	}
+
 	gs.SetState(PLC_CONFIG_READ)
 	if err := gs.Cfg.ReadKonfigViaOpcUa(READMAXWAIT, gs.OpcClient, ctx); err != nil {
-		gs.SetState(RETRY)
 		return fmt.Errorf("error reading configuration via OPC UA: %w", err)
 	}
 

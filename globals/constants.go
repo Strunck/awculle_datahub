@@ -6,11 +6,11 @@ const DEBUG = true
 
 const (
 	INIT_STATE        LoopState = iota // Initialize global variables
-	SETUP_FILES                        // Setup configuration files, setup.json
 	SETUP_ENV                          // Setup environment variables
+	SETUP_FILES                        // Setup configuration files, setup.json
 	SETUP_DONE                         // Setup from files and env is done
-	INIT_CLIENT                        // Initialize the OPC UA client
-	REQ_CONNECTION                     // Request connection to the OPC UA server
+	INIT_TOPICS                        // Initialize the OPC UA client topics
+	DIAL_OPCUA_SRV                     // Dials OPC UA server (PLC)
 	CONNECTED                          // Connected to the OPC UA server
 	PLC_PREFIX                         // Read PLC prefix from the OPC UA server
 	PLC_CONFIG_READ                    // Read PLC configuration

@@ -10,7 +10,9 @@ import (
 	"github.com/awcullen/opcua/ua"
 )
 
-func (gs *GlobalState) InitOpcClient(ctx context.Context) (err error) {
+func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
+
+	gs.SetState(DIAL_OPCUA_SRV)
 
 	// Set the session name
 	if len(gs.SessionName) == 0 {
@@ -28,9 +30,15 @@ func (gs *GlobalState) InitOpcClient(ctx context.Context) (err error) {
 	)
 
 	if err != nil {
-		return fmt.Errorf("'InitOpcClient' failed to create client: %w", err)
+		return fmt.Errorf("'Dial_OPCUA' failed: %w", err)
 	}
 
+	gs.SetState(CONNECTED)
+
+	return nil
+}
+
+func (gs *GlobalState) GetOpcPrefix(ctx context.Context) (err error) {
 	//	ns=0;i=2261  can be either
 	// 	-> EXOR ARM32-Linux QT5
 	//  -> EXOR ARM64-Linux QT5
@@ -45,8 +53,9 @@ func (gs *GlobalState) InitOpcClient(ctx context.Context) (err error) {
 	}
 
 	res, err := gs.OpcClient.Read(ctx, req)
+
 	if err != nil {
-		gs.OpcClient.Abort(ctx)
+		//gs.OpcClient.Abort(ctx)
 		return fmt.Errorf("error reading NumericNodeId %s: %w", nid.String(), err)
 	}
 

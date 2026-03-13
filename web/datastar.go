@@ -7,12 +7,21 @@ import (
 	"net/http"
 	"strunck/uv4-middleware/globals"
 	"strunck/uv4-middleware/view"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/nats-io/nats.go"
 	"github.com/starfederation/datastar-go/datastar"
 )
 
+/*
+DataFlow
+
+	Browser SSE Request (GET /ds/{symbol})
+		-> subscribe to nats topic
+			-> nats message recieved
+				-> Trigger SSE update to clients
+*/
 func DataStarHandler(gs *globals.GlobalState) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -93,10 +102,25 @@ func DataStarLatestMsgHandler(gs *globals.GlobalState) http.HandlerFunc {
 	}
 }
 
-/*
-DataFlow
-	Browser SSE Request (GET /ds/{symbol})
-		-> subscribe to nats topic
-			-> nats message recieved
-				-> Trigger SSE update to clients
-*/
+func DataStarAlarmViewHandler(gs *globals.GlobalState) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		sse := datastar.NewSSE(w, r)
+
+		// do this every 5 seconds
+
+		for {
+			select {
+			case <-r.Context().Done():
+				log.Println("DataStarAlarmViewHandler: r.Context() done, client disconnected")
+				return
+			case <-time.After(5 * time.Second):
+
+				if err := sse.PatchElementTempl(view.AlarmList(gs.Alarms)); err != nil {
+					http.Error(w, "Error initializing DataStar SSE", http.StatusInternalServerError)
+					return
+				}
+
+			}
+		}
+	}
+}

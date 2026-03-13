@@ -29,7 +29,7 @@ templ Base(gs *globals.GlobalState) {
 templ Layout(gs *globals.GlobalState) {
     @Base(gs) {    
         <main>
-            <h1>Middleware Di Datahub {gs.Stats.Version}</h1>
+            <h1>Middleware Datahub {gs.Stats.Version}</h1>
             <br>                        
             <hr> what
             @LinksToRouteTo()
@@ -45,6 +45,12 @@ templ Layout(gs *globals.GlobalState) {
                 </p>
             </div>
             <hr>
+            <div data-init={ datastar.GetSSE("/middleware/ds/alarms") }>
+                <h3>Alarms</h3>
+                <p>
+                    <code id=alarm-list >Keine Alarme</code>
+                </p>
+            </div>
             <hr>
                 @ShowSymbolDev("R01", "BA", "Temp")
             <br>

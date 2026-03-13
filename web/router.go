@@ -96,6 +96,7 @@ func ServeHttp(gs *globals.GlobalState) (r *chi.Mux, err error) {
 		//r.Use(SymbolCtx(gs))
 		r.Get("/{symbol}", DataStarHandler(gs))
 		r.Get("/latestmsg", DataStarLatestMsgHandler(gs))
+		r.Get("/alarms", DataStarAlarmViewHandler(gs))
 
 	})
 

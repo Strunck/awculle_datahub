@@ -1,5 +1,7 @@
 package view
 
+import "strunck/uv4-middleware/globals"
+
 type LatestNatsMessage struct {
     Subject string
     Data    string
@@ -11,6 +13,20 @@ templ LatestNatsMessages(messages []LatestNatsMessage ) {
             for _, msg := range messages {
              
                     <strong>{ msg.Subject }</strong>: { msg.Data } <br>
+             
+            }
+        </code>
+    </div>
+   
+}
+
+
+templ AlarmList(al globals.Alarms) {
+    <div id=alarm-list >
+        <code>
+            for _, alarm := range al.Actual {
+             
+                    <strong>{ alarm.Alarm.Key }</strong>: { alarm.Text } #{ alarm.Alarm.Ort } <br>
              
             }
         </code>

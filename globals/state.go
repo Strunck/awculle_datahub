@@ -64,11 +64,11 @@ func (ps *PlcState) ToJson() []byte {
 func (gs *GlobalState) SetState(state LoopState) {
 	gs.Loop = state
 	if DEBUG {
-		gs.printState()
+		gs.PrintState()
 	}
 }
 
-func (gs GlobalState) printState() {
+func (gs GlobalState) PrintState() {
 	switch gs.Loop {
 	case INIT_STATE:
 		log.Println("🥅 INIT_STATE 🥅")

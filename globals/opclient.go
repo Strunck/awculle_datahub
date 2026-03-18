@@ -2,13 +2,59 @@ package globals
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/awcullen/opcua/client"
 	"github.com/awcullen/opcua/ua"
 )
+
+func (gs *GlobalState) DialAndConfigure(ctx context.Context) (err error) {
+
+	if err := gs.Dial_OPCUA(ctx); err != nil {
+		return fmt.Errorf("error connecting to OPC UA server: %w", err)
+	}
+
+	if err := gs.GetOpcPrefix(ctx); err != nil {
+		return fmt.Errorf("error initializing OPC UA client: %w", err)
+	}
+
+	if err := gs.InitTopics(); err != nil {
+		return fmt.Errorf("🪑 Error setting up topics: %v\nExiting...", err)
+	}
+
+	gs.SetState(PLC_CONFIG_READ)
+	if err := gs.Cfg.ReadKonfigViaOpcUa(READMAXWAIT, gs.OpcClient, ctx); err != nil {
+		return fmt.Errorf("error reading configuration via OPC UA: %w", err)
+	}
+
+	if err := gs.Cfg.SetupKonfigGroup(gs.OpcClient, ctx); err != nil {
+		return fmt.Errorf("error setting up Konfig group: %w", err)
+	}
+
+	if err := gs.Cfg.InitSWSettings(); err != nil {
+		return fmt.Errorf("error initializing SW settings: %w", err)
+	}
+	gs.SetState(PLC_CONFIG_ALARMS)
+	if err := gs.Cfg.SetupAlarmMessages(gs.OpcClient, READMAXWAIT, ctx); err != nil {
+		return fmt.Errorf("error setting up alarm messages: %w", err)
+	}
+
+	gs.SetState(PLC_CONFIG_DONE)
+	// Print the parsed setup configuration for debugging
+	output, _ := json.MarshalIndent(&gs.Cfg, "", "  ")
+	os.WriteFile("result.json", output, 0644)
+
+	gs.SetState(SETUP_DONE)
+	gs.Stats.InitDone = true
+	gs.Stats.Reportdatum = "Noch nicht implementiert"
+	gs.Stats.Uv4Version = gs.Cfg.Opcua.XmlFileName
+
+	return nil
+}
 
 func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
 

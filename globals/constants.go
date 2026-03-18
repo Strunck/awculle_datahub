@@ -25,11 +25,13 @@ const (
 )
 
 const (
-	INTERVAL      = 200 * time.Millisecond
-	LAG           = 1 * time.Millisecond
-	TIMEOUT_OPCUA = 4 * time.Second
-	TIMEOUT_PING  = 2 * time.Second
-	READMAXWAIT   = 5 * time.Second
+	INTERVAL                = 200 * time.Millisecond
+	LAG                     = 1 * time.Millisecond
+	TIMEOUT_OPCUA           = 4 // seconds to increment for each retry attempt
+	TIMEOUT_PING            = 2 * time.Second
+	READMAXWAIT             = 5 * time.Second
+	RETRY_WAIT_SECONDS_MAX  = 120
+	CRASH_EXIT_WAIT_SECONDS = 10800 // 3 h, should be enough time to fix the issue and restart the container, otherwise it will crash exit and restart automatically via podman restart policy
 )
 
 const (

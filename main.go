@@ -42,15 +42,16 @@ func main() {
 
 	ctx := context.Background()
 
-	if err := gs.Run_Init(ctx, *skipTelegramStartup); err != nil {
-		log.Fatalf("Error Run_Init: %v\nCrash Exit..", err)
+	if err := gs.InitTelegramBot(*skipTelegramStartup); err != nil {
+		log.Printf("📨 Error initializing Telegram Bot: %v\nContinuing without Telegram...", err)
 	}
 
 	//*****************************************************************
 	//***************************   MAIN LOOP   ***********************
 	//*****************************************************************
-	if err := run_MainLoop(ctx, &gs); err != nil {
-		log.Fatalf("Fatal Error in Mainloop, Crash Exit!!! Reason: %v\n", err)
+
+	for {
+		runGuard(ctx, &gs)
 	}
 
 }

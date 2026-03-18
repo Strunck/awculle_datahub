@@ -14,7 +14,6 @@ import (
 // pases the files.
 // If this fails, the files are corrupred on we crash with a fatal error.
 func (gs *GlobalState) SetupFiles() (err error) {
-	gs.SetState(SETUP_FILES)
 
 	settingsFileName := gs.Cfg.KoDataPath + "/" + gs.Cfg.SettingsFile
 	symbolConfigFileName := gs.Cfg.KoDataPath + "/" + gs.Cfg.Opcua.XmlFileName
@@ -38,7 +37,7 @@ func (gs *GlobalState) SetupFiles() (err error) {
 	return nil
 }
 
-func (gs *GlobalState) SetupTopics() (err error) {
+func (gs *GlobalState) InitTopics() (err error) {
 	gs.SetState(INIT_TOPICS)
 	// Parse XML-Nodes, that are relevant for the HMI
 	for _, grp_node := range gs.Cfg.Opcua.Symbole.NodeList.Node.Node {

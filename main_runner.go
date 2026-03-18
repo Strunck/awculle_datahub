@@ -99,3 +99,49 @@ func runNats(gs *globals.GlobalState, natsSrvPort int) {
 		log.Fatalf("main init we got Error connecting to NATS server: %v", ncerr)
 	}
 }
+
+func runGuard(ctx context.Context, gs *globals.GlobalState) {
+	gs.PrintState()
+	switch gs.Loop {
+
+	case globals.INIT_STATE:
+		gs.SetState(globals.SETUP_ENV)
+
+	case globals.SETUP_ENV:
+		if err := gs.Cfg.Environment(gs.Stats.Developer); err != nil {
+			gs.SetState(globals.SHUTDOWN)
+			log.Fatalf("string Version from GOFLAGS, probably: %v", err)
+		}
+		gs.SetState(globals.SETUP_FILES)
+
+	case globals.SETUP_FILES:
+		if err := gs.SetupFiles(); err != nil {
+			log.Fatalf("🪑 Error reading from setup files: %v\nExiting...", err)
+		}
+		gs.SetState(globals.DIAL_OPCUA_SRV)
+
+	case globals.DIAL_OPCUA_SRV:
+		if err := gs.DialAndConfigure(ctx); err != nil {
+			log.Printf("Error in DialAndConfigure: %v\nEntering Retry Wait Loop...", err)
+			gs.Retry_Wait(ctx)
+		}
+		gs.SetState(globals.CONNECTED)
+		log.Println("Successfully connected to OPC UA server and configured.")
+
+	case globals.RETRY:
+		err := gs.Retry()
+		if err != nil {
+			log.Printf("Error in Retry: %v\nEntering Retry Wait Loop...", err)
+			gs.Retry_Wait(ctx)
+		}
+	case globals.RETRY_WAIT:
+		gs.Retry_Wait(ctx)
+
+	case globals.CONNECTED:
+		err := run_MainLoop(ctx, gs)
+		if err != nil {
+			log.Printf("Error in MainLoop: %v\nEntering Retry Wait Loop...", err)
+			gs.Retry_Wait(ctx)
+		}
+	}
+}

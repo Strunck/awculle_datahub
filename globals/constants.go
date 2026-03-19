@@ -9,6 +9,7 @@ const (
 	SETUP_ENV                          // Setup environment variables
 	SETUP_FILES                        // Setup configuration files, setup.json
 	SETUP_DONE                         // Setup from files and env is done
+	INIT_TELEGRAM                      // Initialize the Telegram bot, but do not fail
 	INIT_TOPICS                        // Initialize the OPC UA client topics
 	DIAL_OPCUA_SRV                     // Dials OPC UA server (PLC)
 	CONNECTED                          // Connected to the OPC UA server

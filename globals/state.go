@@ -77,6 +77,8 @@ func (gs GlobalState) PrintState() {
 		log.Println("🪬 SETUP_ENV 🪬")
 	case SETUP_FILES:
 		log.Println("🪑 SETUP_FILES 🪑")
+	case INIT_TELEGRAM:
+		log.Println("🤖 INIT_TELEGRAM 🤖")
 	case SETUP_DONE:
 		log.Println("🥅 SETUP_DONE 🥅")
 
@@ -88,7 +90,7 @@ func (gs GlobalState) PrintState() {
 		log.Println("💢 DISCONNECTED 💢")
 
 	case INIT_TOPICS:
-		log.Println("🥅 INIT_TOPICS")
+		log.Println("🥅 INIT_TOPICS 🥅")
 	case PLC_CONFIG_READ:
 		log.Println("🪑 PLC_CONFIG_READ 🪑")
 	case PLC_CONFIG_ALARMS:
@@ -97,7 +99,7 @@ func (gs GlobalState) PrintState() {
 		log.Println("🪑 PLC_CONFIG_DONE 🪑")
 
 	case REQ_MONITORING:
-		log.Println("👀 REQ_MONITORING 👀")
+		log.Println("👁️‍🗨️ REQ_MONITORING 👁️‍🗨️")
 	case MONITORING:
 		log.Println("👀 MONITORING 👀")
 

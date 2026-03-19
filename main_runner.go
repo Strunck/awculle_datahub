@@ -33,6 +33,12 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 		if err := gs.SetupFiles(); err != nil {
 			log.Fatalf("🪑 Error reading from setup files: %v\nExiting...", err)
 		}
+		gs.SetState(globals.INIT_TELEGRAM)
+
+	case globals.INIT_TELEGRAM:
+		if err := gs.InitTelegramBot(); err != nil {
+			log.Printf("🤖 Error initializing Telegram bot: %v\nContinuing without Telegram...", err)
+		}
 		gs.SetState(globals.DIAL_OPCUA_SRV)
 
 	case globals.INIT_TOPICS:

@@ -3,6 +3,7 @@ States
 	INIT_STATE        // Initialize global variables
 	SETUP_ENV         // Setup environment variables
 	SETUP_FILES       // Setup configuration files, settings.json and parse Symbolconfiguration
+    INIT_TELEGRAM     // Init Telegram Bot, but do not fail.
 	INIT_TOPICS       // Initialize the OPC UA client
 	DIAL_OPCUA_SRV    // Dial OPCUA Server (PLC)
 	CONNECTED         // Connected to the OPC UA server
@@ -30,8 +31,10 @@ stateDiagram-v2
     INIT_STATE --> SETUP_ENV
 
     SETUP_ENV --> SETUP_FILES
+    
+    SETUP_FILES --> INIT_TELEGRAM
 
-    SETUP_FILES --> DIAL_OPCUA_SRV
+    INIT_TELEGRAM --> DIAL_OPCUA_SRV
 
     DIAL_OPCUA_SRV --> CONNECT_OK
 

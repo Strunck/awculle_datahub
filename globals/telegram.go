@@ -20,9 +20,10 @@ type Telegram struct {
 	err                error
 }
 
-func (gs *GlobalState) InitTelegramBot(SkipTelegramStartup bool) (err error) {
+// must have read .env file before, so this shoud only be called after
+func (gs *GlobalState) InitTelegramBot() (err error) {
+
 	gs.Telegram.Reachable = false
-	gs.Telegram.SkipStartupMessage = SkipTelegramStartup
 
 	gs.Telegram.Token = os.Getenv("TELGRAMM_API")
 	cid := os.Getenv("TELGRAMM_CHATID")

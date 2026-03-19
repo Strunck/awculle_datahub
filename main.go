@@ -39,17 +39,13 @@ func main() {
 	// Parse command-line flags
 	skipTelegramStartup := flag.Bool("skip-telegram-startup", false, "Skip Telegram startup message")
 	flag.Parse()
+	gs.Telegram.SkipStartupMessage = *skipTelegramStartup
 
 	ctx := context.Background()
-
-	if err := gs.InitTelegramBot(*skipTelegramStartup); err != nil {
-		log.Printf("📨 Error initializing Telegram Bot: %v\nContinuing without Telegram...", err)
-	}
 
 	//*****************************************************************
 	//***************************   MAIN LOOP   ***********************
 	//*****************************************************************
-
 	for {
 		runGuard(ctx, &gs)
 	}

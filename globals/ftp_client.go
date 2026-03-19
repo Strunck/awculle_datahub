@@ -80,13 +80,13 @@ func (gs *GlobalState) FetchReportFiles() (err error) {
 	}
 
 	// Debug
-	log.Println("📄 Report.All length:", len(gs.Report.All))
-	for i, r := range gs.Report.All {
-		log.Printf("📄 Report.All[%d] length: %d\n", i, len(r))
-		if len(r) > 0 {
-			log.Printf("📄 First line: %+v\n", r[0])
-		}
-	}
+	// log.Println("📄 Report.All length:", len(gs.Report.All))
+	// for i, r := range gs.Report.All {
+	// 	log.Printf("📄 Report.All[%d] length: %d\n", i, len(r))
+	// 	if len(r) > 0 {
+	// 		log.Printf("📄 First line: %+v\n", r[0])
+	// 	}
+	// }
 
 	if err := c.Quit(); err != nil {
 		return fmt.Errorf("📄 Error quitting FTP: %w", err)

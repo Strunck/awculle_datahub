@@ -12,6 +12,109 @@ import (
 	"time"
 )
 
+// runGuard is a state machine. Rules: Every state will call a function, that will return an error or nil if successful.
+// To keep the best overview, all states must be set in this swich case. Do not set the states in the functions, that get called here!
+// the default case will crash the programm.
+func runGuard(ctx context.Context, gs *globals.GlobalState) {
+
+	switch gs.Loop {
+
+	case globals.INIT_STATE:
+		gs.SetState(globals.SETUP_ENV)
+
+	case globals.SETUP_ENV:
+		if err := gs.Cfg.Environment(gs.Stats.Developer); err != nil {
+			gs.SetState(globals.SHUTDOWN)
+			log.Fatalf("string Version from GOFLAGS, probably: %v", err)
+		}
+		gs.SetState(globals.SETUP_FILES)
+
+	case globals.SETUP_FILES:
+		if err := gs.SetupFiles(); err != nil {
+			log.Fatalf("🪑 Error reading from setup files: %v\nExiting...", err)
+		}
+		gs.SetState(globals.DIAL_OPCUA_SRV)
+
+	case globals.INIT_TOPICS:
+		if err := gs.InitTopics(); err != nil {
+			log.Printf("Error initializing topics: %v\nExiting...", err)
+			gs.SetState(globals.RETRY_WAIT)
+		}
+		gs.SetState(globals.PLC_CONFIG_READ)
+
+	case globals.PLC_CONFIG_READ:
+		if err := gs.PlcConfigRead(ctx); err != nil {
+			log.Printf("Error reading PLC configuration: %v\nExiting...", err)
+			gs.SetState(globals.RETRY)
+		}
+		gs.SetState(globals.PLC_CONFIG_ALARMS)
+
+	case globals.PLC_CONFIG_ALARMS:
+		if err := gs.Cfg.SetupAlarmMessages(gs.OpcClient, globals.READMAXWAIT, ctx); err != nil {
+			log.Printf("error setting up alarm messages: %v", err)
+			gs.SetState(globals.RETRY)
+		}
+		gs.SetState(globals.PLC_CONFIG_DONE)
+
+	case globals.PLC_CONFIG_DONE:
+		gs.PlcConfigDone()
+		gs.SetState(globals.REQ_MONITORING)
+
+	case globals.DIAL_OPCUA_SRV:
+		if err := gs.Dial_OPCUA(ctx); err != nil {
+			log.Printf("Dial_OPCUA failed: %v\nEntering Retry Wait Loop...", err)
+			gs.SetState(globals.RETRY_WAIT)
+		}
+		if err := gs.GetOpcPrefix(ctx); err != nil {
+			log.Printf("GetOpcPrefix failed: %v\nEntering Retry Wait Loop...", err)
+			gs.SetState(globals.RETRY_WAIT)
+		}
+		gs.SetState(globals.CONNECTED)
+
+	case globals.RETRY:
+		gs.Stats.Attempts++
+		err := gs.Retry()
+		if err != nil {
+			log.Printf("Error in Retry: %v\nEntering Retry Wait Loop...", err)
+			gs.SetState(globals.RETRY_WAIT)
+		}
+		gs.SetState(globals.CONNECTED)
+
+	case globals.RETRY_WAIT:
+		if err := gs.Retry_Wait(ctx); err != nil {
+			log.Fatalf("Crash exit: %v", err)
+		}
+		gs.SetState(globals.RETRY)
+
+	case globals.CONNECTED:
+		gs.Connected()
+		gs.SetState(globals.INIT_TOPICS)
+
+	case globals.REQ_MONITORING:
+
+		// Initialize glocal.Plc.Flat für Websocker middleware/data/v2
+		gs.InitFlatHMIvalues()
+		// Prepare the OPC UA Monitoring, monitor.go
+		// We need the Opc UA Client connection, see global.InitOpcClient in file opclient.go
+		if err := gs.InitMonitorOpcUa(ctx); err != nil {
+			log.Printf("error InitMonitorOpcUa: %v", err)
+			gs.SetState(globals.RETRY)
+		}
+
+		gs.SetState(globals.MONITORING)
+
+	case globals.MONITORING:
+		err := run_MainLoop(ctx, gs)
+		if err != nil {
+			log.Printf("Error in MainLoop: %v\nEntering Retry Wait Loop...", err)
+			gs.SetState(globals.RETRY_WAIT)
+		}
+
+	default:
+		log.Fatalf("Invalid state: %v", gs.Loop)
+	}
+}
+
 func run_MainLoop(ctx context.Context, gs *globals.GlobalState) (err error) {
 
 	// Channel für Fehler
@@ -24,13 +127,6 @@ func run_MainLoop(ctx context.Context, gs *globals.GlobalState) (err error) {
 
 	runNats(gs, 4222)
 
-	// Initialize glocal.Plc.Flat für Websocker middleware/data/v2
-	gs.InitFlatHMIvalues()
-
-	// Prepare the OPC UA Monitoring, monitor.go
-	// We need the Opc UA Client connection, see global.InitOpcClient in file opclient.go
-	gs.SetState(globals.REQ_MONITORING)
-	gs.InitMonitorOpcUa(ctx)
 	log.Println("Monitoring started")
 	go gs.RecieveOpcUaMessage(ctx)
 	gs.SetState(globals.MONITORING)
@@ -97,51 +193,5 @@ func runNats(gs *globals.GlobalState, natsSrvPort int) {
 	ncerr := gs.ConnectToNats(nats_server)
 	if ncerr != nil {
 		log.Fatalf("main init we got Error connecting to NATS server: %v", ncerr)
-	}
-}
-
-func runGuard(ctx context.Context, gs *globals.GlobalState) {
-	gs.PrintState()
-	switch gs.Loop {
-
-	case globals.INIT_STATE:
-		gs.SetState(globals.SETUP_ENV)
-
-	case globals.SETUP_ENV:
-		if err := gs.Cfg.Environment(gs.Stats.Developer); err != nil {
-			gs.SetState(globals.SHUTDOWN)
-			log.Fatalf("string Version from GOFLAGS, probably: %v", err)
-		}
-		gs.SetState(globals.SETUP_FILES)
-
-	case globals.SETUP_FILES:
-		if err := gs.SetupFiles(); err != nil {
-			log.Fatalf("🪑 Error reading from setup files: %v\nExiting...", err)
-		}
-		gs.SetState(globals.DIAL_OPCUA_SRV)
-
-	case globals.DIAL_OPCUA_SRV:
-		if err := gs.DialAndConfigure(ctx); err != nil {
-			log.Printf("Error in DialAndConfigure: %v\nEntering Retry Wait Loop...", err)
-			gs.Retry_Wait(ctx)
-		}
-		gs.SetState(globals.CONNECTED)
-		log.Println("Successfully connected to OPC UA server and configured.")
-
-	case globals.RETRY:
-		err := gs.Retry()
-		if err != nil {
-			log.Printf("Error in Retry: %v\nEntering Retry Wait Loop...", err)
-			gs.Retry_Wait(ctx)
-		}
-	case globals.RETRY_WAIT:
-		gs.Retry_Wait(ctx)
-
-	case globals.CONNECTED:
-		err := run_MainLoop(ctx, gs)
-		if err != nil {
-			log.Printf("Error in MainLoop: %v\nEntering Retry Wait Loop...", err)
-			gs.Retry_Wait(ctx)
-		}
 	}
 }

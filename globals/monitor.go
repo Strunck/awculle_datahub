@@ -12,7 +12,7 @@ import (
 )
 
 // Initialize OPC UA Montitorung, by
-func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) {
+func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) (err error) {
 
 	// prepare create subscription request
 	subreq := &ua.CreateSubscriptionRequest{
@@ -25,9 +25,8 @@ func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) {
 	// send request to server. receive response or error
 	subres, err := gs.OpcClient.CreateSubscription(pctx, subreq)
 	if err != nil {
-		log.Printf("🔱 Error creating subscription. %s\n", err.Error())
-		gs.CloseOpcClient(pctx)
-		return
+		err = fmt.Errorf("🔱 Error creating subscription: %w", err)
+		return err
 	}
 
 	// List of monitored items, that have been configured in func
@@ -60,10 +59,10 @@ func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) {
 	// send request to server. receive response or error
 	_, err = gs.OpcClient.CreateMonitoredItems(pctx, monReq)
 	if err != nil {
-		log.Printf("🔱 Error creating item. %s\n", err.Error())
-		gs.CloseOpcClient(pctx)
-		return
+		err = fmt.Errorf("🔱 error OpcClient.CreateMonitoredItems: %w", err)
+		return err
 	}
+	return nil
 }
 
 // RecieveOpcUaMessage listen to DataChangeNotifications (DCN) from the OPC UA server.

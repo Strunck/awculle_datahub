@@ -37,6 +37,7 @@ type Stats struct {
 	Developer   bool      `json:"developer_mode"`
 	NatsHealth  MsgHealth `json:"nats_health"`
 	OpcHealth   MsgHealth `json:"opc_health"`
+	Attempts    int       `json:"attempts"`
 }
 
 func (stats *Stats) ToJson() []byte {

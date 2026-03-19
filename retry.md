@@ -22,8 +22,7 @@ States
 
 ```mermaid
 stateDiagram-v2
-    state ERROR <<join>>
-    state FATAL <<join>>
+
     state CONNECT_OK <<choice>>
     
     [*] --> INIT_STATE    
@@ -32,16 +31,8 @@ stateDiagram-v2
 
     SETUP_ENV --> SETUP_FILES
 
-    SETUP_ENV --> FATAL
+    SETUP_FILES --> DIAL_OPCUA_SRV
 
-    FATAL --> DIAL_OPCUA_SRV
-
-    SETUP_FILES --> FATAL
-
-    FATAL --> CRASH
-    
-    CRASH --> [*]: Exit
-    
     DIAL_OPCUA_SRV --> CONNECT_OK
 
     CONNECT_OK --> CONNECTED
@@ -54,27 +45,25 @@ stateDiagram-v2
     
     PLC_CONFIG_ALARMS --> PLC_CONFIG_DONE
 
-    PLC_CONFIG_READ --> ERROR : timeout
+    PLC_CONFIG_READ --> RETRY : timeout
 
-    PLC_CONFIG_DONE --> SETUP_DONE 
-    
-    SETUP_DONE --> REQ_MONITORING
+    PLC_CONFIG_DONE --> REQ_MONITORING         
 
     REQ_MONITORING --> MONITORING
 
-    REQ_MONITORING --> ERROR: general timeout
+    REQ_MONITORING --> RETRY: general timeout
 
-    MONITORING --> ERROR: opcua timeout
+    MONITORING --> RETRY: opcua timeout
 
-    ERROR --> RETRY
+    RETRY --> DIAL_OPCUA_SRV
     
-    RETRY --> FATAL
+    RETRY_WAIT --> CRASH
 
-    CONNECT_OK --> DISCONNECTED 
-
-    DISCONNECTED --> RETRY_WAIT
+    CONNECT_OK --> RETRY_WAIT : network err
     
     RETRY_WAIT --> RETRY
-
+    
+    CRASH --> [*]: Crash Exit 
+    
     
  ```

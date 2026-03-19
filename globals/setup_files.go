@@ -37,8 +37,9 @@ func (gs *GlobalState) SetupFiles() (err error) {
 	return nil
 }
 
+// prefix ex710/ex710m must be known in advance!
 func (gs *GlobalState) InitTopics() (err error) {
-	gs.SetState(INIT_TOPICS)
+
 	// Parse XML-Nodes, that are relevant for the HMI
 	for _, grp_node := range gs.Cfg.Opcua.Symbole.NodeList.Node.Node {
 		//log.Printf("🪑 DEBUG Gruppe: %s\t%s\n", grp_node.Name, grp_node.Comment)

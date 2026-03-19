@@ -19,6 +19,10 @@ import (
 // Second read the amount of units
 func (cfg *Config) ReadKonfigViaOpcUa(timeout time.Duration, c *client.Client, bgctx context.Context) (err error) {
 
+	if cfg.Opcua.Prefix == "" {
+		log.Fatalln("ReadKonfigViaOpcUa: Prefix is empty. Can not got without it!")
+	}
+
 	ctx, cancel := context.WithTimeout(bgctx, timeout)
 	defer cancel()
 
@@ -40,7 +44,7 @@ func (cfg *Config) ReadKonfigViaOpcUa(timeout time.Duration, c *client.Client, b
 		id := ua.ParseNodeID(nodeID)
 
 		if id == nil {
-			log.Fatalf("invalid node id: %v", err)
+			log.Fatalf("ReadKonfigViaOpcUa got an invalid node id: %s", nodeID)
 		}
 
 		req := &ua.ReadRequest{
@@ -56,7 +60,7 @@ func (cfg *Config) ReadKonfigViaOpcUa(timeout time.Duration, c *client.Client, b
 
 		resp, err := c.Read(ctx, req)
 		if err != nil {
-			log.Fatalf("Read failed: %s", err)
+			log.Fatalf("Read failed for %s: %s", nodeID, err)
 		}
 
 		if !resp.Results[0].StatusCode.IsGood() {

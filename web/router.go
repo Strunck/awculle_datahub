@@ -8,9 +8,9 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-// ServeHttp set up all routes of the app
-// here I only want a list of my routes
-// file handler.go then holds all handler functions beginning with Path
+// ServeHttp set up all routes of the app.
+// Here I only want a list of my routes.
+// File handler.go then holds all handler functions beginning with Path.
 func ServeHttp(gs *globals.GlobalState) (r *chi.Mux, err error) {
 	r = chi.NewRouter()
 
@@ -45,6 +45,7 @@ func ServeHttp(gs *globals.GlobalState) (r *chi.Mux, err error) {
 			r.Get("/", PathData(gs))
 			r.Get("/{flatkey}", PathDataKey(gs)) //see values_hmi_flat_processed.json
 			r.Get("/alarms", PathDataAlarms(gs))
+			r.Get("/alarmhistory", PathDataAlarmHistory(gs))
 			r.Get("/v2", PathDataV2(gs))
 			r.Get("/v2/{scope}", PathDataV2Scope(gs))
 			r.Get("/v2/{scope}/{group}", PathDataV2Group(gs))

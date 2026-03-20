@@ -157,7 +157,7 @@ func (wr WriteReq) valiadate(gs *globals.GlobalState) (wval *ua.WriteValue, err 
 }
 
 // Add this method to convert values based on DataType
-func (wr WriteReq) convertValue() (interface{}, error) {
+func (wr WriteReq) convertValue() (any, error) {
 	switch wr.DataType {
 	case "Int16":
 		if val, ok := wr.Value.(float64); ok {

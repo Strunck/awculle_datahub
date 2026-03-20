@@ -5,23 +5,27 @@ import (
 	"log"
 
 	"github.com/awcullen/opcua/client"
+	"github.com/nats-io/nats-server/v2/server"
 	"github.com/nats-io/nats.go"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type LoopState uint8
 
 type GlobalState struct {
-	OpcClient   *client.Client
-	Loop        LoopState
-	SessionName string
-	Cfg         Config
-	NatsClient  *nats.Conn
-	Plc         PlcState
-	DataV2      DataV2
-	Stats       Stats `json:"Stats"`
-	Report      ReportData
-	Telegram    Telegram
-	Alarms      Alarms
+	OpcClient      *client.Client
+	Loop           LoopState
+	SessionName    string
+	Cfg            Config
+	NatsClient     *nats.Conn
+	NatsServer     *server.Server
+	Plc            PlcState
+	DataV2         DataV2
+	Stats          Stats `json:"Stats"`
+	Report         ReportData
+	Telegram       Telegram
+	Alarms         Alarms
+	MetricRegistry *prometheus.Registry
 }
 
 type ReportData struct {

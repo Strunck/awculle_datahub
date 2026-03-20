@@ -84,7 +84,7 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 			log.Printf("Error in Retry: %v\nEntering Retry Wait Loop...", err)
 			gs.SetState(globals.RETRY_WAIT)
 		}
-		gs.SetState(globals.CONNECTED)
+		gs.SetState(globals.DIAL_OPCUA_SRV)
 
 	case globals.RETRY_WAIT:
 		if err := gs.Retry_Wait(ctx); err != nil {
@@ -124,21 +124,19 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 func run_MainLoop(ctx context.Context, gs *globals.GlobalState) (err error) {
 
 	// Channel für Fehler
-	errCh := make(chan error, 1)
+	errChHttp := make(chan error, 1)
+	errChMonitor := make(chan error, 1)
+	errChAlarm := make(chan error, 1)
 
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, os.Interrupt)
-
-	go runHttp(gs, errCh)
+	go runHttp(gs, errChHttp)
 
 	runNats(gs, 4222)
 
-	log.Println("Monitoring started")
-	go gs.RecieveOpcUaMessage(ctx)
-	gs.SetState(globals.MONITORING)
+	go gs.RecieveOpcUaMessage(ctx, errChMonitor)
 
-	log.Printf("Start Reading Alarms every %v ..", globals.INTERVAL)
-	go gs.StartPeriodicAlarmReader(ctx)
+	go gs.StartPeriodicAlarmReader(ctx, errChAlarm)
 
 	// Daily Report Cron Job
 	if err := gs.Run_CronJob(); err != nil {
@@ -146,21 +144,28 @@ func run_MainLoop(ctx context.Context, gs *globals.GlobalState) (err error) {
 	}
 
 	select {
-	case err := <-errCh:
+	case err := <-errChHttp:
 		if err != nil {
-			log.Printf("main.go error: %v\n", err)
+			log.Printf("Error in HTTP server: %v\n", err)
 		}
-		log.Println("where am i?")
+
+	case err := <-errChMonitor:
+		if err != nil {
+			log.Printf("Error in OPC UA monitoring: %v\n", err)
+			return err
+		}
+	case err := <-errChAlarm:
+		if err != nil {
+			log.Printf("Error in Alarm monitoring: %v\n", err)
+			return err
+		}
 	case <-signalCh: // Wait for Ctrl+C
 		log.Println("Received interrupt signal, shutting down...")
-		gs.SetState(globals.SHUTDOWN)
 
 		// Clean up and close the OPC UA client
 		if err := gs.CloseOpcClient(ctx); err != nil {
 			log.Fatalf("Error closing connection: %v\nExiting...", err)
 		}
-		gs.SetState(globals.DISCONNECTED)
-
 		log.Println("Exiting gracefully....")
 
 		os.Exit(0)
@@ -183,6 +188,10 @@ func runHttp(gs *globals.GlobalState, errCh chan error) {
 }
 
 func runNats(gs *globals.GlobalState, natsSrvPort int) {
+
+	if gs.NatsServer != nil {
+		return
+	}
 
 	// ---------------------- NATS ---------------------
 	// Initialilize NATS server, Options can be set in nats.go

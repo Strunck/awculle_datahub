@@ -236,7 +236,8 @@ func (gs *GlobalState) setAlarm(nodeID string, vlen int, idx int) (alarm Alarm, 
 }
 
 // StartPeriodicAlarmReader starts a goroutine that reads alarms every 5 seconds
-func (gs *GlobalState) StartPeriodicAlarmReader(bgctx context.Context) {
+func (gs *GlobalState) StartPeriodicAlarmReader(bgctx context.Context, errCh chan error) {
+	log.Printf("Start Reading Alarms every %v ..", INTERVAL)
 
 	ticker := time.NewTicker(5 * time.Second)
 
@@ -249,14 +250,8 @@ func (gs *GlobalState) StartPeriodicAlarmReader(bgctx context.Context) {
 
 				if err := gs.ReadAlarms(bgctx); err != nil {
 					log.Printf("⚠️ Error reading alarms: %v", err)
-					if gs.OpcClient != nil {
-						// gs.OpcClient.Close(bgctx)
-						log.Println("⚠️ Aborted session for Alarm Reader")
-						// return
-					} else {
-						log.Fatalf("⚠️ No OPC UA client to close session. Exiting...")
-						return
-					}
+					errCh <- fmt.Errorf("⚠️ Error reading alarms: %w", err)
+					return
 				}
 
 				return

@@ -65,9 +65,9 @@ func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) (err error) {
 	return nil
 }
 
-// RecieveOpcUaMessage listen to DataChangeNotifications (DCN) from the OPC UA server.
+// RecieveOpcUaMessage listens to DataChangeNotifications (DCN) from the OPC UA server.
 // When a new DCN is recieved, the Method storeAndPublish is called
-func (gs *GlobalState) RecieveOpcUaMessage(ctx context.Context) {
+func (gs *GlobalState) RecieveOpcUaMessage(ctx context.Context, errCh chan<- error) {
 	//log.Println("RecieveOpcUaMessage started")
 
 	// Send initial publish request
@@ -82,7 +82,8 @@ func (gs *GlobalState) RecieveOpcUaMessage(ctx context.Context) {
 		res, err := gs.OpcClient.Publish(ctx, req)
 		if err != nil {
 			log.Printf("🔱 Error publishing request: %s\n", err.Error())
-			break
+			errCh <- fmt.Errorf("🔱 Error publishing request: %w", err)
+			return
 		}
 
 		// Process notification data
@@ -94,6 +95,8 @@ func (gs *GlobalState) RecieveOpcUaMessage(ctx context.Context) {
 
 					if err := gs.storeAndPublish(item); err != nil {
 						log.Printf("Error storing and publishing item: %s\n", err.Error())
+						errCh <- fmt.Errorf("🔱 Error storing and publishing item: %w", err)
+						return
 					}
 				}
 			default:

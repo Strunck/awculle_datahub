@@ -3,13 +3,38 @@ package globals
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/nats-io/nats-server/v2/server"
 	"github.com/nats-io/nats.go"
 )
 
+func (gs *GlobalState) RunNats(natsSrvPort int) {
+
+	if gs.NatsServer != nil {
+		return
+	}
+
+	// ---------------------- NATS ---------------------
+	// Initialilize NATS server, Options can be set in nats.go
+	gs.NatsServer = startNatServer(natsSrvPort)
+	// Start the NATS server in a separate goroutine
+	gs.NatsServer.Start()
+
+	// Wait for the server to be ready
+	if !gs.NatsServer.ReadyForConnections(4 * time.Second) {
+		log.Fatalf("NATS server did not start in time")
+	}
+	log.Printf("NATS server is running on 127.0.0.1:%d\n", natsSrvPort)
+
+	ncerr := gs.ConnectToNats(gs.NatsServer)
+	if ncerr != nil {
+		log.Fatalf("main init we got Error connecting to NATS server: %v", ncerr)
+	}
+}
+
 // StartNatServer starts an internal Nats Server
-func StartNatServer(port int) *server.Server {
+func startNatServer(port int) *server.Server {
 
 	// Create a new NATS server configuration
 	opts := &server.Options{

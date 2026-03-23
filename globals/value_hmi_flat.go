@@ -70,7 +70,8 @@ func (h *HMIVariableTyped) SetStringValue(sval string, pos int) (err error) {
 }
 
 // InitFlatHMIvalues initializes a map, that will be transered via Websocket, to be used in the HMI
-// I need some blank values in the Init Phase, that will be filed later
+// I need some blank values in the Init Phase, that will be filed later.
+// State REQ_MONITORING in main_runner.go
 func (gs *GlobalState) InitFlatHMIvalues() {
 	hmiDataMap := make(map[string]HMIVariableTyped)
 

@@ -13,6 +13,7 @@ import (
 	"github.com/awcullen/opcua/ua"
 )
 
+// PlcConfigDone prints the konfig to result.json
 func (gs *GlobalState) PlcConfigDone() {
 	// Print the parsed setup configuration for debugging
 	output, _ := json.MarshalIndent(&gs.Cfg, "", "  ")
@@ -24,23 +25,25 @@ func (gs *GlobalState) PlcConfigDone() {
 
 }
 
+// PlcConfigRead calls 3 functions to read the PLC congfigureation. See konfig.go
 func (gs *GlobalState) PlcConfigRead(ctx context.Context) (err error) {
 
-	if err := gs.Cfg.ReadKonfigViaOpcUa(READMAXWAIT, gs.OpcClient, ctx); err != nil {
+	if err := gs.Cfg.readKonfigViaOpcUa(READMAXWAIT, gs.OpcClient, ctx); err != nil {
 		return fmt.Errorf("error reading configuration via OPC UA: %w", err)
 	}
 
-	if err := gs.Cfg.SetupKonfigGroup(gs.OpcClient, ctx); err != nil {
+	if err := gs.Cfg.setupKonfigGroup(gs.OpcClient, ctx); err != nil {
 		return fmt.Errorf("error setting up Konfig group: %w", err)
 	}
 
-	if err := gs.Cfg.InitSWSettings(); err != nil {
+	if err := gs.Cfg.initSWSettings(); err != nil {
 		return fmt.Errorf("error initializing SW settings: %w", err)
 	}
 
 	return nil
 }
 
+// Dial_OPCUA establishes a connection to the OPCUA server of the PLC.
 func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
 
 	// Set the session name
@@ -79,6 +82,10 @@ func (gs *GlobalState) GetOpcPrefix(ctx context.Context) (err error) {
 		},
 	}
 
+	if gs.OpcClient == nil {
+		return fmt.Errorf("OPC UA client is not initialized")
+	}
+
 	res, err := gs.OpcClient.Read(ctx, req)
 
 	if err != nil {
@@ -109,14 +116,16 @@ func (gs *GlobalState) CloseOpcClient(ctx context.Context) (err error) {
 	return nil
 }
 
+// Connected resetts the attempt conter, which is read in the Retry_Wait function.
 func (gs *GlobalState) Connected() (err error) {
 	gs.Stats.Attempts = 0
 	return nil
 }
 
+// Retry_Wait implements the waiting algorithm. For now it will increase the waiting time, until a maximum time is reched. At least it crashes the programm.
 func (gs *GlobalState) Retry_Wait(ctx context.Context) (err error) {
 
-	timeoutInt := min(((gs.Stats.Attempts) * TIMEOUT_OPCUA), RETRY_WAIT_SECONDS_MAX)
+	timeoutInt := min(((gs.Stats.Attempts + 1) * TIMEOUT_OPCUA), RETRY_WAIT_SECONDS_MAX)
 	timeout := time.Duration(timeoutInt) * time.Second
 
 	if timeoutInt >= CRASH_EXIT_WAIT_SECONDS {
@@ -130,28 +139,24 @@ func (gs *GlobalState) Retry_Wait(ctx context.Context) (err error) {
 	return nil
 }
 
+// Retry tries to establish a TCP connenction to the OPCUA Port of the PLC.
 func (gs *GlobalState) Retry() (err error) {
 
-	err = gs.retryJustTheNetwork()
-
-	if err != nil {
-		return fmt.Errorf("Retry() failed: %w", err)
-	}
-
-	// Network connection established
-	return nil
-}
-
-func (gs *GlobalState) retryJustTheNetwork() error {
-
 	// Try a Network connection re-establishment, Dial via TCP
-	conn, err := net.DialTimeout("tcp", gs.Cfg.Plc.IPAddress+":80", TIMEOUT_PING)
+	conn, err := net.DialTimeout("tcp", gs.Cfg.Plc.IPAddress+":4840", TIMEOUT_PING)
 	if err != nil {
 		return fmt.Errorf("🔱 Network Dial TCP to PLC %s failed: %w\n", gs.Cfg.Plc.IPAddress, err)
 	}
 	defer conn.Close()
 
 	log.Printf("🔱 Network Dial TCP to PLC %s succeeded\n", gs.Cfg.Plc.IPAddress)
+
+	// Network connection established
+	return nil
+}
+
+// ReEstablishSession tries to re-establish the OPCUA session.
+func (gs *GlobalState) ReEstablishSession(ctx context.Context) (err error) {
 
 	return nil
 }

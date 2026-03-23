@@ -9,7 +9,6 @@ import (
 	"os/signal"
 	"strunck/uv4-middleware/globals"
 	"strunck/uv4-middleware/web"
-	"time"
 )
 
 // runGuard is a state machine. Rules: Every state will call a function, that will return an error or nil if successful.
@@ -45,22 +44,25 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 		if err := gs.InitTopics(); err != nil {
 			log.Printf("Error initializing topics: %v\nExiting...", err)
 			gs.SetState(globals.RETRY_WAIT)
+		} else {
+			gs.SetState(globals.PLC_CONFIG_READ)
 		}
-		gs.SetState(globals.PLC_CONFIG_READ)
 
 	case globals.PLC_CONFIG_READ:
 		if err := gs.PlcConfigRead(ctx); err != nil {
 			log.Printf("Error reading PLC configuration: %v\nExiting...", err)
 			gs.SetState(globals.RETRY)
+		} else {
+			gs.SetState(globals.PLC_CONFIG_ALARMS)
 		}
-		gs.SetState(globals.PLC_CONFIG_ALARMS)
 
 	case globals.PLC_CONFIG_ALARMS:
 		if err := gs.Cfg.SetupAlarmMessages(gs.OpcClient, globals.READMAXWAIT, ctx); err != nil {
 			log.Printf("error setting up alarm messages: %v", err)
 			gs.SetState(globals.RETRY)
+		} else {
+			gs.SetState(globals.PLC_CONFIG_DONE)
 		}
-		gs.SetState(globals.PLC_CONFIG_DONE)
 
 	case globals.PLC_CONFIG_DONE:
 		gs.PlcConfigDone()
@@ -68,27 +70,30 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 
 	case globals.DIAL_OPCUA_SRV:
 		if err := gs.Dial_OPCUA(ctx); err != nil {
-			log.Printf("Dial_OPCUA failed: %v\nEntering Retry Wait Loop...", err)
+			log.Printf("runGuard Dial_OPCUA failed: %v", err)
 			gs.SetState(globals.RETRY_WAIT)
+			break
 		}
 		if err := gs.GetOpcPrefix(ctx); err != nil {
-			log.Printf("GetOpcPrefix failed: %v\nEntering Retry Wait Loop...", err)
+			log.Printf("runGuard GetOpcPrefix failed: %v", err)
 			gs.SetState(globals.RETRY_WAIT)
+			break
 		}
+
 		gs.SetState(globals.CONNECTED)
 
 	case globals.RETRY:
 		gs.Stats.Attempts++
-		err := gs.Retry()
-		if err != nil {
-			log.Printf("Error in Retry: %v\nEntering Retry Wait Loop...", err)
+		if err := gs.Retry(); err != nil {
+			log.Printf("runGuard Retry failed: %v", err)
 			gs.SetState(globals.RETRY_WAIT)
+		} else {
+			gs.SetState(globals.DIAL_OPCUA_SRV)
 		}
-		gs.SetState(globals.DIAL_OPCUA_SRV)
 
 	case globals.RETRY_WAIT:
 		if err := gs.Retry_Wait(ctx); err != nil {
-			log.Fatalf("Crash exit: %v", err)
+			log.Fatalf("runGuard Crash exit: %v", err)
 		}
 		gs.SetState(globals.RETRY)
 
@@ -103,16 +108,16 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 		// Prepare the OPC UA Monitoring, monitor.go
 		// We need the Opc UA Client connection, see global.InitOpcClient in file opclient.go
 		if err := gs.InitMonitorOpcUa(ctx); err != nil {
-			log.Printf("error InitMonitorOpcUa: %v", err)
+			log.Printf("runGuard error InitMonitorOpcUa: %v", err)
 			gs.SetState(globals.RETRY)
+		} else {
+			gs.SetState(globals.MONITORING)
 		}
-
-		gs.SetState(globals.MONITORING)
 
 	case globals.MONITORING:
 		err := run_MainLoop(ctx, gs)
 		if err != nil {
-			log.Printf("Error in MainLoop: %v\nEntering Retry Wait Loop...", err)
+			log.Printf("runGuard run_MainLoop failed: %v", err)
 			gs.SetState(globals.RETRY_WAIT)
 		}
 
@@ -132,7 +137,7 @@ func run_MainLoop(ctx context.Context, gs *globals.GlobalState) (err error) {
 	signal.Notify(signalCh, os.Interrupt)
 	go runHttp(gs, errChHttp)
 
-	runNats(gs, 4222)
+	gs.RunNats(4222)
 
 	go gs.RecieveOpcUaMessage(ctx, errChMonitor)
 
@@ -146,18 +151,16 @@ func run_MainLoop(ctx context.Context, gs *globals.GlobalState) (err error) {
 	select {
 	case err := <-errChHttp:
 		if err != nil {
-			log.Printf("Error in HTTP server: %v\n", err)
+			return fmt.Errorf("channeled error in HTTP server: %w", err)
 		}
 
 	case err := <-errChMonitor:
 		if err != nil {
-			log.Printf("Error in OPC UA monitoring: %v\n", err)
-			return err
+			return fmt.Errorf("channeled error in OPC UA monitoring: %w", err)
 		}
 	case err := <-errChAlarm:
 		if err != nil {
-			log.Printf("Error in Alarm monitoring: %v\n", err)
-			return err
+			return fmt.Errorf("channeled error in Alarm monitoring: %w", err)
 		}
 	case <-signalCh: // Wait for Ctrl+C
 		log.Println("Received interrupt signal, shutting down...")
@@ -185,28 +188,4 @@ func runHttp(gs *globals.GlobalState, errCh chan error) {
 		return
 	}
 	errCh <- http.ListenAndServe(httpPort, srv)
-}
-
-func runNats(gs *globals.GlobalState, natsSrvPort int) {
-
-	if gs.NatsServer != nil {
-		return
-	}
-
-	// ---------------------- NATS ---------------------
-	// Initialilize NATS server, Options can be set in nats.go
-	nats_server := globals.StartNatServer(natsSrvPort)
-	// Start the NATS server in a separate goroutine
-	nats_server.Start()
-
-	// Wait for the server to be ready
-	if !nats_server.ReadyForConnections(4 * time.Second) {
-		log.Fatalf("NATS server did not start in time")
-	}
-	log.Printf("NATS server is running on 127.0.0.1:%d\n", natsSrvPort)
-
-	ncerr := gs.ConnectToNats(nats_server)
-	if ncerr != nil {
-		log.Fatalf("main init we got Error connecting to NATS server: %v", ncerr)
-	}
 }

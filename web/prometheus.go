@@ -17,9 +17,8 @@ func MetricsEndpoint(gs *globals.GlobalState) http.Handler {
 
 		// Register Metrics from konfig.makeArrayNodes()
 		for _, nodeid := range gs.Cfg.Plc.Publish {
-			if len(nodeid.Metric) > 0 { // only the ones, that have a metric name
-				log.Printf("Registering metric for topic: %s", nodeid.Topic)
-
+			// only the ones, that have a metric name
+			if len(nodeid.Metric) > 0 {
 				gs.MetricRegistry.MustRegister(nodeid.Gauge)
 			}
 		}

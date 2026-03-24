@@ -26,7 +26,7 @@ const (
 )
 
 const (
-	INTERVAL               = 200 * time.Millisecond
+	READ_ALARM_INTERVAL    = 5000 * time.Millisecond
 	LAG                    = 1 * time.Millisecond
 	RETRYWAIT_INCREMENT    = 4               // seconds to increment for each retry attempt
 	NETDIAL_TIMEOUT        = 2 * time.Second // timeout for net.Dial TCP Port 4840

@@ -8,7 +8,18 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/awcullen/opcua/client"
+	"github.com/awcullen/opcua/ua"
 )
+
+// Alarm will be parsed from the OPCua Group Alarm
+type Alarm struct {
+	Key     string `json:"key"` // on frontend key is used look up a markdown file, with a detailed Alarm message
+	Message string `json:"message"`
+	Ort     string `json:"ort"` //
+	Id      string `json:"id"`  // e.g AL_Wn.5, AL_KaelteDetektor.1
+}
 
 // Alarms holds a map of the current active alarms and the alarm history
 type Alarms struct {
@@ -27,6 +38,35 @@ type ActiveAlarm struct {
 
 const historyLimit = 100 // Limit for alarm history entries
 
+// StartPeriodicAlarmReader starts a goroutine that reads alarms every 5 seconds
+func (gs *GlobalState) StartPeriodicAlarmReader(bgctx context.Context, errCh chan error) {
+	log.Printf("⚠️ Start Reading Alarms every %v ..", READ_ALARM_INTERVAL)
+
+	ticker := time.NewTicker(READ_ALARM_INTERVAL)
+
+	go func() {
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-ticker.C:
+
+				if err := gs.ReadAlarms(bgctx); err != nil {
+					log.Printf("⚠️ Error reading alarms: %v", err)
+					errCh <- fmt.Errorf("⚠️ Error reading alarms: %w", err)
+					return
+				}
+				errCh <- nil // Signal successful read
+			case <-bgctx.Done():
+				log.Println("⚠️ Stopping periodic alarm reader")
+				return
+			}
+		}
+	}()
+
+	log.Println("⚠️ Started periodic alarm reader (every 5 seconds)")
+}
+
 func (hal *Alarms) pushHistory(act ActiveAlarm) {
 	if hal.History == nil {
 		hal.History = make([]ActiveAlarm, 0, historyLimit)
@@ -38,8 +78,9 @@ func (hal *Alarms) pushHistory(act ActiveAlarm) {
 	hal.History = append(hal.History, act)
 }
 
-func (al *Alarms) addOrPersistAlarm(alarmList []Alarm, gs *GlobalState) {
-	for _, act := range alarmList {
+func (al *Alarms) addOrPersistAlarm(alarmSet map[string]Alarm, gs *GlobalState) {
+	log.Printf("ddOrPersistAlarm alarmSet: %v", alarmSet)
+	for _, act := range alarmSet {
 		if al.Actual == nil {
 			al.Actual = make(map[string]ActiveAlarm)
 		}
@@ -61,9 +102,11 @@ func (al *Alarms) addOrPersistAlarm(alarmList []Alarm, gs *GlobalState) {
 		}
 	}
 
+	log.Printf("addOrPersistsAlarm al.Actual: %v", al.Actual)
+
 	for id, a := range al.Actual {
 		found := false
-		for _, alarm := range alarmList {
+		for _, alarm := range alarmSet {
 			if alarm.Id == id {
 				found = true
 				break
@@ -112,6 +155,7 @@ func (gs *GlobalState) GetAlarmTextFromSymbol(al Alarm) string {
 // This list get rewritten on user request or periodically every 5 seconds
 // so no need to delete a key, since everytime it gets regenerated
 func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
+	log.Printf("⚠️ Reading alarms from OPC UA server...")
 
 	// Prepare the Reader
 	// check if we are below 100 items
@@ -136,6 +180,9 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 	activeAlSet := make(map[string]Alarm)
 	var oneAlarm Alarm
 
+	//reset alcount
+	gs.Alarms.AlCount = 0
+
 	for i, resp := range response.Results {
 		if resp.StatusCode.IsBad() {
 			log.Printf("⚠️ Error reading alarm node %s: %s", gs.Cfg.Plc.AlarmReader.NodesToRead[i].NodeID, resp.StatusCode.Error())
@@ -150,10 +197,12 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 			for alarmIndex, alarmIsAktive := range bvals {
 				if alarmIsAktive {
 					oneAlarm, err = gs.setAlarm(nodeID, len(bvals), alarmIndex)
-
 					if err != nil {
 						return fmt.Errorf("⚠️ Error setting alarm for node %s: %w", nodeID, err)
 					}
+					gs.Alarms.AlCount++
+					activeAlSet[oneAlarm.Id] = oneAlarm
+					log.Printf("⚠️ ReadAlarm - Active alarm found: %s - %s (Ort: %s)", oneAlarm.Key, oneAlarm.Message, oneAlarm.Ort)
 				}
 			}
 		} else if alarmIsAktive, ok := resp.Value.(bool); ok {
@@ -163,21 +212,23 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 				if err != nil {
 					return fmt.Errorf("⚠️ Error setting alarm for node %s: %w", nodeID, err)
 				}
+				gs.Alarms.AlCount++
+				activeAlSet[oneAlarm.Id] = oneAlarm
+				log.Printf("⚠️ ReadAlarm - Active alarm found: %s - %s (Ort: %s)", oneAlarm.Key, oneAlarm.Message, oneAlarm.Ort)
 			}
 		}
-		activeAlSet[oneAlarm.Id] = oneAlarm
 	}
 
 	// Update the alarm list in the configuration
 	//gs.Cfg.Plc.AlarmList = make([]Alarm, 0, len(activeAlSet))
-	for _, alarm := range activeAlSet {
-		if len(alarm.Key) > 0 {
-			gs.Cfg.Plc.AlarmList = append(gs.Cfg.Plc.AlarmList, alarm)
-			log.Printf("func ReadAlarms append Alarm: %v", alarm)
-		}
-	}
+	// for _, alarm := range activeAlSet {
+	// 	if len(alarm.Key) > 0 {
+	// 		gs.Cfg.Plc.AlarmList = append(gs.Cfg.Plc.AlarmList, alarm)
+	// 		log.Printf("func ReadAlarms append Alarm: %v", alarm)
+	// 	}
+	// }
 
-	gs.Alarms.addOrPersistAlarm(gs.Cfg.Plc.AlarmList, gs)
+	gs.Alarms.addOrPersistAlarm(activeAlSet, gs)
 
 	// log.Printf("DEBUG ReadAlarms Processed %d alarm nodes, found %d active alarms", len(response.Results), len(activeAlSet))
 
@@ -235,36 +286,6 @@ func (gs *GlobalState) setAlarm(nodeID string, vlen int, idx int) (alarm Alarm, 
 
 }
 
-// StartPeriodicAlarmReader starts a goroutine that reads alarms every 5 seconds
-func (gs *GlobalState) StartPeriodicAlarmReader(bgctx context.Context, errCh chan error) {
-	log.Printf("Start Reading Alarms every %v ..", INTERVAL)
-
-	ticker := time.NewTicker(5 * time.Second)
-
-	go func() {
-		defer ticker.Stop()
-
-		for {
-			select {
-			case <-ticker.C:
-
-				if err := gs.ReadAlarms(bgctx); err != nil {
-					log.Printf("⚠️ Error reading alarms: %v", err)
-					errCh <- fmt.Errorf("⚠️ Error reading alarms: %w", err)
-					return
-				}
-
-				return
-			case <-bgctx.Done():
-				log.Println("⚠️ Stopping periodic alarm reader")
-				return
-			}
-		}
-	}()
-
-	log.Println("⚠️ Started periodic alarm reader (every 5 seconds)")
-}
-
 // ReadAlarmsOnDemand provides a way to manually trigger an alarm read
 // This can be called from web handlers or other parts of the application
 func (gs *GlobalState) ReadAlarmsOnDemand(bgctx context.Context) error {
@@ -290,4 +311,126 @@ func (al Alarms) HistoryToJson() []byte {
 		return nil
 	}
 	return res
+}
+
+func (al Alarms) ToJson() []byte {
+	res, err := json.MarshalIndent(al, "", "  ")
+	if err != nil {
+		log.Println("Error marshalling Alarm Count to JSON:", err)
+		return nil
+	}
+	return res
+}
+
+// Filter alarm messages from .Nats.Topics
+// Create a map of shorts -> description to assotiate the descr
+// to the Alarm, if one should occur
+func (cfg *Config) SetupAlarmMessages(plcCon *client.Client, readmaxwait time.Duration, bgctx context.Context) (err error) {
+	normAlarmMap := make(map[string]string)
+	var normalAlarmList []ua.ReadValueID
+	for _, v := range cfg.Nats.Topics {
+		if v.Name == "AL_AlarmAktiv" || v.Name == "AL_AlarmMerk" {
+			continue
+		}
+		if v.Group == "Al" {
+			normAlarmMap[v.Opcnode] = v.Descr
+
+			nid := ua.ParseNodeID(v.Opcnode)
+			normalAlarmList = append(normalAlarmList, ua.ReadValueID{
+				NodeID:      nid,
+				AttributeID: ua.AttributeIDValue,
+			})
+		}
+	}
+
+	// Get the descr field from the Wn Node and if they are active
+	// array of node id
+
+	firstRequest := make([]ua.ReadValueID, 100)
+	wnAlarmReadList := make([]ua.ReadValueID, 20)
+	//cfg.Plc.AlarmReader = make([]*ua.ReadRequest, 3)
+
+	var wn_id, vnn_id string
+
+	for i := 1; i <= 20; i++ {
+		//
+		wn_id = fmt.Sprintf("%sGTB.Wn[%d].sName", cfg.Opcua.Prefix, i)
+		wn_nodeid := ua.ParseNodeID(wn_id)
+
+		firstRequest[i-1] = ua.ReadValueID{
+			NodeID:      wn_nodeid,
+			AttributeID: ua.AttributeIDValue,
+		}
+
+		wn_alarm_nid := fmt.Sprintf("%sGTB.Wn[%d].xAlarm", cfg.Opcua.Prefix, i)
+		wn_alarm_nodeid := ua.ParseNodeID(wn_alarm_nid)
+
+		wnAlarmReadList[i-1] = ua.ReadValueID{
+			NodeID:      wn_alarm_nodeid,
+			AttributeID: ua.AttributeIDValue,
+		}
+	}
+
+	for i := 21; i <= 100; i++ {
+		vnn_id = fmt.Sprintf("%sGTB.Vnn[%d].sBezeichner", cfg.Opcua.Prefix, i-20)
+		vnn_nodeid := ua.ParseNodeID(vnn_id)
+		firstRequest[i-1] = ua.ReadValueID{
+			NodeID:      vnn_nodeid,
+			AttributeID: ua.AttributeIDValue,
+		}
+
+	}
+
+	secondRequest := make([]ua.ReadValueID, 80)
+	for i := 1; i <= 80; i++ {
+		vnn_id = fmt.Sprintf("%sGTB.Vnn[%d].sBezeichner", cfg.Opcua.Prefix, i)
+		vnn_nodeid := ua.ParseNodeID(vnn_id)
+
+		secondRequest[i-1] = ua.ReadValueID{
+			NodeID:      vnn_nodeid,
+			AttributeID: ua.AttributeIDValue,
+		}
+	}
+
+	//  Read the Nodes
+	ctx, cancel := context.WithTimeout(bgctx, readmaxwait)
+	defer cancel()
+
+	firstResponse, err := plcCon.Read(ctx, &ua.ReadRequest{MaxAge: 2000, NodesToRead: firstRequest})
+	if err != nil {
+		return fmt.Errorf("setting up alarms from firstResponse: %v", err)
+	}
+
+	fr := firstResponse.Header()
+	if fr.ServiceResult.IsBad() {
+		return fmt.Errorf("setting up alarms from firstResponse: header servcice result 'is bad'")
+	}
+
+	var wn_key, wn_message string
+
+	for i, resp := range firstResponse.Results {
+
+		if i < 20 {
+
+			wn_key = fmt.Sprintf("%s", firstRequest[i].NodeID)
+			// replace sName with xAlarm
+			wn_key = strings.Replace(wn_key, "sName", "xAlarm", 1)
+			wn_message = resp.Value.(string)
+			// log.Printf("%s %s", wn_key, wn_message)
+			normAlarmMap[wn_key] = wn_message
+		} else {
+			vnn_msg := resp.Value.(string)
+			cfg.Plc.SWSettings.Vnn = append(cfg.Plc.SWSettings.Vnn, vnn_msg)
+			// log.Printf("%s", vnn_msg)
+		}
+	}
+
+	wnAlarmReadList = append(wnAlarmReadList, normalAlarmList...)
+
+	cfg.Plc.AlarmReader = &ua.ReadRequest{
+		MaxAge:      2000,
+		NodesToRead: wnAlarmReadList,
+	}
+	cfg.Plc.AlarmDict = normAlarmMap
+	return nil
 }

@@ -54,7 +54,6 @@ type PlcConfig struct {
 	Tmp         []string                    `json:"Tmp"`         // Can I delete this?
 	SWSettings  SWSettings                  `json:"SWSettings"`  // SWSettings is needed for the frontend to start
 	AlarmDict   map[string]string           `json:"AlarmDict"`   // Prefill from Nats.Topics and Wn to setup an alarm message part
-	AlarmList   []Alarm                     `json:"Alarms"`      // Current active alarms
 	AlarmReader *ua.ReadRequest             `json:"AlarmReader"` // OpcUa Read Request
 	Publish     map[uint32]VariantToMessage `json:"Publish"`     // Maps the opcua message id to setting that are needed to process the message
 	GrafanRaum  string                      `json:"Raum"`        // Raumnummern to be processed by Grafana
@@ -81,14 +80,6 @@ type VariantToMessage struct {
 type DimScopeArray struct {
 	Length  uint8
 	Scopers []string
-}
-
-// Alarm will be parsed from the OPCua Group Alarm
-type Alarm struct {
-	Key     string `json:"key"` // on frontend key is used look up a markdown file, with a detailed Alarm message
-	Message string `json:"message"`
-	Ort     string `json:"ort"` //
-	Id      string `json:"id"`  // e.g AL_Wn.5, AL_KaelteDetektor.1
 }
 
 // OPCUA stuff from the Codesys xml file -------------------------------------------------------------------------------------------------

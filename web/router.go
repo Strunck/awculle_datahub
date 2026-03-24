@@ -45,6 +45,7 @@ func ServeHttp(gs *globals.GlobalState) (r *chi.Mux, err error) {
 			r.Get("/", PathData(gs))
 			r.Get("/{flatkey}", PathDataKey(gs)) //see values_hmi_flat_processed.json
 			r.Get("/alarms", PathDataAlarms(gs))
+			r.Get("/alarmsactual", PathDataAlarmsActual(gs))
 			r.Get("/alarmhistory", PathDataAlarmHistory(gs))
 			r.Get("/v2", PathDataV2(gs))
 			r.Get("/v2/{scope}", PathDataV2Scope(gs))

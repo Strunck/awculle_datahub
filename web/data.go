@@ -45,6 +45,17 @@ func PathDataAlarms(gs *globals.GlobalState) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
+		if _, err := w.Write(gs.Alarms.ToJson()); err != nil {
+			http.Error(w, "Error writing response", http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
+func PathDataAlarmsActual(gs *globals.GlobalState) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
 		if _, err := w.Write(gs.Alarms.ActualToJson()); err != nil {
 			http.Error(w, "Error writing response", http.StatusInternalServerError)
 			return

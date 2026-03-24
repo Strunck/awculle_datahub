@@ -26,21 +26,16 @@ const (
 )
 
 const (
-	INTERVAL                = 200 * time.Millisecond
-	LAG                     = 1 * time.Millisecond
-	TIMEOUT_OPCUA           = 4 // seconds to increment for each retry attempt
-	TIMEOUT_PING            = 2 * time.Second
-	READMAXWAIT             = 5 * time.Second
-	RETRY_WAIT_SECONDS_MAX  = 12
-	CRASH_EXIT_WAIT_SECONDS = 60 // 3 h, should be enough time to fix the issue and restart the container, otherwise it will crash exit and restart automatically via podman restart policy
-)
-
-const (
-	MAXREAD = 100
-)
-
-const (
-	SYMBOLXML    = "ULOVisor_V0.14.20_AAA.04.Device.Application.xml"
-	SETTINGSJSON = "settings.json"
-	HttpPort     = 1881
+	INTERVAL               = 200 * time.Millisecond
+	LAG                    = 1 * time.Millisecond
+	RETRYWAIT_INCREMENT    = 4               // seconds to increment for each retry attempt
+	NETDIAL_TIMEOUT        = 2 * time.Second // timeout for net.Dial TCP Port 4840
+	READWAIT_INC_MAX       = 5 * time.Second
+	RETRY_WAIT_SECONDS_MAX = 12                                // max seconds, between retry attempt
+	RETRYWAIT_ATTEMPTS_MAX = 10                                // max 10 attempt are made. Otherwise it will crash exit and restart automatically via podman restart policy.
+	OPCUA_SESSION_TIMEOUT  = RETRYWAIT_ATTEMPTS_MAX * 3 * 1000 // WithSessionTimeout sets the number of milliseconds that a session may be unused before being closed by the server. (default: 2 min)
+	OPCUA_CONNECT_TIMEOUT  = 1000 * 5                          // sets the number of milliseconds to wait for a connection response. (default:5000)
+	SYMBOLXML              = "ULOVisor_V0.14.20_AAA.04.Device.Application.xml"
+	SETTINGSJSON           = "settings.json"
+	HttpPort               = 1881
 )

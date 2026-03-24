@@ -268,7 +268,7 @@ func (gs *GlobalState) StartPeriodicAlarmReader(bgctx context.Context, errCh cha
 // ReadAlarmsOnDemand provides a way to manually trigger an alarm read
 // This can be called from web handlers or other parts of the application
 func (gs *GlobalState) ReadAlarmsOnDemand(bgctx context.Context) error {
-	ctx, cancel := context.WithTimeout(bgctx, READMAXWAIT)
+	ctx, cancel := context.WithTimeout(bgctx, READWAIT_INC_MAX)
 	defer cancel()
 
 	return gs.ReadAlarms(ctx)

@@ -50,14 +50,14 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 
 	case globals.PLC_CONFIG_READ:
 		if err := gs.PlcConfigRead(ctx); err != nil {
-			log.Printf("Error reading PLC configuration: %v\nExiting...", err)
+			log.Printf("⏳ Error reading PLC configuration: %v\nExiting...", err)
 			gs.SetState(globals.RETRY)
 		} else {
 			gs.SetState(globals.PLC_CONFIG_ALARMS)
 		}
 
 	case globals.PLC_CONFIG_ALARMS:
-		if err := gs.Cfg.SetupAlarmMessages(gs.OpcClient, globals.READMAXWAIT, ctx); err != nil {
+		if err := gs.Cfg.SetupAlarmMessages(gs.OpcClient, globals.READWAIT_INC_MAX, ctx); err != nil {
 			log.Printf("error setting up alarm messages: %v", err)
 			gs.SetState(globals.RETRY)
 		} else {
@@ -76,6 +76,11 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 		}
 		if err := gs.GetOpcPrefix(ctx); err != nil {
 			log.Printf("runGuard GetOpcPrefix failed: %v", err)
+			gs.SetState(globals.RETRY_WAIT)
+			break
+		}
+		if err := gs.GetConnectionStatus(ctx); err != nil {
+			log.Printf("runGuard GetConnectionStatus failed: %v", err)
 			gs.SetState(globals.RETRY_WAIT)
 			break
 		}

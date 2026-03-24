@@ -45,7 +45,7 @@ func (cfg *Config) readKonfigViaOpcUa(timeout time.Duration, c *client.Client, b
 		id := ua.ParseNodeID(nodeID)
 
 		if id == nil {
-			log.Fatalf("ReadKonfigViaOpcUa got an invalid node id: %s", nodeID)
+			log.Fatalf("🪑 ReadKonfigViaOpcUa got an invalid node id: %s", nodeID)
 		}
 
 		req := &ua.ReadRequest{
@@ -61,11 +61,11 @@ func (cfg *Config) readKonfigViaOpcUa(timeout time.Duration, c *client.Client, b
 
 		resp, err := c.Read(ctx, req)
 		if err != nil {
-			log.Fatalf("Read failed for %s: %s", nodeID, err)
+			log.Fatalf("🪑 Read failed for %s: %s", nodeID, err)
 		}
 
 		if !resp.Results[0].StatusCode.IsGood() {
-			log.Fatalf("Status not OK for %s: %v", nodeID, resp.Results[0].StatusCode.Error())
+			log.Fatalf("🪑 Status not OK for %s: %v", nodeID, resp.Results[0].StatusCode.Error())
 		}
 
 		value := resp.Results[0].Value.(byte)
@@ -97,12 +97,12 @@ func (cfg *Config) readKonfigViaOpcUa(timeout time.Duration, c *client.Client, b
 
 	err = cfg.transferDimensons()
 	if err != nil {
-		log.Fatalf("failed to fill topic map: %s", err.Error())
+		log.Fatalf("🪑 failed to fill topic map: %s", err.Error())
 	}
 
 	err = cfg.makeVariantToMessage()
 	if err != nil {
-		log.Fatalf("failed to prepare the list of node id's for the Opcua Subcribtions: %s", err.Error())
+		log.Fatalf("🪑 failed to prepare the list of node id's for the Opcua Subcribtions: %s", err.Error())
 	}
 
 	return err
@@ -117,13 +117,13 @@ func (cfg *Config) transferDimensons() (err error) {
 		// get the amount of the configured plc scopes(loops)
 		loop, ok := cfg.Plc.DimMap[t.Scope]
 		if !ok {
-			log.Printf("'%s' with scope %s is not Config.Plc.DimMap", t.Short, t.Scope)
+			log.Printf("🪑 '%s' with scope %s is not Config.Plc.DimMap", t.Short, t.Scope)
 		}
 		cfg.Nats.Topics[i].Length = loop.Length
 		i++
 	}
 	if i == 0 {
-		return errors.New("no topics found in NATS Config")
+		return errors.New("🪑 no topics found in NATS Config")
 	}
 
 	return nil
@@ -229,7 +229,7 @@ func (cfg *Config) setupKonfigGroup(client *client.Client, bgctx context.Context
 
 				lf, err := ComposeExtensionObject(prefix, n)
 				if err != nil {
-					log.Printf("ComposeExtensionObject Error: %v\n", err)
+					log.Printf("🪑 ComposeExtensionObject Error: %v\n", err)
 				} else {
 					//	log.Printf("Append: %v\n%v\n", leaf_node.Name, lf)
 					nodeIdList = append(nodeIdList, lf...)
@@ -238,7 +238,7 @@ func (cfg *Config) setupKonfigGroup(client *client.Client, bgctx context.Context
 		}
 	}
 
-	log.Println("NodeList is created. Found", len(nodeIdList))
+	log.Println("🪑 NodeList is created. Found", len(nodeIdList))
 
 	var opcReadReqList []*ua.ReadRequest
 
@@ -271,7 +271,7 @@ func (cfg *Config) setupKonfigGroup(client *client.Client, bgctx context.Context
 			j++
 
 		} else {
-			log.Printf("WARN keine NodeID %s\t%v\n", n.Name, n)
+			log.Printf("🪑 WARN keine NodeID %s\t%v\n", n.Name, n)
 			nodeListErrCnt++
 		}
 
@@ -279,7 +279,7 @@ func (cfg *Config) setupKonfigGroup(client *client.Client, bgctx context.Context
 
 	// Just for Debugging
 	if nodeListErrCnt > 0 {
-		log.Printf("WARNING %d NodeId could not be created\n", nodeListErrCnt)
+		log.Printf("🪑 WARNING %d NodeId could not be created\n", nodeListErrCnt)
 	}
 
 	// New Context for Reading OPC UA
@@ -291,15 +291,15 @@ func (cfg *Config) setupKonfigGroup(client *client.Client, bgctx context.Context
 	readlistCount := len(opcReadReqList)
 	idx := 0
 	for i, readlist := range opcReadReqList {
-		log.Println("Read Sequence:", i+1, "of", readlistCount, "Start")
+		log.Println("🪑 Read Sequence:", i+1, "of", readlistCount, "Start")
 
 		readed, err := client.Read(ctx, readlist)
 
 		if err != nil {
-			log.Println("WARNING Did not read all Konfig Nodes", err)
+			log.Println("🪑 WARNING Did not read all Konfig Nodes", err)
 
 		} else {
-			log.Println("Read Sequence", i+1, "SUCCESS")
+			log.Println("🪑 Read Sequence", i+1, "SUCCESS")
 
 			for k, rr := range readed.Results {
 				idx = k + (i * MAXREAD)
@@ -322,10 +322,10 @@ func (cfg *Config) setupKonfigGroup(client *client.Client, bgctx context.Context
 	// Aggregate Plc.Konfig
 	err = cfg.ComposeArrayFromObjects()
 	if err != nil {
-		return fmt.Errorf("failed to compose arrays from Plc.Konfig: %w", err)
+		return fmt.Errorf("🪑 failed to compose arrays from Plc.Konfig: %w", err)
 		// log.Fatalf("failed to compose arrays from Plc.Konfig: %s", err.Error())
 	}
-	log.Println("SetupKonfigGroup: Selfconfiguration from PLC successfully finished.")
+	log.Println("🪑 SetupKonfigGroup: Selfconfiguration from PLC successfully finished.")
 
 	return err
 }
@@ -340,7 +340,7 @@ func (cfg *Config) initSWSettings() (err error) {
 	// Make Array from string
 	f, ok = cfg.Plc.Konfig["gs_Raumnummer"]
 	if !ok {
-		return fmt.Errorf("key 'gs_Raumnummer' not found in Plc.Konfig")
+		return fmt.Errorf("🪑 key 'gs_Raumnummer' not found in Plc.Konfig")
 	}
 	rn := strings.Split(f.(string), ",")
 	s.Raumnummer = rn
@@ -348,17 +348,17 @@ func (cfg *Config) initSWSettings() (err error) {
 	// Raumstring for Grafana	// Raumanzahl
 	el, ok := cfg.Plc.DimMap["R"]
 	if !ok {
-		return fmt.Errorf("key 'R' not found in Plc.DimMap")
+		return fmt.Errorf("🪑 key 'R' not found in Plc.DimMap")
 	}
 	s.Raumanzahl = int(el.Length)
 	s.R = s.Raumanzahl
 
 	// Error checks
 	if s.Raumanzahl > len(rn) {
-		return fmt.Errorf("string Raumnummer has %d entries, but Raumanzahl is %d", len(rn), s.Raumanzahl)
+		return fmt.Errorf("🪑 string Raumnummer has %d entries, but Raumanzahl is %d", len(rn), s.Raumanzahl)
 	}
 	if s.Raumanzahl == 0 {
-		return fmt.Errorf("initSWSettings Raumanzahl is 0, please check your configuration")
+		return fmt.Errorf("🪑 initSWSettings Raumanzahl is 0, please check your configuration")
 	}
 
 	// Raumstring for Grafana
@@ -370,14 +370,14 @@ func (cfg *Config) initSWSettings() (err error) {
 
 	f, ok = cfg.Plc.Konfig["Gs_Kunde"]
 	if !ok {
-		return fmt.Errorf("key 'Gs_Kunde' not found in Plc.Konfig")
+		return fmt.Errorf("🪑 key 'Gs_Kunde' not found in Plc.Konfig")
 	}
 	s.Kunde = f.(string)
 
 	s.Version = cfg.Plc.Konfig["Gs_Version"].(string)
 	f, ok = cfg.Plc.Konfig["Gs_Version"]
 	if !ok {
-		return fmt.Errorf("key 'Gs_Version' not found in Plc.Konfig")
+		return fmt.Errorf("🪑 key 'Gs_Version' not found in Plc.Konfig")
 	}
 	s.Version = f.(string)
 
@@ -393,7 +393,7 @@ func (cfg *Config) initSWSettings() (err error) {
 
 	f, ok = cfg.Plc.Konfig["Gb_AnzahlEMeter"]
 	if !ok {
-		return fmt.Errorf("key 'Gb_AnzahlEMeter' not found in Plc.Konfig")
+		return fmt.Errorf("🪑 key 'Gb_AnzahlEMeter' not found in Plc.Konfig")
 	}
 	s.J = f.(int)
 

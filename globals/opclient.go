@@ -28,7 +28,7 @@ func (gs *GlobalState) PlcConfigDone() {
 // PlcConfigRead calls 3 functions to read the PLC congfigureation. See konfig.go
 func (gs *GlobalState) PlcConfigRead(ctx context.Context) (err error) {
 
-	if err := gs.Cfg.readKonfigViaOpcUa(READMAXWAIT, gs.OpcClient, ctx); err != nil {
+	if err := gs.Cfg.readKonfigViaOpcUa(READWAIT_INC_MAX, gs.OpcClient, ctx); err != nil {
 		return fmt.Errorf("error reading configuration via OPC UA: %w", err)
 	}
 
@@ -57,8 +57,8 @@ func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
 		gs.Cfg.Opcua.Url,
 		client.WithSessionName(gs.SessionName),
 		client.WithInsecureSkipVerify(),
-		client.WithSessionTimeout(1000*30),
-		client.WithConnectTimeout(1000*5),
+		client.WithSessionTimeout(OPCUA_SESSION_TIMEOUT),
+		client.WithConnectTimeout(OPCUA_CONNECT_TIMEOUT),
 	)
 
 	if err != nil {
@@ -116,24 +116,24 @@ func (gs *GlobalState) CloseOpcClient(ctx context.Context) (err error) {
 	return nil
 }
 
-// Connected resetts the attempt conter, which is read in the Retry_Wait function.
+// Connected resetts the attempt counter, which is read in the Retry_Wait function.
 func (gs *GlobalState) Connected() (err error) {
 	gs.Stats.Attempts = 0
 	return nil
 }
 
-// Retry_Wait implements the waiting algorithm. For now it will increase the waiting time, until a maximum time is reched. At least it crashes the programm.
+// Retry_Wait implements the waiting algorithm. For now it will increase the waiting time, until a maximum time is reached. At least it crashes the program.
 func (gs *GlobalState) Retry_Wait(ctx context.Context) (err error) {
 
-	timeoutInt := min(((gs.Stats.Attempts + 1) * TIMEOUT_OPCUA), RETRY_WAIT_SECONDS_MAX)
+	timeoutInt := min(((gs.Stats.Attempts + 1) * RETRYWAIT_INCREMENT), RETRY_WAIT_SECONDS_MAX)
 	timeout := time.Duration(timeoutInt) * time.Second
 
-	if timeoutInt >= CRASH_EXIT_WAIT_SECONDS {
-		return fmt.Errorf("retried too often, waited for %d seconds", timeoutInt)
+	if gs.Stats.Attempts >= RETRYWAIT_ATTEMPTS_MAX {
+		return fmt.Errorf("⏳ retried too often, waited for %d seconds", timeoutInt)
 	}
 
 	// wait for TIMEOUT_OPCUA sec before switching to Retry
-	log.Printf("Waiting for %d seconds before retrying connection...\n", timeoutInt)
+	log.Printf("⏳ Waiting for %d seconds before retrying connection...\n", timeoutInt)
 	time.Sleep(timeout)
 
 	return nil
@@ -143,9 +143,9 @@ func (gs *GlobalState) Retry_Wait(ctx context.Context) (err error) {
 func (gs *GlobalState) Retry() (err error) {
 
 	// Try a Network connection re-establishment, Dial via TCP
-	conn, err := net.DialTimeout("tcp", gs.Cfg.Plc.IPAddress+":4840", TIMEOUT_PING)
+	conn, err := net.DialTimeout("tcp", gs.Cfg.Plc.IPAddress+":"+gs.Cfg.Plc.OpcUaPort, NETDIAL_TIMEOUT)
 	if err != nil {
-		return fmt.Errorf("🔱 Network Dial TCP to PLC %s failed: %w\n", gs.Cfg.Plc.IPAddress, err)
+		return fmt.Errorf("🔱 Network Dial attempt %d to PLC %s failed: %w\n", gs.Stats.Attempts, gs.Cfg.Plc.IPAddress, err)
 	}
 	defer conn.Close()
 
@@ -158,5 +158,42 @@ func (gs *GlobalState) Retry() (err error) {
 // ReEstablishSession tries to re-establish the OPCUA session.
 func (gs *GlobalState) ReEstablishSession(ctx context.Context) (err error) {
 
+	//session := gs.OpcClient.TransferSubscriptions()
+
+	return nil
+}
+
+// monitors the connection status.
+func (gs *GlobalState) GetConnectionStatus(ctx context.Context) error {
+
+	if gs.OpcClient == nil {
+		return fmt.Errorf("🔱 OPC UA client is not initialized")
+	}
+
+	// Attempt a simple read to verify connection
+	req := &ua.ReadRequest{
+		NodesToRead: []ua.ReadValueID{
+			{
+				NodeID:      ua.NewNodeIDNumeric(0, 2259), // Server_ConnectionStatus
+				AttributeID: ua.AttributeIDValue,
+			},
+		},
+	}
+
+	res, err := gs.OpcClient.Read(ctx, req)
+	if err != nil {
+		return fmt.Errorf("🔱 OPC UA connection lost: %w", err)
+	} else {
+		rtext := "🔱 OPC UA connection status is "
+		// get the test of the connection status
+		if res.ServiceResult.IsGood() {
+			rtext += "good"
+		} else {
+			rtext += "bad"
+			return fmt.Errorf("%s: %v", rtext, res.Results[0].Value)
+		}
+		status := res.Results[0].Value
+		log.Printf("%s: %v", rtext, status)
+	}
 	return nil
 }

@@ -79,12 +79,6 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 			gs.SetState(globals.RETRY_WAIT)
 			break
 		}
-		if err := gs.GetConnectionStatus(ctx); err != nil {
-			log.Printf("runGuard GetConnectionStatus failed: %v", err)
-			gs.SetState(globals.RETRY_WAIT)
-			break
-		}
-
 		gs.SetState(globals.CONNECTED)
 
 	case globals.RETRY:
@@ -146,7 +140,7 @@ func run_MainLoop(ctx context.Context, gs *globals.GlobalState) (err error) {
 
 	go gs.RecieveOpcUaMessage(ctx, errChMonitor)
 
-	go gs.StartPeriodicAlarmReader(ctx, errChAlarm)
+	gs.StartPeriodicAlarmReader(ctx, errChAlarm)
 
 	// Daily Report Cron Job
 	if err := gs.Run_CronJob(); err != nil {

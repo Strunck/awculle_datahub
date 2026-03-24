@@ -29,6 +29,12 @@ func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) (err error) {
 		return err
 	}
 
+	if subres.ServiceResult.IsGood() {
+		log.Printf("🔱 OPC UA Subscription created with ID: %d\n", subres.SubscriptionID)
+	} else {
+		return fmt.Errorf("🔱 OPC UA Subscription creation failed with status: %v", subres.ServiceResult)
+	}
+
 	// List of monitored items, that have been configured in func
 	mimi := make([]ua.MonitoredItemCreateRequest, gs.Cfg.Plc.Stats.TotalSubcriptions)
 	for i, vtm := range gs.Cfg.Plc.Publish {
@@ -190,7 +196,7 @@ func (mh *MsgHealth) calcAge() {
 	now := time.Now()
 	//log.Println("Now", now.Unix(), "Last", mh.LastMsg.Unix())
 	mh.AgeMs = now.UnixMilli() - mh.LastMsg.UnixMilli()
-	mh.Ok = mh.AgeMs < READMAXWAIT.Milliseconds()
+	mh.Ok = mh.AgeMs < READWAIT_INC_MAX.Milliseconds()
 }
 
 func (mh *MsgHealth) Update() {

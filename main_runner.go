@@ -4,11 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net/http"
-	"os"
-	"os/signal"
 	"strunck/uv4-middleware/globals"
-	"strunck/uv4-middleware/web"
 )
 
 // runGuard is a state machine. Rules: Every state will call a function, that will return an error or nil if successful.
@@ -114,29 +110,26 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 		}
 
 	case globals.MONITORING:
-		err := run_MainLoop(ctx, gs)
-		if err != nil {
+		if err := startMonitor(ctx, gs); err != nil {
 			log.Printf("runGuard run_MainLoop failed: %v", err)
 			gs.SetState(globals.RETRY_WAIT)
 		}
+		gs.SetState(globals.RUN)
+
+	case globals.RUN:
 
 	default:
 		log.Fatalf("Invalid state: %v", gs.Loop)
 	}
 }
 
-func run_MainLoop(ctx context.Context, gs *globals.GlobalState) (err error) {
+func startMonitor(ctx context.Context, gs *globals.GlobalState) (err error) {
+	fmt.Printf("\n\nrun_MainLoop\n\n\n")
 
 	// Channel für Fehler
-	errChHttp := make(chan error, 1)
+
 	errChMonitor := make(chan error, 1)
 	errChAlarm := make(chan error, 1)
-
-	signalCh := make(chan os.Signal, 1)
-	signal.Notify(signalCh, os.Interrupt)
-	go runHttp(gs, errChHttp)
-
-	gs.RunNats(4222)
 
 	go gs.RecieveOpcUaMessage(ctx, errChMonitor)
 
@@ -148,10 +141,6 @@ func run_MainLoop(ctx context.Context, gs *globals.GlobalState) (err error) {
 	}
 
 	select {
-	case err := <-errChHttp:
-		if err != nil {
-			return fmt.Errorf("channeled error in HTTP server: %w", err)
-		}
 
 	case err := <-errChMonitor:
 		if err != nil {
@@ -161,30 +150,7 @@ func run_MainLoop(ctx context.Context, gs *globals.GlobalState) (err error) {
 		if err != nil {
 			return fmt.Errorf("channeled error in Alarm monitoring: %w", err)
 		}
-	case <-signalCh: // Wait for Ctrl+C
-		log.Println("Received interrupt signal, shutting down...")
-
-		// Clean up and close the OPC UA client
-		if err := gs.CloseOpcClient(ctx); err != nil {
-			log.Fatalf("Error closing connection: %v\nExiting...", err)
-		}
-		log.Println("Exiting gracefully....")
-
-		os.Exit(0)
 	}
 
 	return nil
-}
-
-func runHttp(gs *globals.GlobalState, errCh chan error) {
-
-	httpPort := fmt.Sprintf(":%d", globals.HttpPort)
-	log.Printf("Starting Webserver port %s\n", httpPort)
-
-	srv, err := web.ServeHttp(gs)
-	if err != nil {
-		errCh <- fmt.Errorf("error starting HTTP server: %w", err)
-		return
-	}
-	errCh <- http.ListenAndServe(httpPort, srv)
 }

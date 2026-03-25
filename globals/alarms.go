@@ -79,7 +79,7 @@ func (hal *Alarms) pushHistory(act ActiveAlarm) {
 }
 
 func (al *Alarms) addOrPersistAlarm(alarmSet map[string]Alarm, gs *GlobalState) {
-	log.Printf("ddOrPersistAlarm alarmSet: %v", alarmSet)
+
 	for _, act := range alarmSet {
 		if al.Actual == nil {
 			al.Actual = make(map[string]ActiveAlarm)
@@ -101,8 +101,6 @@ func (al *Alarms) addOrPersistAlarm(alarmSet map[string]Alarm, gs *GlobalState) 
 			log.Printf("⚠️ New active alarm added: id: %s Symbol: %s - %s (Ort: %s)", act.Id, act.Key, act.Message, act.Ort)
 		}
 	}
-
-	log.Printf("addOrPersistsAlarm al.Actual: %v", al.Actual)
 
 	for id, a := range al.Actual {
 		found := false

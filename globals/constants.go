@@ -19,6 +19,7 @@ const (
 	PLC_CONFIG_DONE                    // PLC configuration is read
 	REQ_MONITORING                     // Request monitoring of nodes
 	MONITORING                         // Monitoring nodes
+	RUN                                // Run the main loop
 	DISCONNECTED                       // Disconnected from the OPC UA server
 	RETRY                              // Retry connection to the OPC UA server
 	RETRY_WAIT                         // Wait before retrying connection

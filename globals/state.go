@@ -3,6 +3,7 @@ package globals
 import (
 	"encoding/json"
 	"log"
+	"sync"
 
 	"github.com/awcullen/opcua/client"
 	"github.com/nats-io/nats-server/v2/server"
@@ -29,6 +30,7 @@ type GlobalState struct {
 }
 
 type ReportData struct {
+	mu    sync.Mutex
 	Daily map[string]DailyReportExtension
 	All   [][]ReportCsvLine
 }
@@ -73,7 +75,7 @@ func (gs *GlobalState) SetState(state LoopState) {
 	}
 }
 
-func (gs GlobalState) PrintState() {
+func (gs *GlobalState) PrintState() {
 	switch gs.Loop {
 	case INIT_STATE:
 		log.Println("🥅 INIT_STATE 🥅")
@@ -104,8 +106,12 @@ func (gs GlobalState) PrintState() {
 
 	case REQ_MONITORING:
 		log.Println("👁️‍🗨️ REQ_MONITORING 👁️‍🗨️")
+
 	case MONITORING:
 		log.Println("👀 MONITORING 👀")
+
+	case RUN:
+		log.Println("🏃 RUN 🏃")
 
 	case SHUTDOWN:
 		log.Println("💀 SHUTDOWN 💀")

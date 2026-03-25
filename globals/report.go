@@ -56,7 +56,11 @@ type DailyReportExtension struct {
 	Raum    string
 }
 
+// DailyReportGatherer acquires yesterdays date für the report and data from the Plc from the global data structure.
 func (gs *GlobalState) DailyReportGatherer() (err error) {
+	time.Sleep(7 * time.Second) // Wait a bit to ensure that PLC values are updated
+
+	gs.Report.mu.Lock()
 
 	log.Println("📃 DailyReportGatherer started...")
 
@@ -65,34 +69,33 @@ func (gs *GlobalState) DailyReportGatherer() (err error) {
 		gs.Report.Daily = make(map[string]DailyReportExtension)
 	}
 
-	time.Sleep(7 * time.Second) // Wait a bit to ensure that PLC values are updated
-
 	dt := time.Now().AddDate(0, 0, -1).Format("02.01.2006")
+
 	gs.Stats.Reportdatum = dt
 	gs.Cfg.Plc.SWSettings.Reportdatum = dt
 
 	var e DailyReportExtension
 
-	// Get data from Flat.Values
-	mapRTavg := gs.findVal("GVL.gi_RaumTemp_24h_AVG")
-	mapKTavg := gs.findVal("GVL.gi_KontTemp_24h_AVG")
-	mapKzeit := gs.findVal("Z.ZV_Rmm06_24hKaltVZeit_arw")
-	mapKtakt := gs.findVal("Z.ZV_Rmm07_24hKaltVTakt_arw")
-	mapTW := gs.findVal("Z.ZV_Rmm05_24hTau_arw")
-	mapCO2takt := gs.findVal("Z.ZV_Rmm02_24hCO2_arw")
-	mapO2takt := gs.findVal("Z.ZV_Rmm03_24hO2_arw")
-	mapRTsoll := gs.findVal("BD.BA_Rmm14_SollTemp_ari")
-	mapRTmax := gs.findVal("Z.Max_Temp_24h_ari")
-	mapRTmin := gs.findVal("Z.Min_Temp_24h_ari")
-	mapKTmax := gs.findVal("Z.Max_KontTemp_24h_ari")
-	mapKTmin := gs.findVal("Z.Min_KontTemp_24h_ari")
-	mapO2max := gs.findVal("Z.Max_O2_24h_arw")
-	mapO2min := gs.findVal("Z.Min_O2_24h_arw")
-	mapCO2max := gs.findVal("Z.Max_CO2_24h_arw")
-	mapCO2min := gs.findVal("Z.Min_CO2_24h_arw")
-	mapLM := gs.findVal("Z.ZV_Rmm09_24hKaltSperInt_arw")
-	mapFrost := gs.findVal("Z.ZV_Rmm10_24hFrostTakt_arw")
-	mapLzeit := gs.findVal("Z.ZV_Rmm11_24hVerdaZeit_arw")
+	// // Get data from Flat.Values
+	mapRTavg := gs.Plc.GetArrayString("GVL.gi_RaumTemp_24h_AVG")
+	mapKTavg := gs.Plc.GetArrayString("GVL.gi_KontTemp_24h_AVG")
+	mapKzeit := gs.Plc.GetArrayString("Z.ZV_Rmm06_24hKaltVZeit_arw")
+	mapKtakt := gs.Plc.GetArrayString("Z.ZV_Rmm07_24hKaltVTakt_arw")
+	mapTW := gs.Plc.GetArrayString("Z.ZV_Rmm05_24hTau_arw")
+	mapCO2takt := gs.Plc.GetArrayString("Z.ZV_Rmm02_24hCO2_arw")
+	mapO2takt := gs.Plc.GetArrayString("Z.ZV_Rmm03_24hO2_arw")
+	mapRTsoll := gs.Plc.GetArrayString("BD.BA_Rmm14_SollTemp_ari")
+	mapRTmax := gs.Plc.GetArrayString("Z.Max_Temp_24h_ari")
+	mapRTmin := gs.Plc.GetArrayString("Z.Min_Temp_24h_ari")
+	mapKTmax := gs.Plc.GetArrayString("Z.Max_KontTemp_24h_ari")
+	mapKTmin := gs.Plc.GetArrayString("Z.Min_KontTemp_24h_ari")
+	mapO2max := gs.Plc.GetArrayString("Z.Max_O2_24h_arw")
+	mapO2min := gs.Plc.GetArrayString("Z.Min_O2_24h_arw")
+	mapCO2max := gs.Plc.GetArrayString("Z.Max_CO2_24h_arw")
+	mapCO2min := gs.Plc.GetArrayString("Z.Min_CO2_24h_arw")
+	mapLM := gs.Plc.GetArrayString("Z.ZV_Rmm09_24hKaltSperInt_arw")
+	mapFrost := gs.Plc.GetArrayString("Z.ZV_Rmm10_24hFrostTakt_arw")
+	mapLzeit := gs.Plc.GetArrayString("Z.ZV_Rmm11_24hVerdaZeit_arw")
 
 	for i := 0; i < gs.Cfg.Plc.SWSettings.Raumanzahl; i++ {
 		e.Index = i
@@ -133,6 +136,8 @@ func (gs *GlobalState) DailyReportGatherer() (err error) {
 
 	log.Println("📃 DailyReportGatherer finished...")
 
+	gs.Report.mu.Unlock()
+
 	return nil
 
 }
@@ -147,7 +152,19 @@ func unMapArrayString(m map[string]string, idx int) string {
 	return val
 }
 
-func (gs GlobalState) findVal(key string) (sval map[string]string) {
+func (ps *PlcState) GetArrayString(key string) (sval map[string]string) {
+	v, ok := ps.Flat[key]
+	if !ok {
+		log.Printf("📃 Error findVal. %s is not found in Plc.Flat...", key)
+	}
+	//check if there are enough elemets in the values map
+	if len(v.Values.ArrayString) != v.Length {
+		log.Printf("📃 Error findVal. %s has not enough elements in Values.ArrayString... expected: %d, got: %d", key, v.Length, len(v.Values.ArrayString))
+	}
+	return v.Values.ArrayString
+}
+
+func (gs *GlobalState) findVal(key string) (sval map[string]string) {
 	v, ok := gs.Plc.Flat[key]
 	if !ok {
 		log.Printf("📃 Error findVal. %s is not found in Plc.Flat...", key)
@@ -208,9 +225,11 @@ type DailyReportResponse struct {
 	Data        []DailyReportExtension `json:"data"`
 }
 
-func (gs GlobalState) ToDailyReportJson() []byte {
+func (gs *GlobalState) ToDailyReportJson() []byte {
 	var d DailyReportResponse
 
+	gs.Report.mu.Lock()
+	defer gs.Report.mu.Unlock()
 	d.Data = make([]DailyReportExtension, gs.Cfg.Plc.SWSettings.Raumanzahl)
 	for _, val := range gs.Report.Daily {
 		//log.Printf("📃 ToDailyReportJson key: %s, val: %#v", key, val)
@@ -224,42 +243,29 @@ func (gs GlobalState) ToDailyReportJson() []byte {
 	d.Version = ""
 	d.DockerName = ""
 
-	/*
-	   // Add keys if report section shoud be shown. e.g. if there is no o2 measurement, do not show that section
+	/* // Add keys if report section shoud be shown. e.g. if there is no o2 measurement, do not show that section
+	const g = global.get("Konfig");
+	const anz = g.Gb_Anzahl_Raeume;
+	const show_RT = g.Gar_RaumFuehl.slice(0, anz).includes(true);
+	const show_KT = g.Gar_Kontroll.slice(0, anz).includes(true);
+	const show_TW = g.Gar_Tauwasser.slice(0,anz).includes(true);
+	const show_O2 = g.Gar_O2Luefter.slice(0, anz).includes(true);
+	const show_CO2 = g.Gar_CO2_Aktion.slice(0, anz).includes(true);
 
-	   try {
-	       const g = global.get("Konfig");
-	       const anz = g.Gb_Anzahl_Raeume;
-
-	       const show_RT = g.Gar_RaumFuehl.slice(0, anz).includes(true);
-	       const show_KT = g.Gar_Kontroll.slice(0, anz).includes(true);
-	       const show_TW = g.Gar_Tauwasser.slice(0,anz).includes(true);
-	       const show_O2 = g.Gar_O2Luefter.slice(0, anz).includes(true);
-	       const show_CO2 = g.Gar_CO2_Aktion.slice(0, anz).includes(true);
-
-	       msg.payload.show = {
-	           RT: show_RT,
-	           KT: show_KT,
-	           TW: show_TW,
-	           O2: show_O2,
-	           CO2: show_CO2
-	       }
-
-	   } catch (error) {
-
-	   };
-
-	   return msg;
-
-
-	*/
+	msg.payload.show = {
+		RT: show_RT,
+		KT: show_KT,
+		TW: show_TW,
+		O2: show_O2,
+		CO2: show_CO2
+	}*/
 	d.Show = make(map[string]bool)
 
-	d.Show["RT"] = getKonfigBooleans("Gar_RaumFuehl", &gs)
-	d.Show["KT"] = getKonfigBooleans("Gar_Kontroll", &gs)
-	d.Show["TW"] = getKonfigBooleans("Gar_Tauwasser", &gs)
-	d.Show["O2"] = getKonfigBooleans("Gar_O2Luefter", &gs)
-	d.Show["CO2"] = getKonfigBooleans("Gar_CO2_Aktion", &gs)
+	d.Show["RT"] = getKonfigBooleans("Gar_RaumFuehl", gs)
+	d.Show["KT"] = getKonfigBooleans("Gar_Kontroll", gs)
+	d.Show["TW"] = getKonfigBooleans("Gar_Tauwasser", gs)
+	d.Show["O2"] = getKonfigBooleans("Gar_O2Luefter", gs)
+	d.Show["CO2"] = getKonfigBooleans("Gar_CO2_Aktion", gs)
 
 	json, _ := json.MarshalIndent(d, "", "  ")
 
@@ -287,4 +293,23 @@ func getKonfigBooleans(key string, gs *GlobalState) bool {
 	}
 
 	return false
+}
+
+func (report *ReportData) LenAll() int {
+	report.mu.Lock()
+	defer report.mu.Unlock()
+	return len(report.All)
+}
+
+func (report *ReportData) LenAllOrt(idx int) int {
+	report.mu.Lock()
+	defer report.mu.Unlock()
+
+	return len(report.All[idx])
+}
+
+func (report *ReportData) GetAllOrt(idx int) []ReportCsvLine {
+	report.mu.Lock()
+	defer report.mu.Unlock()
+	return report.All[idx]
 }

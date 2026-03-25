@@ -56,7 +56,7 @@ func PathReportOrt(gs *globals.GlobalState) http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 
-		dlen := len(gs.Report.All)
+		dlen := gs.Report.LenAll()
 
 		log.Println("Report Data Length:", dlen)
 		if dlen == 0 {
@@ -67,15 +67,14 @@ func PathReportOrt(gs *globals.GlobalState) http.HandlerFunc {
 		} else { // Report data should be available
 
 			if ortPlus1 > 0 && ortPlus1 <= dlen {
-
+				anz := gs.Report.LenAllOrt(ortPlus1 - 1)
 				repRes.Success = true
-				repRes.Message = "OK Anzahl Datensätze " + strconv.Itoa(len(gs.Report.All[ortPlus1-1]))
-				repRes.Data = gs.Report.All[ortPlus1-1]
-
+				repRes.Message = "OK Anzahl Datensätze " + strconv.Itoa(anz)
+				repRes.Data = gs.Report.GetAllOrt(ortPlus1 - 1)
 			} else {
 				repRes.Success = false
 				repRes.Message = "Parameter Ort " + ort + " out of range, must be between 1 and " + strconv.Itoa(dlen)
-				repRes.Data = gs.Report.All[ortPlus1-1]
+				repRes.Data = gs.Report.GetAllOrt(ortPlus1 - 1)
 			}
 		}
 

@@ -115,7 +115,7 @@ func DataStarAlarmViewHandler(gs *globals.GlobalState) http.HandlerFunc {
 				return
 			case <-time.After(5 * time.Second):
 
-				if err := sse.PatchElementTempl(view.AlarmList(gs.Alarms)); err != nil {
+				if err := sse.PatchElementTempl(view.AlarmList(gs.Alarms.GetActualAlarms())); err != nil {
 					http.Error(w, "Error initializing DataStar SSE", http.StatusInternalServerError)
 					return
 				}

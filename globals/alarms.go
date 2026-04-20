@@ -7,6 +7,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/awcullen/opcua/client"
@@ -23,9 +24,16 @@ type Alarm struct {
 
 // Alarms holds a map of the current active alarms and the alarm history
 type Alarms struct {
+	mu      sync.Mutex
 	AlCount int                    // Current number of active alarms
 	Actual  map[string]ActiveAlarm // map of active alarms, key is alarm ID (f.e. "xAlarm.5", "AL_Rmm07_VerdaEis_ar.1")
 	History []ActiveAlarm          // Last 100 cleared alarms. TODO add serialization
+}
+
+func (al *Alarms) GetActualAlarms() map[string]ActiveAlarm {
+	al.mu.Lock()
+	defer al.mu.Unlock()
+	return al.Actual
 }
 
 type ActiveAlarm struct {
@@ -43,28 +51,32 @@ func (gs *GlobalState) StartPeriodicAlarmReader(bgctx context.Context, errCh cha
 	log.Printf("⚠️ Start Reading Alarms every %v ..", READ_ALARM_INTERVAL)
 
 	ticker := time.NewTicker(READ_ALARM_INTERVAL)
+	init := true
 
 	go func() {
-		defer ticker.Stop()
-
 		for {
 			select {
 			case <-ticker.C:
-
 				if err := gs.ReadAlarms(bgctx); err != nil {
 					log.Printf("⚠️ Error reading alarms: %v", err)
 					errCh <- fmt.Errorf("⚠️ Error reading alarms: %w", err)
 					return
 				}
-				errCh <- nil // Signal successful read
+				//errCh <- nil // Signal successful read
 			case <-bgctx.Done():
+				ticker.Stop()
 				log.Println("⚠️ Stopping periodic alarm reader")
 				return
 			}
 		}
 	}()
 
-	log.Println("⚠️ Started periodic alarm reader (every 5 seconds)")
+	if init {
+		log.Println("⚠️ Started periodic alarm reader (every 5 seconds)")
+		init = false
+	} else {
+		log.Println("⚠️ StartPeriodicAlarmReader quit routine")
+	}
 }
 
 func (hal *Alarms) pushHistory(act ActiveAlarm) {
@@ -155,6 +167,9 @@ func (gs *GlobalState) GetAlarmTextFromSymbol(al Alarm) string {
 func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 	log.Printf("⚠️ Reading alarms from OPC UA server...")
 
+	gs.Alarms.mu.Lock()
+	defer gs.Alarms.mu.Unlock()
+
 	// Prepare the Reader
 	// check if we are below 100 items
 	if len(gs.Cfg.Plc.AlarmDict) > 100 {
@@ -169,7 +184,7 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 	}
 
 	// Read alarm values using the pre-configured AlarmReader
-	response, err := gs.OpcClient.Read(bgctx, gs.Cfg.Plc.AlarmReader)
+	response, err := gs.OpcUa.Client.Read(bgctx, gs.Cfg.Plc.AlarmReader)
 	if err != nil {
 		return fmt.Errorf("⚠️ failed to read alarm values: %w", err)
 	}
@@ -181,6 +196,7 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 	//reset alcount
 	gs.Alarms.AlCount = 0
 
+	log.Printf("⚠️ Processing Result....")
 	for i, resp := range response.Results {
 		if resp.StatusCode.IsBad() {
 			log.Printf("⚠️ Error reading alarm node %s: %s", gs.Cfg.Plc.AlarmReader.NodesToRead[i].NodeID, resp.StatusCode.Error())
@@ -200,7 +216,7 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 					}
 					gs.Alarms.AlCount++
 					activeAlSet[oneAlarm.Id] = oneAlarm
-					log.Printf("⚠️ ReadAlarm - Active alarm found: %s - %s (Ort: %s)", oneAlarm.Key, oneAlarm.Message, oneAlarm.Ort)
+					log.Printf("⚠️ ReadAlarm Array - Active alarm found: %s - %s (Ort: %s)", oneAlarm.Key, oneAlarm.Message, oneAlarm.Ort)
 				}
 			}
 		} else if alarmIsAktive, ok := resp.Value.(bool); ok {
@@ -293,7 +309,9 @@ func (gs *GlobalState) ReadAlarmsOnDemand(bgctx context.Context) error {
 	return gs.ReadAlarms(ctx)
 }
 
-func (al Alarms) ActualToJson() []byte {
+func (al *Alarms) ActualToJson() []byte {
+	al.mu.Lock()
+	defer al.mu.Unlock()
 	res, err := json.MarshalIndent(al.Actual, "", "  ")
 	if err != nil {
 		log.Println("Error marshalling Alarms to JSON:", err)
@@ -302,7 +320,9 @@ func (al Alarms) ActualToJson() []byte {
 	return res
 }
 
-func (al Alarms) HistoryToJson() []byte {
+func (al *Alarms) HistoryToJson() []byte {
+	al.mu.Lock()
+	defer al.mu.Unlock()
 	res, err := json.MarshalIndent(al.History, "", "  ")
 	if err != nil {
 		log.Println("Error marshalling Alarm History to JSON:", err)
@@ -311,7 +331,9 @@ func (al Alarms) HistoryToJson() []byte {
 	return res
 }
 
-func (al Alarms) ToJson() []byte {
+func (al *Alarms) ToJson() []byte {
+	al.mu.Lock()
+	defer al.mu.Unlock()
 	res, err := json.MarshalIndent(al, "", "  ")
 	if err != nil {
 		log.Println("Error marshalling Alarm Count to JSON:", err)

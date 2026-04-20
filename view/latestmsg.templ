@@ -21,10 +21,10 @@ templ LatestNatsMessages(messages []LatestNatsMessage ) {
 }
 
 
-templ AlarmList(al globals.Alarms) {
+templ AlarmList(al map[string]globals.ActiveAlarm) {
     <div id=alarm-list >
         <code>
-            for _, alarm := range al.Actual {
+            for _, alarm := range al {
              
                     <strong>{ alarm.Alarm.Key }</strong>: { alarm.Text } #{ alarm.Alarm.Ort } <br>
              

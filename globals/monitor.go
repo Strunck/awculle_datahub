@@ -73,7 +73,7 @@ func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) (err error) {
 
 	if monRes.ServiceResult.IsGood() {
 		for _, res := range monRes.Results {
-			gs.OpcUa.ItemsIds = append(gs.OpcUa.ItemsIds, res.MonitoredItemID)
+			gs.OpcUa.ItemIds = append(gs.OpcUa.ItemIds, res.MonitoredItemID)
 		}
 		log.Printf("🔱 %d Monitored Items created", len(monRes.Results))
 	}

@@ -80,7 +80,7 @@ func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
 		// DeleteMonitoredItemsRequest to clean up old monitored items
 		delReq := &ua.DeleteMonitoredItemsRequest{
 			SubscriptionID:   gs.OpcUa.SupscriptId, // Assuming subscription ID 1, adjust if needed
-			MonitoredItemIDs: gs.OpcUa.ItemsIds,    // Assuming monitored item IDs 1, 2, 3, adjust if needed
+			MonitoredItemIDs: gs.OpcUa.ItemIds,     // Assuming monitored item IDs 1, 2, 3, adjust if needed
 		}
 
 		// Send the request to the server to clean up old monitored items

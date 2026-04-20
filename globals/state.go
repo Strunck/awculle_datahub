@@ -31,7 +31,7 @@ type OpcUaState struct {
 	Client      *client.Client
 	SessionName string
 	SupscriptId uint32
-	ItemsIds    []uint32
+	ItemIds     []uint32
 }
 
 type ReportData struct {

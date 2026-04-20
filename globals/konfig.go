@@ -405,3 +405,30 @@ func (cfg *Config) initSWSettings() (err error) {
 
 	return nil
 }
+
+func (gs *GlobalState) InitPrometheus() (err error) {
+	log.Println("🪑 Init Metrics")
+
+	var count int
+
+	// New Registry is called in web/prometheus.go
+	// this extra check can probably be removed in the future.
+	if gs.MetricRegistry == nil {
+		gs.MetricRegistry = prometheus.NewRegistry()
+	}
+
+	// Register Metrics from konfig.makeArrayNodes()
+	for _, nodeid := range gs.Cfg.Plc.Publish {
+		// only the ones, that have a metric name
+		if len(nodeid.Metric) > 0 {
+			count++
+			gs.MetricRegistry.MustRegister(nodeid.Gauge)
+		}
+	}
+	log.Printf("🪑 Registered %d metrics in Prometheus registry\n", count)
+
+	if count == 0 {
+		return fmt.Errorf("no metrics registered, check settings.json")
+	}
+	return nil
+}

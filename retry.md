@@ -10,6 +10,7 @@ States
 	PLC_PREFIX        // Read PLC prefix from the OPC UA server
 	PLC_CONFIG_READ   // Read PLC configuration
     PLC_CONFIG_ALARMS // Setup alarm messages
+    PLC_CONFIG_METRICS // Registers Prometheus Metrics
 	PLC_CONFIG_DONE   // PLC configuration is read
 	SETUP_DONE        // Setup from files and env is done
 	REQ_MONITORING    // Request monitoring of nodes
@@ -46,7 +47,9 @@ stateDiagram-v2
 
     PLC_CONFIG_READ --> PLC_CONFIG_ALARMS
     
-    PLC_CONFIG_ALARMS --> PLC_CONFIG_DONE
+    PLC_CONFIG_ALARMS --> PLC_CONFIG_METRICS
+    
+    PLC_CONFIG_METRICS --> PLC_CONFIG_DONE
 
     PLC_CONFIG_READ --> RETRY : timeout
 

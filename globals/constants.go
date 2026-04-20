@@ -5,25 +5,26 @@ import "time"
 const DEBUG = true
 
 const (
-	INIT_STATE        LoopState = iota // Initialize global variables
-	SETUP_ENV                          // Setup environment variables
-	SETUP_FILES                        // Setup configuration files, setup.json
-	SETUP_DONE                         // Setup from files and env is done
-	INIT_TELEGRAM                      // Initialize the Telegram bot, but do not fail
-	INIT_TOPICS                        // Initialize the OPC UA client topics
-	DIAL_OPCUA_SRV                     // Dials OPC UA server (PLC)
-	CONNECTED                          // Connected to the OPC UA server
-	PLC_PREFIX                         // Read PLC prefix from the OPC UA server
-	PLC_CONFIG_READ                    // Read PLC configuration
-	PLC_CONFIG_ALARMS                  // Read PLC alarm configuration
-	PLC_CONFIG_DONE                    // PLC configuration is read
-	REQ_MONITORING                     // Request monitoring of nodes
-	MONITORING                         // Monitoring nodes
-	RUN                                // Run the main loop
-	DISCONNECTED                       // Disconnected from the OPC UA server
-	RETRY                              // Retry connection to the OPC UA server
-	RETRY_WAIT                         // Wait before retrying connection
-	SHUTDOWN                           // Shutdown the OPC UA client
+	INIT_STATE         LoopState = iota // Initialize global variables
+	SETUP_ENV                           // Setup environment variables
+	SETUP_FILES                         // Setup configuration files, setup.json
+	SETUP_DONE                          // Setup from files and env is done
+	INIT_TELEGRAM                       // Initialize the Telegram bot, but do not fail
+	INIT_TOPICS                         // Initialize the OPC UA client topics
+	DIAL_OPCUA_SRV                      // Dials OPC UA server (PLC)
+	CONNECTED                           // Connected to the OPC UA server
+	PLC_PREFIX                          // Read PLC prefix from the OPC UA server
+	PLC_CONFIG_READ                     // Read PLC configuration
+	PLC_CONFIG_ALARMS                   // Read PLC alarm configuration
+	PLC_CONFIG_METRICS                  // Registers Prometheus Metrics
+	PLC_CONFIG_DONE                     // PLC configuration is read
+	REQ_MONITORING                      // Request monitoring of nodes
+	MONITORING                          // Monitoring nodes
+	RUN                                 // Run the main loop
+	DISCONNECTED                        // Disconnected from the OPC UA server
+	RETRY                               // Retry connection to the OPC UA server
+	RETRY_WAIT                          // Wait before retrying connection
+	SHUTDOWN                            // Shutdown the OPC UA client
 )
 
 const (

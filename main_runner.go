@@ -57,6 +57,14 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 			log.Printf("error setting up alarm messages: %v", err)
 			gs.SetState(globals.RETRY)
 		} else {
+			gs.SetState(globals.PLC_CONFIG_METRICS)
+		}
+
+	case globals.PLC_CONFIG_METRICS:
+		if err := gs.InitPrometheus(); err != nil {
+			log.Printf("error initializing Prometheus metrics: %v", err)
+			gs.SetState(globals.RETRY)
+		} else {
 			gs.SetState(globals.PLC_CONFIG_DONE)
 		}
 

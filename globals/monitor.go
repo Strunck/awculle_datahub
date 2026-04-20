@@ -180,6 +180,7 @@ func (gs *GlobalState) storeAndPublish(item ua.MonitoredItemNotification) (err e
 				return fmt.Errorf("🔱 NodeID %s could not convert value to float: %w", p.NodeID, err)
 			}
 		}
+		//log.Printf("%s: Gauge.Set %s = %f ", p.NodeID, p.Metric, fval)
 		p.Gauge.Set(fval)
 	}
 

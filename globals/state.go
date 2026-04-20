@@ -106,6 +106,8 @@ func (gs *GlobalState) PrintState() {
 		log.Println("🪑 PLC_CONFIG_READ 🪑")
 	case PLC_CONFIG_ALARMS:
 		log.Println("🪑 PLC_CONFIG_ALARMS 🪑")
+	case PLC_CONFIG_METRICS:
+		log.Println("🪑 PLC_CONFIG_METRICS 🪑")
 	case PLC_CONFIG_DONE:
 		log.Println("🪑 PLC_CONFIG_DONE 🪑")
 

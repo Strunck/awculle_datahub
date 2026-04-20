@@ -94,7 +94,7 @@ func WSListenWrite(gs *globals.GlobalState) http.HandlerFunc {
 			req := ua.WriteRequest{}
 			req.NodesToWrite = append(req.NodesToWrite, *wval)
 
-			res, err := gs.OpcClient.Write(r.Context(), &req)
+			res, err := gs.OpcUa.Client.Write(r.Context(), &req)
 			if err != nil {
 				log.Println("OPCUA write error:", err)
 				continue

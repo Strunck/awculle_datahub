@@ -53,7 +53,7 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 		}
 
 	case globals.PLC_CONFIG_ALARMS:
-		if err := gs.Cfg.SetupAlarmMessages(gs.OpcClient, globals.READWAIT_INC_MAX, ctx); err != nil {
+		if err := gs.Cfg.SetupAlarmMessages(gs.OpcUa.Client, globals.READWAIT_INC_MAX, ctx); err != nil {
 			log.Printf("error setting up alarm messages: %v", err)
 			gs.SetState(globals.RETRY)
 		} else {
@@ -113,8 +113,9 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 		if err := startMonitor(ctx, gs); err != nil {
 			log.Printf("runGuard run_MainLoop failed: %v", err)
 			gs.SetState(globals.RETRY_WAIT)
+		} else {
+			gs.SetState(globals.RUN)
 		}
-		gs.SetState(globals.RUN)
 
 	case globals.RUN:
 
@@ -127,11 +128,10 @@ func startMonitor(ctx context.Context, gs *globals.GlobalState) (err error) {
 	fmt.Printf("\n\nrun_MainLoop\n\n\n")
 
 	// Channel für Fehler
-
 	errChMonitor := make(chan error, 1)
 	errChAlarm := make(chan error, 1)
 
-	go gs.RecieveOpcUaMessage(ctx, errChMonitor)
+	gs.RecieveOpcUaMessage(ctx, errChMonitor)
 
 	gs.StartPeriodicAlarmReader(ctx, errChAlarm)
 
@@ -146,6 +146,8 @@ func startMonitor(ctx context.Context, gs *globals.GlobalState) (err error) {
 		if err != nil {
 			return fmt.Errorf("channeled error in OPC UA monitoring: %w", err)
 		}
+	case <-ctx.Done():
+		return fmt.Errorf("startMonitor ctx.Done()")
 	case err := <-errChAlarm:
 		if err != nil {
 			return fmt.Errorf("channeled error in Alarm monitoring: %w", err)

@@ -28,11 +28,11 @@ func (gs *GlobalState) PlcConfigDone() {
 // PlcConfigRead calls 3 functions to read the PLC congfigureation. See konfig.go
 func (gs *GlobalState) PlcConfigRead(ctx context.Context) (err error) {
 
-	if err := gs.Cfg.readKonfigViaOpcUa(READWAIT_INC_MAX, gs.OpcClient, ctx); err != nil {
+	if err := gs.Cfg.readKonfigViaOpcUa(READWAIT_INC_MAX, gs.OpcUa.Client, ctx); err != nil {
 		return fmt.Errorf("error reading configuration via OPC UA: %w", err)
 	}
 
-	if err := gs.Cfg.setupKonfigGroup(gs.OpcClient, ctx); err != nil {
+	if err := gs.Cfg.setupKonfigGroup(gs.OpcUa.Client, ctx); err != nil {
 		return fmt.Errorf("error setting up Konfig group: %w", err)
 	}
 
@@ -46,16 +46,23 @@ func (gs *GlobalState) PlcConfigRead(ctx context.Context) (err error) {
 // Dial_OPCUA establishes a connection to the OPCUA server of the PLC.
 func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
 
+	var isNewSession bool
+
 	// Set the session name
-	if len(gs.SessionName) == 0 {
-		gs.SessionName = "uv4_" + fmt.Sprintf("%d", time.Now().Unix())
-		log.Println("Renew Init OPC UA Session Name to", gs.SessionName)
+	if len(gs.OpcUa.SessionName) == 0 {
+		gs.OpcUa.SessionName = "uv4_" + fmt.Sprintf("%d", time.Now().Unix())
+		log.Println("Renew Init OPC UA Session Name to", gs.OpcUa.SessionName)
+
+		isNewSession = true
+	} else {
+		log.Println("Reusing existing session name", gs.OpcUa.SessionName)
+		isNewSession = false
 	}
 
-	gs.OpcClient, err = client.Dial(
+	gs.OpcUa.Client, err = client.Dial(
 		ctx,
 		gs.Cfg.Opcua.Url,
-		client.WithSessionName(gs.SessionName),
+		client.WithSessionName(gs.OpcUa.SessionName),
 		client.WithInsecureSkipVerify(),
 		client.WithSessionTimeout(OPCUA_SESSION_TIMEOUT),
 		client.WithConnectTimeout(OPCUA_CONNECT_TIMEOUT),
@@ -65,6 +72,29 @@ func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
 		return fmt.Errorf("'Dial_OPCUA' failed: %w", err)
 	}
 
+	if !isNewSession {
+
+		ctxTimeout, cancel := context.WithTimeout(ctx, OPCUA_CONNECT_TIMEOUT)
+		defer cancel()
+
+		// DeleteMonitoredItemsRequest to clean up old monitored items
+		delReq := &ua.DeleteMonitoredItemsRequest{
+			SubscriptionID:   gs.OpcUa.SupscriptId, // Assuming subscription ID 1, adjust if needed
+			MonitoredItemIDs: gs.OpcUa.ItemsIds,    // Assuming monitored item IDs 1, 2, 3, adjust if needed
+		}
+
+		// Send the request to the server to clean up old monitored items
+		res := &ua.DeleteMonitoredItemsResponse{}
+		if res, err = gs.OpcUa.Client.DeleteMonitoredItems(ctxTimeout, delReq); err != nil {
+			return fmt.Errorf("Error cleaning up old OPC UA session: %w", err)
+		}
+
+		if res.ServiceResult.IsGood() {
+			log.Println("Cleaned up old OPC UA session successfully")
+		} else {
+			log.Fatalln("Cleanup Failed")
+		}
+	}
 	return nil
 }
 
@@ -82,14 +112,14 @@ func (gs *GlobalState) GetOpcPrefix(ctx context.Context) (err error) {
 		},
 	}
 
-	if gs.OpcClient == nil {
+	if gs.OpcUa.Client == nil {
 		return fmt.Errorf("OPC UA client is not initialized")
 	}
 
-	res, err := gs.OpcClient.Read(ctx, req)
+	res, err := gs.OpcUa.Client.Read(ctx, req)
 
 	if err != nil {
-		//gs.OpcClient.Abort(ctx)
+		//gs.OpcUa.Client.Abort(ctx)
 		return fmt.Errorf("error reading NumericNodeId %s: %w", nid.String(), err)
 	}
 
@@ -100,23 +130,23 @@ func (gs *GlobalState) GetOpcPrefix(ctx context.Context) (err error) {
 
 func (gs *GlobalState) CloseOpcClient(ctx context.Context) (err error) {
 
-	if gs.OpcClient == nil {
+	if gs.OpcUa.Client == nil {
 		return fmt.Errorf("no OPC UA client to close")
 	}
 
-	err = gs.OpcClient.Close(ctx)
+	err = gs.OpcUa.Client.Close(ctx)
 	if err != nil {
-		gs.OpcClient.Abort(ctx)
+		gs.OpcUa.Client.Abort(ctx)
 		return fmt.Errorf("error closing OPC Client: %w", err)
 	} else {
-		log.Println("Successfully closed OpcClient-Session ", gs.SessionName)
+		log.Println("Successfully closed OpcClient-Session ", gs.OpcUa.SessionName)
 
 	}
 
 	return nil
 }
 
-// Connected resetts the attempt counter, which is read in the Retry_Wait function.
+// Connected resetts the attempt counter, which is read in the Retry_Wait function. Also Cleanup OPC Stuff
 func (gs *GlobalState) Connected() (err error) {
 	gs.Stats.Attempts = 0
 	return nil
@@ -166,7 +196,7 @@ func (gs *GlobalState) ReEstablishSession(ctx context.Context) (err error) {
 // monitors the connection status.
 func (gs *GlobalState) GetConnectionStatus(ctx context.Context) error {
 
-	if gs.OpcClient == nil {
+	if gs.OpcUa.Client == nil {
 		return fmt.Errorf("🔱 OPC UA client is not initialized")
 	}
 
@@ -180,7 +210,7 @@ func (gs *GlobalState) GetConnectionStatus(ctx context.Context) error {
 		},
 	}
 
-	res, err := gs.OpcClient.Read(ctx, req)
+	res, err := gs.OpcUa.Client.Read(ctx, req)
 	if err != nil {
 		return fmt.Errorf("🔱 OPC UA connection lost: %w", err)
 	} else {

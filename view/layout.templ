@@ -39,7 +39,7 @@ templ Layout(gs *globals.GlobalState) {
             <hr>
             <div data-init={ datastar.GetSSE("/middleware/ds/latestmsg") }>
                 <h3>Nats Messages</h3>
-                <h5>Session Name {gs.SessionName}</h5>
+                <h5>Session Name {gs.OpcUa.SessionName}</h5>
                 <p>
                     <code id=nats-latest-string >Latest NATS message: xxxxxxxxxxx </code>
                 </p>

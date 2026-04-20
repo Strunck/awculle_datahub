@@ -23,13 +23,14 @@ func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) (err error) {
 	}
 
 	// send request to server. receive response or error
-	subres, err := gs.OpcClient.CreateSubscription(pctx, subreq)
+	subres, err := gs.OpcUa.Client.CreateSubscription(pctx, subreq)
 	if err != nil {
 		err = fmt.Errorf("🔱 Error creating subscription: %w", err)
 		return err
 	}
 
 	if subres.ServiceResult.IsGood() {
+		gs.OpcUa.SupscriptId = subres.SubscriptionID
 		log.Printf("🔱 OPC UA Subscription created with ID: %d\n", subres.SubscriptionID)
 	} else {
 		return fmt.Errorf("🔱 OPC UA Subscription creation failed with status: %v", subres.ServiceResult)
@@ -53,6 +54,7 @@ func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) (err error) {
 				SamplingInterval: 1000.0,
 			},
 		}
+
 	}
 
 	// prepare create monitored items request
@@ -63,18 +65,27 @@ func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) (err error) {
 	}
 
 	// send request to server. receive response or error
-	_, err = gs.OpcClient.CreateMonitoredItems(pctx, monReq)
+	monRes, err := gs.OpcUa.Client.CreateMonitoredItems(pctx, monReq)
 	if err != nil {
 		err = fmt.Errorf("🔱 error OpcClient.CreateMonitoredItems: %w", err)
 		return err
 	}
+
+	if monRes.ServiceResult.IsGood() {
+		for _, res := range monRes.Results {
+			gs.OpcUa.ItemsIds = append(gs.OpcUa.ItemsIds, res.MonitoredItemID)
+		}
+		log.Printf("🔱 %d Monitored Items created", len(monRes.Results))
+	}
+
 	return nil
 }
 
 // RecieveOpcUaMessage listens to DataChangeNotifications (DCN) from the OPC UA server.
 // When a new DCN is recieved, the Method storeAndPublish is called
 func (gs *GlobalState) RecieveOpcUaMessage(ctx context.Context, errCh chan<- error) {
-	//log.Println("RecieveOpcUaMessage started")
+
+	init := true
 
 	// Send initial publish request
 	req := &ua.PublishRequest{
@@ -82,45 +93,54 @@ func (gs *GlobalState) RecieveOpcUaMessage(ctx context.Context, errCh chan<- err
 		SubscriptionAcknowledgements: []ua.SubscriptionAcknowledgement{},
 	}
 
-	// Loop to receive notifications
-	for {
-		// Send publish request
-		res, err := gs.OpcClient.Publish(ctx, req)
-		if err != nil {
-			log.Printf("🔱 Error publishing request: %s\n", err.Error())
-			errCh <- fmt.Errorf("🔱 Error publishing request: %w", err)
-			return
-		}
+	go func() {
+		// Loop to receive notifications
+		for {
+			// Send publish request
+			res, err := gs.OpcUa.Client.Publish(ctx, req)
+			if err != nil {
+				log.Printf("🔱 Error publishing request: %s\n", err.Error())
+				errCh <- fmt.Errorf("🔱 Error publishing request: %w", err)
+				return
+			}
 
-		// Process notification data
-		for _, data := range res.NotificationMessage.NotificationData {
-			switch body := data.(type) {
-			case ua.DataChangeNotification:
-				// Process data change notification
-				for _, item := range body.MonitoredItems {
+			// Process notification data
+			for _, data := range res.NotificationMessage.NotificationData {
+				switch body := data.(type) {
+				case ua.DataChangeNotification:
+					// Process data change notification
+					for _, item := range body.MonitoredItems {
 
-					if err := gs.storeAndPublish(item); err != nil {
-						log.Printf("Error storing and publishing item: %s\n", err.Error())
-						errCh <- fmt.Errorf("🔱 Error storing and publishing item: %w", err)
-						return
+						if err := gs.storeAndPublish(item); err != nil {
+							log.Printf("Error storing and publishing item: %s\n", err.Error())
+							errCh <- fmt.Errorf("🔱 Error storing and publishing item: %w", err)
+							return
+						}
 					}
+				default:
+					// Other notification types can be handled here
+					log.Printf("Received unhandled notification type: %T\n", body)
 				}
-			default:
-				// Other notification types can be handled here
-				log.Printf("Received unhandled notification type: %T\n", body)
+			}
+
+			// Prepare next publish request with acknowledgement
+			req = &ua.PublishRequest{
+				RequestHeader: ua.RequestHeader{TimeoutHint: 60000},
+				SubscriptionAcknowledgements: []ua.SubscriptionAcknowledgement{
+					{
+						SequenceNumber: res.NotificationMessage.SequenceNumber,
+						SubscriptionID: res.SubscriptionID,
+					},
+				},
 			}
 		}
+	}()
 
-		// Prepare next publish request with acknowledgement
-		req = &ua.PublishRequest{
-			RequestHeader: ua.RequestHeader{TimeoutHint: 60000},
-			SubscriptionAcknowledgements: []ua.SubscriptionAcknowledgement{
-				{
-					SequenceNumber: res.NotificationMessage.SequenceNumber,
-					SubscriptionID: res.SubscriptionID,
-				},
-			},
-		}
+	if init {
+		log.Println("RecieveOpcUaMessage started")
+		init = false
+	} else {
+		log.Println("RecieveOpcUaMessage quit routine")
 	}
 }
 

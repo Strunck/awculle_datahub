@@ -10,7 +10,6 @@ import (
 	"os/signal"
 	"strunck/uv4-middleware/globals"
 	"strunck/uv4-middleware/web"
-	"time"
 )
 
 // will be set during build, see Makefile
@@ -25,8 +24,7 @@ func main() {
 	log.Printf("Starting datahub in a Container Version: %s ...", Version)
 
 	gs := globals.GlobalState{
-		Loop:        globals.INIT_STATE,
-		SessionName: "uv4_" + fmt.Sprintf("%d", time.Now().Unix()),
+		Loop: globals.INIT_STATE,
 	}
 
 	gs.Cfg.SettingsFile = globals.SETTINGSJSON
@@ -50,7 +48,6 @@ func main() {
 	gs.RunNats(4222)
 
 	errChHttp := make(chan error)
-	chStart := make(chan bool)
 
 	go runHttp(&gs, errChHttp)
 
@@ -58,8 +55,19 @@ func main() {
 	ctx, stop := signal.NotifyContext(bctx, os.Interrupt)
 	defer stop()
 
-	fmt.Println("chStart")
-	chStart <- true
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				runGuard(ctx, &gs)
+				if gs.Loop == globals.RUN {
+					return
+				}
+			}
+		}
+	}()
 
 	select {
 	case err := <-errChHttp:
@@ -79,8 +87,6 @@ func main() {
 		log.Println("Exiting gracefully....")
 
 		os.Exit(0)
-	case <-chStart:
-		runGuard(ctx, &gs)
 	}
 
 }

@@ -14,9 +14,8 @@ import (
 type LoopState uint8
 
 type GlobalState struct {
-	OpcClient      *client.Client
+	OpcUa          OpcUaState
 	Loop           LoopState
-	SessionName    string
 	Cfg            Config
 	NatsClient     *nats.Conn
 	NatsServer     *server.Server
@@ -27,6 +26,12 @@ type GlobalState struct {
 	Telegram       Telegram
 	Alarms         Alarms
 	MetricRegistry *prometheus.Registry
+}
+type OpcUaState struct {
+	Client      *client.Client
+	SessionName string
+	SupscriptId uint32
+	ItemsIds    []uint32
 }
 
 type ReportData struct {

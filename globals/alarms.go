@@ -165,7 +165,7 @@ func (gs *GlobalState) GetAlarmTextFromSymbol(al Alarm) string {
 // This list get rewritten on user request or periodically every 5 seconds
 // so no need to delete a key, since everytime it gets regenerated
 func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
-	log.Printf("⚠️ Reading alarms from OPC UA server...")
+	//log.Printf("⚠️ Reading alarms from OPC UA server...")
 
 	gs.Alarms.mu.Lock()
 	defer gs.Alarms.mu.Unlock()
@@ -196,7 +196,7 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 	//reset alcount
 	gs.Alarms.AlCount = 0
 
-	log.Printf("⚠️ Processing Result....")
+	//log.Printf("⚠️ Processing Result....")
 	for i, resp := range response.Results {
 		if resp.StatusCode.IsBad() {
 			log.Printf("⚠️ Error reading alarm node %s: %s", gs.Cfg.Plc.AlarmReader.NodesToRead[i].NodeID, resp.StatusCode.Error())

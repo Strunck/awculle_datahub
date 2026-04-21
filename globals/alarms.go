@@ -216,7 +216,7 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 					}
 					gs.Alarms.AlCount++
 					activeAlSet[oneAlarm.Id] = oneAlarm
-					log.Printf("⚠️ ReadAlarm Array - Active alarm found: %s - %s (Ort: %s)", oneAlarm.Key, oneAlarm.Message, oneAlarm.Ort)
+					// log.Printf("⚠️ ReadAlarm Array - Active alarm found: %s - %s (Ort: %s)", oneAlarm.Key, oneAlarm.Message, oneAlarm.Ort)
 				}
 			}
 		} else if alarmIsAktive, ok := resp.Value.(bool); ok {
@@ -228,7 +228,7 @@ func (gs *GlobalState) ReadAlarms(bgctx context.Context) (err error) {
 				}
 				gs.Alarms.AlCount++
 				activeAlSet[oneAlarm.Id] = oneAlarm
-				log.Printf("⚠️ ReadAlarm - Active alarm found: %s - %s (Ort: %s)", oneAlarm.Key, oneAlarm.Message, oneAlarm.Ort)
+				// log.Printf("⚠️ ReadAlarm - Active alarm found: %s - %s (Ort: %s)", oneAlarm.Key, oneAlarm.Message, oneAlarm.Ort)
 			}
 		}
 	}

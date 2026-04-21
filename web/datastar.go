@@ -66,7 +66,7 @@ func DataStarLatestMsgHandler(gs *globals.GlobalState) http.HandlerFunc {
 		for {
 			select {
 			case <-r.Context().Done():
-				log.Println("DataStarLatestMsgHandler: r.Context() done, client disconnected")
+				// log.Println("DataStarLatestMsgHandler: r.Context() done, client disconnected")
 				return
 
 			case msg := <-msgBufferChannel:

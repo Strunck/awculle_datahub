@@ -14,24 +14,33 @@ import (
 type LoopState uint8
 
 type GlobalState struct {
-	OpcUa          OpcUaState
-	Loop           LoopState
-	Cfg            Config
-	NatsClient     *nats.Conn
-	NatsServer     *server.Server
-	Plc            PlcState
-	DataV2         DataV2
-	Stats          Stats `json:"Stats"`
-	Report         ReportData
-	Telegram       Telegram
-	Alarms         Alarms
-	MetricRegistry *prometheus.Registry
+	OpcUa    OpcUaState
+	Loop     LoopState
+	Cfg      Config
+	Nats     Nats
+	Plc      PlcState
+	DataV2   DataV2
+	Stats    Stats `json:"Stats"`
+	Report   ReportData
+	Telegram Telegram
+	Alarms   Alarms
+	Metrics  Metrics
+}
+
+type Nats struct {
+	Client *nats.Conn
+	Server *server.Server
 }
 type OpcUaState struct {
 	Client      *client.Client
 	SessionName string
 	SupscriptId uint32
 	ItemIds     []uint32
+}
+
+type Metrics struct {
+	Registry *prometheus.Registry
+	Count    uint16 // Counter für registered metritcs
 }
 
 type ReportData struct {

@@ -11,23 +11,23 @@ import (
 
 func (gs *GlobalState) RunNats(natsSrvPort int) {
 
-	if gs.NatsServer != nil {
+	if gs.Nats.Server != nil {
 		return
 	}
 
 	// ---------------------- NATS ---------------------
 	// Initialilize NATS server, Options can be set in nats.go
-	gs.NatsServer = startNatServer(natsSrvPort)
+	gs.Nats.Server = startNatServer(natsSrvPort)
 	// Start the NATS server in a separate goroutine
-	gs.NatsServer.Start()
+	gs.Nats.Server.Start()
 
 	// Wait for the server to be ready
-	if !gs.NatsServer.ReadyForConnections(4 * time.Second) {
+	if !gs.Nats.Server.ReadyForConnections(4 * time.Second) {
 		log.Fatalf("NATS server did not start in time")
 	}
 	log.Printf("NATS server is running on 127.0.0.1:%d\n", natsSrvPort)
 
-	ncerr := gs.ConnectToNats(gs.NatsServer)
+	ncerr := gs.ConnectToNats(gs.Nats.Server)
 	if ncerr != nil {
 		log.Fatalf("main init we got Error connecting to NATS server: %v", ncerr)
 	}
@@ -57,7 +57,7 @@ func startNatServer(port int) *server.Server {
 
 func (gs *GlobalState) ConnectToNats(natssrv *server.Server) (err error) {
 	// Connect to NATS
-	gs.NatsClient, err = nats.Connect(natssrv.ClientURL())
+	gs.Nats.Client, err = nats.Connect(natssrv.ClientURL())
 	if err != nil {
 		return fmt.Errorf("error connecting to NATS server at %s: %v", natssrv.ClientURL(), err)
 	}
@@ -69,7 +69,7 @@ func (gs *GlobalState) ChanSubscribeWrapper(subj string, ch chan *nats.Msg) (*na
 
 	// todo: check if subj makes sense. will it return messages
 
-	return gs.NatsClient.ChanSubscribe(subj, ch)
+	return gs.Nats.Client.ChanSubscribe(subj, ch)
 }
 
 func (gs *GlobalState) ChanLatestNatsMessage(ch chan *nats.Msg) (*nats.Subscription, error) {

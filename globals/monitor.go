@@ -185,7 +185,7 @@ func (gs *GlobalState) storeAndPublish(item ua.MonitoredItemNotification) (err e
 	}
 
 	// Publish to NATS
-	err = gs.NatsClient.Publish(p.Topic, []byte(sval))
+	err = gs.Nats.Client.Publish(p.Topic, []byte(sval))
 
 	if err != nil {
 		log.Printf("failed to publish message: %s\nretrying...", err.Error())

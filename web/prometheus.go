@@ -13,10 +13,10 @@ func MetricsEndpoint(gs *globals.GlobalState) http.Handler {
 
 	log.Println("Call to MetricsEndpoint")
 
-	gs.MetricRegistry = prometheus.NewRegistry()
+	gs.Metrics.Registry = prometheus.NewRegistry()
 
 	return promhttp.HandlerFor(
-		gs.MetricRegistry,
+		gs.Metrics.Registry,
 		promhttp.HandlerOpts{
-			Registry: gs.MetricRegistry})
+			Registry: gs.Metrics.Registry})
 }

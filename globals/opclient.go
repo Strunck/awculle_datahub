@@ -54,22 +54,23 @@ func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
 		log.Println("Renew Init OPC UA Session Name to", gs.OpcUa.SessionName)
 
 		isNewSession = true
+
+		gs.OpcUa.Client, err = client.Dial(
+			ctx,
+			gs.Cfg.Opcua.Url,
+			client.WithSessionName(gs.OpcUa.SessionName),
+			client.WithInsecureSkipVerify(),
+			client.WithSessionTimeout(OPCUA_SESSION_TIMEOUT),
+			client.WithConnectTimeout(OPCUA_CONNECT_TIMEOUT.Microseconds()),
+		)
+
+		if err != nil {
+			return fmt.Errorf("'Dial_OPCUA' failed: %w", err)
+		}
+
 	} else {
-		log.Println("Reusing existing session name", gs.OpcUa.SessionName)
+		log.Println("Reusing existing session name", gs.OpcUa.SessionName, gs.OpcUa.Client.SessionID())
 		isNewSession = false
-	}
-
-	gs.OpcUa.Client, err = client.Dial(
-		ctx,
-		gs.Cfg.Opcua.Url,
-		client.WithSessionName(gs.OpcUa.SessionName),
-		client.WithInsecureSkipVerify(),
-		client.WithSessionTimeout(OPCUA_SESSION_TIMEOUT),
-		client.WithConnectTimeout(OPCUA_CONNECT_TIMEOUT),
-	)
-
-	if err != nil {
-		return fmt.Errorf("'Dial_OPCUA' failed: %w", err)
 	}
 
 	if !isNewSession {
@@ -77,23 +78,12 @@ func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
 		ctxTimeout, cancel := context.WithTimeout(ctx, OPCUA_CONNECT_TIMEOUT)
 		defer cancel()
 
-		// DeleteMonitoredItemsRequest to clean up old monitored items
-		delReq := &ua.DeleteMonitoredItemsRequest{
-			SubscriptionID:   gs.OpcUa.SupscriptId, // Assuming subscription ID 1, adjust if needed
-			MonitoredItemIDs: gs.OpcUa.ItemIds,     // Assuming monitored item IDs 1, 2, 3, adjust if needed
+		if err = gs.CloseOpcClient(ctxTimeout); err != nil {
+			return fmt.Errorf("error closing existing OPC UA client: %w", err)
 		}
 
-		// Send the request to the server to clean up old monitored items
-		res := &ua.DeleteMonitoredItemsResponse{}
-		if res, err = gs.OpcUa.Client.DeleteMonitoredItems(ctxTimeout, delReq); err != nil {
-			return fmt.Errorf("Error cleaning up old OPC UA session: %w", err)
-		}
-
-		if res.ServiceResult.IsGood() {
-			log.Println("Cleaned up old OPC UA session successfully")
-		} else {
-			log.Fatalln("Cleanup Failed")
-		}
+		gs.OpcUa.SessionName = ""
+		return fmt.Errorf("closing....")
 	}
 	return nil
 }

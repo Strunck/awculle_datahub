@@ -8,7 +8,7 @@ templ:
 run:
 	KO_DATA_PATH=kodata \
 	go run -ldflags="-X 'main.Version=${VERSION}'" \
-	main.go main_runner.go
+	main.go
 
 dev: 
 	@zsh ./devContainer.sh $(VERSION)
@@ -22,7 +22,7 @@ ko: systemctl
 	DATA_PATH=kodata \
 	GOFLAGS="-ldflags=-X=main.Version=${VERSION}" \
 	ko build --local -B \
-	main.go main_runner.go
+	main.go
 
 koarm: systemctl
 	DOCKER_HOST=unix:///run/user/1000/podman/podman.sock \
@@ -30,7 +30,7 @@ koarm: systemctl
 	DATA_PATH=kodata \
 	GOFLAGS="-ldflags=-X=main.Version=${VERSION}" \
 	ko build --local -B --platform=linux/arm64 --tags=arm64 \
-	main.go main_runner.go
+	main.go
 
 login:
 	podman login docker.io	
@@ -38,7 +38,7 @@ login:
 systemctl:
 	systemctl --user start podman.service
 
-release: koarm ko
+release: ko koarm
 	buildah manifest create ${FNAME}:$(VERSION)
 	buildah manifest add ${FNAME}:$(VERSION) ${KO_DOCKER_REPO}/${FNAME}:arm64
 	buildah manifest add ${FNAME}:$(VERSION) ${KO_DOCKER_REPO}/${FNAME}:latest

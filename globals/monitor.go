@@ -11,7 +11,7 @@ import (
 	"github.com/awcullen/opcua/ua"
 )
 
-// Initialize OPC UA Montitorung. State REQ_MONITORING in main_runner.go
+// Initialize OPC UA Montitorung. State REQ_MONITORING in main.go
 func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) (err error) {
 
 	// prepare create subscription request

@@ -23,6 +23,8 @@ func (v *VariantToMessage) ToString(msg ua.MonitoredItemNotification) (s string,
 		s = scaleInt(fmt.Sprintf("%d", msg.Value.Value.(uint8)), v.Scale)
 	case "INT":
 		s = scaleInt(fmt.Sprintf("%d", msg.Value.Value.(int16)), v.Scale)
+	case "EMT":
+		s = EnumEMTtoStr(msg.Value)
 	case "WORD":
 		s = scaleInt(fmt.Sprintf("%d", msg.Value.Value.(uint16)), v.Scale)
 	case "DWORD":
@@ -34,7 +36,7 @@ func (v *VariantToMessage) ToString(msg ua.MonitoredItemNotification) (s string,
 	case "TIME":
 		s = fmt.Sprintf("%v", msg.Value.Value)
 	case "PVMOD":
-		s = fmt.Sprintf("%d", msg.Value.Value.(int16))
+		s = EnumPVMODtoStr(msg.Value)
 
 	default:
 		return "", fmt.Errorf("ToString for node %s has unknown type %s", v.NodeID, v.Type)
@@ -64,4 +66,54 @@ func scaleInt(val string, scale int8) (scaledVal string) {
 	}
 
 	return scaledVal
+}
+
+func EnumEMTtoStr(val ua.DataValue) (s string) {
+	switch val.Value.(int32) {
+	case 0:
+		s = "Sonderfall"
+	case 1:
+		s = "Hausanschluss"
+	case 2:
+		s = "Schaltschrank"
+	case 3:
+		s = "KaelteErzeuger"
+	case 4:
+		s = "KaelteVerteilung"
+	case 5:
+		s = "ULO_Technik"
+	case 6:
+		s = "Scrubber"
+	case 7:
+		s = "Stickstofferz"
+	case 8:
+		s = "Solepumpe"
+	case 9:
+		s = "CEE_Dose"
+	case 10:
+		s = "Verdampferlueft"
+	case 11:
+		s = "KaelteAnlage"
+	case 255:
+		s = "Undefiniert"
+	default:
+		s = fmt.Sprintf("Unknown EMT value: %d", val.Value.(int32))
+	}
+	return s
+}
+
+func EnumPVMODtoStr(val ua.DataValue) (s string) {
+	switch val.Value.(int32) {
+	case 0:
+		s = "AUS"
+	case 1:
+		s = "AUTO"
+	case 2:
+		s = "HAND"
+	case 3:
+		s = "PV"
+	default:
+		s = fmt.Sprintf("Unknown PVMOD value: %d", val.Value.(int32))
+	}
+	return s
 }

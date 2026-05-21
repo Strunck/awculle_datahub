@@ -306,7 +306,7 @@ func (cfg *Config) setupKonfigGroup(client *client.Client, bgctx context.Context
 				if idx < len(nodeIdList) {
 					n := nodeIdList[idx]
 					//n.Vals = rr.Value
-					//log.Printf("--------\n%3d %s\t%s\n%+v\n%#v\n--------\n", idx, n.Name, n.Type, readlist.NodesToRead[k].NodeID, rr.Value)
+					log.Printf("--------\n%3d %s\t%s\n%+v\n%#v\n--------\n", idx, n.Name, n.Type, readlist.NodesToRead[k].NodeID, rr.Value)
 					m[n.Key] = fmt.Sprintf("%v", rr.Value)
 					m[n.Key] = ConvertSymbol(rr.Value, n.Type)
 				}

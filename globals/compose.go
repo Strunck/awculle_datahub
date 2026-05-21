@@ -36,7 +36,7 @@ func ComposeExtensionObject(prefix string, n Node) (res []NodeHelper, err error)
 	case "T_ARRAY__1__24__OF_TYPE_EMeterKonfig":
 		res = append(res, makeNodeHelperArray(24, "xVorhanden", "T_BOOL", "EMeter", prefix)...)
 		res = append(res, makeNodeHelperArray(24, "rPulswertigkeit", "T_REAL", "EMeter", prefix)...)
-		res = append(res, makeNodeHelperArray(24, "EMeterType", "T_INT", "EMeter", prefix)...)
+		res = append(res, makeNodeHelperArray(24, "EMeterType", "T_EMT", "EMeter", prefix)...)
 		res = append(res, makeNodeHelperArray(24, "bOrt", "T_BYTE", "EMeter", prefix)...)
 		res = append(res, makeNodeHelperArray(24, "sShort", "T_STRING", "EMeter", prefix)...)
 		res = append(res, makeNodeHelperArray(24, "sDescr", "T_STRING", "EMeter", prefix)...)

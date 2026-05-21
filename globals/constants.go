@@ -37,7 +37,9 @@ const (
 	RETRYWAIT_ATTEMPTS_MAX = 15                                // max 15 attempt are made. Otherwise it will crash exit and restart automatically via podman restart policy.
 	OPCUA_SESSION_TIMEOUT  = RETRYWAIT_ATTEMPTS_MAX * 3 * 1000 // WithSessionTimeout sets the number of milliseconds that a session may be unused before being closed by the server. (default: 2 min)
 	OPCUA_CONNECT_TIMEOUT  = 10 * time.Second                  // sets the number of milliseconds to wait for a connection response. (default:5000)
-	SYMBOLXML              = "ULOVisor_V0.14.20_AAA.04.Device.Application.xml"
-	SETTINGSJSON           = "settings.json"
-	HttpPort               = 1881
+	OPCUA_MONITOR_BATCH    = 100                               // create monitored items in bounded batches to stay below server operation limits
+	// SYMBOLXML              = "ULOVisor_V0.14.20_AAA.04.Device.Application.xml"
+	SYMBOLXML    = "ULOVisor_V0.18.00_AAB.08.Device.Application.xml"
+	SETTINGSJSON = "settings.json"
+	HttpPort     = 1881
 )

@@ -58,25 +58,41 @@ func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) (err error) {
 	}
 
 	// prepare create monitored items request
-	monReq := &ua.CreateMonitoredItemsRequest{
-		SubscriptionID:     subres.SubscriptionID,
-		TimestampsToReturn: ua.TimestampsToReturnBoth,
-		ItemsToCreate:      mimi,
-	}
+	gs.OpcUa.ItemIds = gs.OpcUa.ItemIds[:0]
+	totalCreated := 0
+	for start := 0; start < len(mimi); start += OPCUA_MONITOR_BATCH {
+		end := start + OPCUA_MONITOR_BATCH
+		if end > len(mimi) {
+			end = len(mimi)
+		}
 
-	// send request to server. receive response or error
-	monRes, err := gs.OpcUa.Client.CreateMonitoredItems(pctx, monReq)
-	if err != nil {
-		err = fmt.Errorf("🔱 error OpcClient.CreateMonitoredItems: %w", err)
-		return err
-	}
+		monReq := &ua.CreateMonitoredItemsRequest{
+			SubscriptionID:     subres.SubscriptionID,
+			TimestampsToReturn: ua.TimestampsToReturnBoth,
+			ItemsToCreate:      mimi[start:end],
+		}
 
-	if monRes.ServiceResult.IsGood() {
-		for _, res := range monRes.Results {
+		// send request to server. receive response or error
+		monRes, err := gs.OpcUa.Client.CreateMonitoredItems(pctx, monReq)
+		if err != nil {
+			return fmt.Errorf("🔱 error OpcClient.CreateMonitoredItems batch %d-%d: %w", start, end-1, err)
+		}
+
+		if !monRes.ServiceResult.IsGood() {
+			return fmt.Errorf("🔱 OPC UA monitored item creation failed for batch %d-%d with status: %v", start, end-1, monRes.ServiceResult)
+		}
+
+		for idx, res := range monRes.Results {
+			if !res.StatusCode.IsGood() {
+				return fmt.Errorf("🔱 OPC UA monitored item creation failed for client handle %d with status: %v", mimi[start+idx].RequestedParameters.ClientHandle, res.StatusCode)
+			}
 			gs.OpcUa.ItemIds = append(gs.OpcUa.ItemIds, res.MonitoredItemID)
 		}
-		log.Printf("🔱 %d Monitored Items created", len(monRes.Results))
+
+		totalCreated += len(monRes.Results)
 	}
+
+	log.Printf("🔱 %d Monitored Items created in batches of %d", totalCreated, OPCUA_MONITOR_BATCH)
 
 	return nil
 }

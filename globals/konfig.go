@@ -301,19 +301,27 @@ func (cfg *Config) setupKonfigGroup(client *client.Client, bgctx context.Context
 		} else {
 			log.Println("🪑 Read Sequence", i+1, "SUCCESS")
 
+			log.Printf("🪑 idx|SymbolName\t|T_TYPE\t|OPC UA NodeId\t|value\n--------------------------------------------------------------------------------------\n")
+
 			for k, rr := range readed.Results {
 				idx = k + (i * MAXREAD)
 				if idx < len(nodeIdList) {
 					n := nodeIdList[idx]
-					//n.Vals = rr.Value
-					log.Printf("--------\n%3d %s\t%s\n%+v\n%#v\n--------\n", idx, n.Name, n.Type, readlist.NodesToRead[k].NodeID, rr.Value)
-					m[n.Key] = fmt.Sprintf("%v", rr.Value)
-					m[n.Key] = ConvertSymbol(rr.Value, n.Type)
+
+					msg := fmt.Sprintf("🪑 %3d %s\t%s\t%+v\t", idx, n.Name, n.Type, readlist.NodesToRead[k].NodeID)
+					symbolValue := ConvertSymbol(rr.Value, n.Type)
+					if symbolValue == nil {
+						// Only print, if PLC version missmatches expected version
+						fmt.Printf("%s ⛔ WARNING: value is nil ⛔\n", msg)
+					} else {
+						m[n.Key] = symbolValue
+						// fmt.Printf("%s ✅\n", msg)
+					}
 				}
 			}
 		}
 
-		// wait for 500 ms
+		// wait for 200 ms
 		time.Sleep(200 * time.Millisecond)
 	}
 

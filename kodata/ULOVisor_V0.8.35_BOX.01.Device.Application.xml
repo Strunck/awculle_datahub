@@ -1,0 +1,989 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Symbolconfiguration xmlns="http://www.3s-software.com/schemas/Symbolconfiguration.xsd">
+  <Header>
+    <Version>3.5.11.0</Version>
+    <SymbolConfigObject version="3.5.12.0" runtimeid="3.5.12.0" libversion="3.5.11.0" compiler="3.5.12.0" lmm="3.5.12.0" profile="CODESYS V3.5 SP12+" settings="LayoutCalculator=OptimizedClientSideLayoutCalculator" />
+    <ProjectInfo name="ULOVisor_V0.8.35_BOX.01" devicename="Device" appname="Application" />
+  </Header>
+  <TypeList>
+    <TypeSimple name="T_BOOL" size="1" swapsize="0" typeclass="Bool" iecname="BOOL" />
+    <TypeSimple name="T_BYTE" size="1" swapsize="1" typeclass="Byte" iecname="BYTE" />
+    <TypeSimple name="T_DATE_AND_TIME" size="4" swapsize="4" typeclass="DateAndTime" iecname="DATE_AND_TIME" />
+    <TypeSimple name="T_DINT" size="4" swapsize="4" typeclass="DInt" iecname="DINT" />
+    <TypeSimple name="T_DWORD" size="4" swapsize="4" typeclass="DWord" iecname="DWORD" />
+    <TypeSimple name="T_INT" size="2" swapsize="2" typeclass="Int" iecname="INT" />
+    <TypeSimple name="T_REAL" size="4" swapsize="4" typeclass="Real" iecname="REAL" />
+    <TypeSimple name="T_STRING" size="81" swapsize="0" typeclass="String" iecname="STRING" />
+    <TypeSimple name="T_STRING_255_" size="256" swapsize="0" typeclass="String" iecname="STRING(255)" />
+    <TypeSimple name="T_TIME" size="4" swapsize="4" typeclass="Time" iecname="TIME" />
+    <TypeSimple name="T_UINT" size="2" swapsize="2" typeclass="UInt" iecname="UINT" />
+    <TypeSimple name="T_WORD" size="2" swapsize="2" typeclass="Word" iecname="WORD" />
+    <TypeArray name="T_ARRAY__1__10__OF_BOOL" size="10" nativesize="10" typeclass="Array" iecname="ARRAY [1..10] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="1" maxrange="10" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__10__OF_BYTE" size="10" nativesize="10" typeclass="Array" iecname="ARRAY [1..10] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="1" maxrange="10" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__20__1__4__OF_BYTE" size="80" nativesize="80" typeclass="Array" iecname="ARRAY [1..20, 1..4] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="1" maxrange="20" />
+      <ArrayDim minrange="1" maxrange="4" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__20__1__4__OF_WORD" size="160" nativesize="160" typeclass="Array" iecname="ARRAY [1..20, 1..4] OF WORD" basetype="T_WORD">
+      <ArrayDim minrange="1" maxrange="20" />
+      <ArrayDim minrange="1" maxrange="4" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__20__OF_BOOL" size="20" nativesize="20" typeclass="Array" iecname="ARRAY [1..20] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="1" maxrange="20" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__20__OF_BYTE" size="20" nativesize="20" typeclass="Array" iecname="ARRAY [1..20] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="1" maxrange="20" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__20__OF_INT" size="40" nativesize="40" typeclass="Array" iecname="ARRAY [1..20] OF INT" basetype="T_INT">
+      <ArrayDim minrange="1" maxrange="20" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__20__OF_WORD" size="40" nativesize="40" typeclass="Array" iecname="ARRAY [1..20] OF WORD" basetype="T_WORD">
+      <ArrayDim minrange="1" maxrange="20" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__21__OF_BYTE" size="21" nativesize="21" typeclass="Array" iecname="ARRAY [1..21] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="1" maxrange="21" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__2__OF_BOOL" size="2" nativesize="2" typeclass="Array" iecname="ARRAY [1..2] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="1" maxrange="2" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__2__OF_BYTE" size="2" nativesize="2" typeclass="Array" iecname="ARRAY [1..2] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="1" maxrange="2" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__2__OF_INT" size="4" nativesize="4" typeclass="Array" iecname="ARRAY [1..2] OF INT" basetype="T_INT">
+      <ArrayDim minrange="1" maxrange="2" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__2__OF_WORD" size="4" nativesize="4" typeclass="Array" iecname="ARRAY [1..2] OF WORD" basetype="T_WORD">
+      <ArrayDim minrange="1" maxrange="2" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__4__1__40__OF_BYTE" size="160" nativesize="160" typeclass="Array" iecname="ARRAY [1..4, 1..40] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="1" maxrange="4" />
+      <ArrayDim minrange="1" maxrange="40" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__40__OF_BOOL" size="40" nativesize="40" typeclass="Array" iecname="ARRAY [1..40] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="1" maxrange="40" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__40__OF_BYTE" size="40" nativesize="40" typeclass="Array" iecname="ARRAY [1..40] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="1" maxrange="40" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__40__OF_DATE_AND_TIME" size="160" nativesize="160" typeclass="Array" iecname="ARRAY [1..40] OF DATE_AND_TIME" basetype="T_DATE_AND_TIME">
+      <ArrayDim minrange="1" maxrange="40" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__40__OF_DWORD" size="160" nativesize="160" typeclass="Array" iecname="ARRAY [1..40] OF DWORD" basetype="T_DWORD">
+      <ArrayDim minrange="1" maxrange="40" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__40__OF_INT" size="80" nativesize="80" typeclass="Array" iecname="ARRAY [1..40] OF INT" basetype="T_INT">
+      <ArrayDim minrange="1" maxrange="40" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__40__OF_WORD" size="80" nativesize="80" typeclass="Array" iecname="ARRAY [1..40] OF WORD" basetype="T_WORD">
+      <ArrayDim minrange="1" maxrange="40" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__46__OF_BOOL" size="46" nativesize="46" typeclass="Array" iecname="ARRAY [1..46] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="1" maxrange="46" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__46__OF_INT" size="92" nativesize="92" typeclass="Array" iecname="ARRAY [1..46] OF INT" basetype="T_INT">
+      <ArrayDim minrange="1" maxrange="46" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__4__OF_BOOL" size="4" nativesize="4" typeclass="Array" iecname="ARRAY [1..4] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="1" maxrange="4" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__4__OF_BYTE" size="4" nativesize="4" typeclass="Array" iecname="ARRAY [1..4] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="1" maxrange="4" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__4__OF_TIME" size="16" nativesize="16" typeclass="Array" iecname="ARRAY [1..4] OF TIME" basetype="T_TIME">
+      <ArrayDim minrange="1" maxrange="4" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__5__OF_BOOL" size="5" nativesize="5" typeclass="Array" iecname="ARRAY [1..5] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="1" maxrange="5" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__5__OF_BYTE" size="5" nativesize="5" typeclass="Array" iecname="ARRAY [1..5] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="1" maxrange="5" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__6__1__20__OF_WORD" size="240" nativesize="240" typeclass="Array" iecname="ARRAY [1..6, 1..20] OF WORD" basetype="T_WORD">
+      <ArrayDim minrange="1" maxrange="6" />
+      <ArrayDim minrange="1" maxrange="20" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__6__OF_BOOL" size="6" nativesize="6" typeclass="Array" iecname="ARRAY [1..6] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="1" maxrange="6" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__6__OF_BYTE" size="6" nativesize="6" typeclass="Array" iecname="ARRAY [1..6] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="1" maxrange="6" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__6__OF_DWORD" size="24" nativesize="24" typeclass="Array" iecname="ARRAY [1..6] OF DWORD" basetype="T_DWORD">
+      <ArrayDim minrange="1" maxrange="6" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__6__OF_INT" size="12" nativesize="12" typeclass="Array" iecname="ARRAY [1..6] OF INT" basetype="T_INT">
+      <ArrayDim minrange="1" maxrange="6" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__6__OF_REAL" size="24" nativesize="24" typeclass="Array" iecname="ARRAY [1..6] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="1" maxrange="6" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__6__OF_STRING" size="486" nativesize="486" typeclass="Array" iecname="ARRAY [1..6] OF STRING" basetype="T_STRING">
+      <ArrayDim minrange="1" maxrange="6" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__6__OF_WORD" size="12" nativesize="12" typeclass="Array" iecname="ARRAY [1..6] OF WORD" basetype="T_WORD">
+      <ArrayDim minrange="1" maxrange="6" />
+    </TypeArray>
+    <TypeUserDef name="T_POINT" size="8" nativesize="8" typeclass="Userdef" pouclass="STRUCTURE" iecname="POINT">
+      <UserDefElement iecname="X" type="T_DINT" byteoffset="0" vartype="VAR" />
+      <UserDefElement iecname="Y" type="T_DINT" byteoffset="4" vartype="VAR" />
+    </TypeUserDef>
+    <TypeUserDef name="T_RTS_SYSTIMEDATE" size="18" nativesize="18" typeclass="Userdef" pouclass="STRUCTURE" iecname="RTS_SYSTIMEDATE">
+      <UserDefElement iecname="wYear" type="T_UINT" byteoffset="0" vartype="VAR" />
+      <UserDefElement iecname="wMonth" type="T_UINT" byteoffset="2" vartype="VAR" />
+      <UserDefElement iecname="wDay" type="T_UINT" byteoffset="4" vartype="VAR" />
+      <UserDefElement iecname="wHour" type="T_UINT" byteoffset="6" vartype="VAR" />
+      <UserDefElement iecname="wMinute" type="T_UINT" byteoffset="8" vartype="VAR" />
+      <UserDefElement iecname="wSecond" type="T_UINT" byteoffset="10" vartype="VAR" />
+      <UserDefElement iecname="wMilliseconds" type="T_UINT" byteoffset="12" vartype="VAR" />
+      <UserDefElement iecname="wDayOfWeek" type="T_UINT" byteoffset="14" vartype="VAR" />
+      <UserDefElement iecname="wYday" type="T_UINT" byteoffset="16" vartype="VAR" />
+    </TypeUserDef>
+    <TypeUserDef name="T_STRUCT_VerdichterVisu" size="10" nativesize="10" typeclass="Userdef" pouclass="STRUCTURE" iecname="STRUCT_VerdichterVisu">
+      <UserDefElement iecname="b_Verdichter1" type="T_BYTE" byteoffset="0" vartype="VAR" />
+      <UserDefElement iecname="b_Verdichter2" type="T_BYTE" byteoffset="1" vartype="VAR" />
+      <UserDefElement iecname="b_Verdichter3" type="T_BYTE" byteoffset="2" vartype="VAR" />
+      <UserDefElement iecname="b_Verdichter4" type="T_BYTE" byteoffset="3" vartype="VAR" />
+      <UserDefElement iecname="b_Verdichter5" type="T_BYTE" byteoffset="4" vartype="VAR" />
+      <UserDefElement iecname="b_Verdichter6" type="T_BYTE" byteoffset="5" vartype="VAR" />
+      <UserDefElement iecname="b_Verdichter7" type="T_BYTE" byteoffset="6" vartype="VAR" />
+      <UserDefElement iecname="b_Verdichter8" type="T_BYTE" byteoffset="7" vartype="VAR" />
+      <UserDefElement iecname="b_Verdichter9" type="T_BYTE" byteoffset="8" vartype="VAR" />
+      <UserDefElement iecname="b_Verdichter10" type="T_BYTE" byteoffset="9" vartype="VAR" />
+    </TypeUserDef>
+    <TypeUserDef name="T_STRUCT_VerflussigerVisu" size="10" nativesize="10" typeclass="Userdef" pouclass="STRUCTURE" iecname="STRUCT_VerflussigerVisu">
+      <UserDefElement iecname="b_Verflussiger1" type="T_BYTE" byteoffset="0" vartype="VAR" />
+      <UserDefElement iecname="b_Verflussiger2" type="T_BYTE" byteoffset="1" vartype="VAR" />
+      <UserDefElement iecname="b_Verflussiger3" type="T_BYTE" byteoffset="2" vartype="VAR" />
+      <UserDefElement iecname="b_Verflussiger4" type="T_BYTE" byteoffset="3" vartype="VAR" />
+      <UserDefElement iecname="b_Verflussiger5" type="T_BYTE" byteoffset="4" vartype="VAR" />
+      <UserDefElement iecname="b_Verflussiger6" type="T_BYTE" byteoffset="5" vartype="VAR" />
+      <UserDefElement iecname="b_Verflussiger7" type="T_BYTE" byteoffset="6" vartype="VAR" />
+      <UserDefElement iecname="b_Verflussiger8" type="T_BYTE" byteoffset="7" vartype="VAR" />
+      <UserDefElement iecname="b_Verflussiger9" type="T_BYTE" byteoffset="8" vartype="VAR" />
+      <UserDefElement iecname="b_Verflussiger10" type="T_BYTE" byteoffset="9" vartype="VAR" />
+    </TypeUserDef>
+    <TypeArray name="T_ARRAY__0__24__OF_POINT" size="200" nativesize="200" typeclass="Array" iecname="ARRAY [0..24] OF POINT" basetype="T_POINT">
+      <ArrayDim minrange="0" maxrange="24" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__6__OF_STRUCT_VerdichterVisu" size="60" nativesize="60" typeclass="Array" iecname="ARRAY [1..6] OF STRUCT_VerdichterVisu" basetype="T_STRUCT_VerdichterVisu">
+      <ArrayDim minrange="1" maxrange="6" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__6__OF_STRUCT_VerflussigerVisu" size="60" nativesize="60" typeclass="Array" iecname="ARRAY [1..6] OF STRUCT_VerflussigerVisu" basetype="T_STRUCT_VerflussigerVisu">
+      <ArrayDim minrange="1" maxrange="6" />
+    </TypeArray>
+    <TypeUserDef name="T_Struct_ArrOfPoints" size="200" nativesize="200" typeclass="Userdef" pouclass="STRUCTURE" iecname="Struct_ArrOfPoints">
+      <UserDefElement iecname="POINT24" type="T_ARRAY__0__24__OF_POINT" byteoffset="0" vartype="VAR" />
+    </TypeUserDef>
+    <TypeArray name="T_ARRAY__1__2__OF_Struct_ArrOfPoints" size="400" nativesize="400" typeclass="Array" iecname="ARRAY [1..2] OF Struct_ArrOfPoints" basetype="T_Struct_ArrOfPoints">
+      <ArrayDim minrange="1" maxrange="2" />
+    </TypeArray>
+  </TypeList>
+  <NodeList>
+    <Node name="Application">
+      <Node name="Al">
+        <Node name="AL_AlarmAktiv" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_AlarmMerk" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_An01_ND_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An02_HD_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An03_PuDoZeit_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An04_FlussigSchlag_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An05_WFlussigSchlag_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An06_WLeerTakte_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An07_WKaltSchwimm_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An08_DetektKalt_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An09_WVerfUDruck_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An10_WVerflMotor_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An11_NDAbschalt_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An12_KWSPumpeA_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An13_KWSPumpeB_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An14_KWSGasalarm_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An15_KWSSammel_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_An16_Vorlauftemp_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Cnn01_OlDruck_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Cnn02_Motor_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Count" type="T_WORD" access="ReadWrite" />
+        <Node name="AL_Dn1_ScrDruckluft_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Dn2_ScrMotorStoer_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Mn02_WCO2_ar" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Mn03_O2FrischSperr_ar" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm01_WCO2Schwell_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm02_WMessgasPump_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm04_WMotorVerda_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm05_O2Low_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm06_ZuKalt_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm07_VerdaEis_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm08_ZuWarm_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm09_Tauwasser_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm10_Frost_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm11_EVentil_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm12_WFrost_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm13_WBedarfAbtau_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_Rmm14_WKaeltmittel_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="AL_S01_Stromausfall" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_S02_Testmessung" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_S03_Ueberlast" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_S04_Starklast" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_S07_ComPla1" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_S08_ComPla2" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_S09_ComPla3" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_S10_ComPla4" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_S11_ComPla5" type="T_BOOL" access="ReadWrite" />
+        <Node name="AL_S12_ComPla6" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="BD">
+        <Node name="BA_An01_AggLeistung_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An02_HD_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An03_VerfTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An04_SaugDruck_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An05_SaugTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An06_HitzeVerd_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An07_AggLeistungSoll_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An08_VerdaTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An09_AggLeistAktiv_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An10_VerfLeist_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An11_VerfDruckSoll_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An12_VerdStellwert_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An13_VerfStellwert_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An14_Raum1Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An15_AnsaugTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An16_Energie_ardw" type="T_ARRAY__1__6__OF_DWORD" access="ReadWrite" />
+        <Node name="BA_An17_SaugDruckSoll_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An18_VerdaTempSoll_arw" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An20_Raum2Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An21_Raum3Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An22_Raum4Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An23_Raum5Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An24_Raum6Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An25_Raum7Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An26_Raum8Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An27_Raum9Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An28_Raum10Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An29_Raum11Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An30_Raum12Kuhl_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An31_TempDiff_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An32_FluessigTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An33_VerdiEndTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An34_ReglerModusND" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An35_ReglerModusHD" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An36_MischerPos_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="BA_An37_KWS_SpeicherSoll" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_An38_KWS_SpeicherSollVolt" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="BA_Cnn2_VerzEinVerdCount_arb" type="T_ARRAY__1__20__OF_BYTE" access="ReadWrite" />
+        <Node name="BA_Cnn2a_VerzEinVerdCount_arb" type="T_ARRAY__1__20__1__4__OF_BYTE" access="ReadWrite" />
+        <Node name="BA_Dn1_ScrubberPhase_arb" type="T_ARRAY__1__4__OF_BYTE" access="ReadWrite" />
+        <Node name="BA_Dn2_ScrubberCountDown_ati" type="T_ARRAY__1__4__OF_TIME" access="ReadWrite" />
+        <Node name="BA_Dn3_RaumNrAktiv_arb" type="T_ARRAY__1__4__OF_BYTE" access="ReadWrite" />
+        <Node name="BA_Dn4_ScubWartList_2d" type="T_ARRAY__1__4__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="BA_Dn5_ScubberRaeume_2d" type="T_ARRAY__1__4__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="BA_Dn6_ScruEditRaumNr_b" type="T_BYTE" access="ReadWrite" />
+        <Node name="BA_Dn7_ScruEditPos_b" type="T_BYTE" access="ReadWrite" />
+        <Node name="BA_Dn8_ManRaumNr" type="T_ARRAY__1__4__OF_BYTE" access="ReadWrite" />
+        <Node name="BA_Enn01_KuhlA" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn02_KuhlB" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn03_RegelA" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn04_RegelB" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn05_RegelSollA" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn06_RegelSollB" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn07_SaugTempA" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Enn08_SaugTempB" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Enn09_SchutzA" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn10_SchutzB" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn11_HitzeA" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Enn12_HitzeB" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Enn13_VentilA" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn14_VentilB" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn15_VentilSchrittA" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn16_VentilSchrittB" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn17_VerdaDruckA" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn18_VerdaDruckB" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn19_VerdaTempA" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Enn20_VerdaTempB" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Mn01_CO2_Scrubber_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="BA_Mn02_O2_Scrubber_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="BA_Mn03_RaumNrInMess_arb" type="T_ARRAY__1__2__OF_BYTE" access="ReadWrite" />
+        <Node name="BA_Rmm01_CO2_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Rmm02_KuhlLeistung_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Rmm03_O2_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Rmm04_Druck_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Rmm05_TempKontroll_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Rmm06_Temp_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Rmm07_VerdaTemp_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Rmm08_TauMax_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Rmm09_Luftfeu_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="BA_Rmm10_TempAux1_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Rmm11_TempAux2_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_Rmm12_TempAux3_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="BA_S01_CO2_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="BA_S02_O2_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="BA_S03_EnergieZahler_dw" type="T_DWORD" access="ReadWrite" />
+        <Node name="BA_S04_VersionNr_w" type="T_WORD" access="ReadWrite" />
+        <Node name="BA_S05_AussenTemp_i" type="T_INT" access="ReadWrite" />
+        <Node name="BX_An01_AggMaxAuslasung_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An02_AggLastAbsch_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An03_AggNachkuhl_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An04_ZuVerzRaumAktiv_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An05_KaltSchwimm_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An06_KaelteDetek_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An11_KWS_PumpAstoer_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An12_KWS_PumpBstoer_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An13_KWS_SammelStoer_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An14_KWS_Gasalarm_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An2_AlDruckND_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An3_AlDruckHD_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_An5_AlVerflMotor_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Cnn1_LastAbschalt_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn12_ManMotorStop_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn13_Manuell_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn14_SFCTip" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn1_ScrDruckluftWaecht" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn1_ScrubberAktiv_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn2_ScrMotorStoer" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn2_VisuDoppelKlapp" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn3_VisuLunge_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn4_ListeLoeschen_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn5_ListeAendern_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Dn6_ManLL_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Mn2_AlCO2_ar" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Rmm01_AbtauAnf_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Rmm02_Umluft_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Rmm03_KaltVSperrInt_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Rmm04_KVLastSperre_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Rmm05_Frost_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_Rmm07_AlE_Ventil_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="BX_S01_Buzzer" type="T_BOOL" access="ReadWrite" />
+        <Node name="BX_S01_Starklast" type="T_BOOL" access="ReadWrite" />
+        <Node name="BX_S02_Sync12Uhr" type="T_BOOL" access="ReadWrite" />
+        <Node name="BX_S03_Steuerstromaus" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="GVL">
+        <Node name="Gar_AbbruchKuhl" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="gar_AnzVerdAgg" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_KP_Verd" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="Gar_KP_Verf" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="Gar_MesskreisFertig" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_MesskreisFertig2" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_O2Request" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_Offset_Verd" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="Gar_Offset_Verf" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="Gar_PCO2_15" type="T_ARRAY__1__2__OF_Struct_ArrOfPoints" access="ReadWrite" />
+        <Node name="Gar_PO2_3" type="T_ARRAY__1__2__OF_Struct_ArrOfPoints" access="ReadWrite" />
+        <Node name="Gar_RequestVerda" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_TN_Verd" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="Gar_TN_Verf" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="Gar_TV_Verd" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="Gar_TV_Verf" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="Gar_VerdaRed" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_Vorrang" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Garb_EnthitzerGrenz" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="Garb_KarltesterRaum" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="Garb_StufeVerfGrenz" type="T_ARRAY__1__20__OF_INT" access="ReadWrite" />
+        <Node name="gari_AggVisible" type="T_ARRAY__1__46__OF_BOOL" access="ReadWrite" />
+        <Node name="Gari_AnzVerfAgg" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="gari_Bar_HDOben1" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Bar_HDOben2" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Bar_HDUnten1" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Bar_HDUnten2" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Bar_NDOben1" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Bar_NDOben2" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Bar_NDUnten1" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Bar_NDUnten2" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Bar_VerdampfMax" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Bar_VerdampfMin" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="Gari_KarltesterWert" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_KondTempSoll_arw" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_NrAgg" type="T_ARRAY__1__46__OF_INT" access="ReadWrite" />
+        <Node name="gari_NrRaum" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="gari_RaumVisible" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="gari_SollTVerfMin_arw" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_HDOben1" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_HDOben2" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_HDUnten1" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_HDUnten2" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_NDOben1" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_NDOben2" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_NDUnten1" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_NDUnten2" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_PuDoSchwelle" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_RegelSaug" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_SammlVordruck" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_SollEffHD" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_SollEffND" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="gari_Temp_WarnUber" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="Gari_Verd_inC" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="Gari_Verf_inC" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="garr_Ansaug_20mA" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Ansaug_4mA" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Ansaug_Max" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Ansaug_Min" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_DruckRaum_20mA" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_DruckRaum_4mA" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_DruckRaum_Max" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_DruckRaum_Min" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Feuchte_20mA" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Feuchte_4mA" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Feuchte_Max" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Feuchte_Min" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Saug_20mA" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Saug_4mA" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Saug_Max" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garr_Saug_Min" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="garri_Tabelle" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="garw_Jahr" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="garw_Monat" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="garw_Tag" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="garw_Tage" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="Garx_AggregatAktiv" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Garx_Enthitzer" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Garx_NDUberbruck" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="garx_pdAktiv" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Garx_QuitALAN01" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Garx_QuitALAN02" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Garx_QuitALAN04" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="garx_Rmm03_TuerInv_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="garx_UbersichtSeite" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="gb_KalibrierzeitCO2" type="T_ARRAY__1__2__OF_BYTE" access="ReadWrite" />
+        <Node name="gb_KalibrierzeitO2" type="T_ARRAY__1__2__OF_BYTE" access="ReadWrite" />
+        <Node name="gi_BenutzerJahr" type="T_INT" access="ReadWrite" />
+        <Node name="gi_BenutzerMinute" type="T_INT" access="ReadWrite" />
+        <Node name="gi_BenutzerMonat" type="T_INT" access="ReadWrite" />
+        <Node name="gi_BenutzerStunde" type="T_INT" access="ReadWrite" />
+        <Node name="gi_BenutzerTag" type="T_INT" access="ReadWrite" />
+        <Node name="gi_Luftdruck" type="T_WORD" access="ReadWrite" />
+        <Node name="gs_Trend" type="T_STRING" access="ReadWrite" />
+        <Node name="Gstruct_SyncZeit" type="T_RTS_SYSTIMEDATE" access="ReadWrite" />
+        <Node name="gt_EinlagerDatum" type="T_ARRAY__1__40__OF_DATE_AND_TIME" access="ReadWrite" />
+        <Node name="gt_SyncZeit" type="T_DATE_AND_TIME" access="ReadWrite" />
+        <Node name="gw_E_Menge" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="gw_FU1Prozent" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="gw_FU2Prozent" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="gw_Sollentfeuchtung" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="gw_VerfProzent" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="gx_Auto_CO2_1" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_Auto_CO2_2" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_Auto_CO2_3" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_Auto_O2_1" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_Auto_O2_2" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_Auto_O2_3" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_BlackScreen" type="T_BOOL" access="ReadWrite" />
+        <Node name="gx_Init_CO2" type="T_BOOL" access="ReadWrite" />
+        <Node name="gx_KonfigCO2Fertig" type="T_BOOL" access="ReadWrite" />
+        <Node name="gx_KonfigFertig" type="T_BOOL" access="ReadWrite" />
+        <Node name="gx_Quit" type="T_BOOL" access="ReadWrite" />
+        <Node name="gx_Simulation" type="T_BOOL" access="ReadWrite" />
+        <Node name="gx_TabelleFertig" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="In">
+        <Node name="IA_An01_SaugTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="IA_An02_AnsaugTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="IA_An03_SaugDruckVerd_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="IA_An04_DruckKond_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="IA_An05_FluessigTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="IA_An06_VerdEndTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="IA_Cnn1_VerdEndTemp_ari" type="T_ARRAY__1__20__OF_INT" access="ReadWrite" />
+        <Node name="IA_Enn1_SauggastempA" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Enn2_SauggastempB" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Enn3_VerdadruckA" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Enn4_VerdadruckB" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Mn01_O2Mess_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="IA_Mn02_CO2Mess_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="IA_Rmm01_Temp_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Rmm02_KontTemp_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Rmm03_VerdaTemp_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Rmm04_Druck_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Rmm05_Feuchte_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Rmm06_TempAux1_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Rmm07_TempAux2_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_Rmm08_TempAux3_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="IA_S01_ELeistung_w" type="T_WORD" access="ReadWrite" />
+        <Node name="IX_An10_EnergiAgg_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_An11_KWS_PumpAstoer_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_An12_KWS_PumpBstoer_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_An13_KWS_SammelStoer_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_An14_KWS_Gasalarm_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_An1_KaltDetekt_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_An2_AlDruckND_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_An3_AlDruckHD_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_An4_KaltSchwimm_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_An5_AlVerflMotor_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Cnn1_AlOlDruck_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Cnn2_VerdVerr_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Cnn3_AlMotor_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Cnn4_VerdichterAus_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Dn1_ScrDruckluftWaecht" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Dn2_ScrMotorStoer" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Enn1_AktivierungA" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Enn2_AktivierungB" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Mn1_AlMessgas_ar" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Mn2_AlCO2_ar" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Mn3_KaltDetekt_ar" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Rmm01_KuhlVerr_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Rmm02_VerdaAktiv_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Rmm03_Tuer_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Rmm04_TauSchwimm_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Rmm05_Frost_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Rmm07_AlE_Ventil_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_Rmm08_RaumAus_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="IX_S01_Starklast" type="T_BOOL" access="ReadWrite" />
+        <Node name="IX_S02_TempAbsenk" type="T_BOOL" access="ReadWrite" />
+        <Node name="IX_S03_Steuerstromaus" type="T_BOOL" access="ReadWrite" />
+        <Node name="IX_S04_EnergieImpuls" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="Konfig">
+        <Node name="Gar_AbtHeiz" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_AggZuRaum" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_AggZuVerd" type="T_ARRAY__1__6__OF_STRUCT_VerdichterVisu" access="ReadWrite" />
+        <Node name="Gar_AggZuVerf" type="T_ARRAY__1__6__OF_STRUCT_VerflussigerVisu" access="ReadWrite" />
+        <Node name="Gar_AnzahlStufen" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_Aux1Fuehl" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_Aux2Fuehl" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_Aux3Fuehl" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_Befeuchter" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_CO2_Aktion" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_DurchflussWache" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_FeuchtFuehl" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_FrostWache" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_FUMaxDreh_Verd" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="Gar_FUMin" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="Gar_IA_An01" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_IA_An02" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_IA_An03" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_IA_An04" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_IA_An05" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_IA_An06" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_An1" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertiX_An11" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertiX_An12" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertiX_An13" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertiX_An14" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_An2" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_An3" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_An4" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_An5" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertiX_Cnn1" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertiX_Cnn3" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_Dn1" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_Dn2" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_Mn2" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_Rmm05" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_Rmm07" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_S01" type="T_BOOL" access="ReadWrite" />
+        <Node name="Gar_InvertIX_S03" type="T_BOOL" access="ReadWrite" />
+        <Node name="Gar_Kaelteventil" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_Kontroll" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_KWS" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_KWS_FreigabenInv" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_KWS_FreigabenSchalter" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_KWS_IPAdress" type="T_STRING_255_" access="ReadWrite" />
+        <Node name="Gar_KWS_MaxSollTemp" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="Gar_KWS_MinSollTemp" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="Gar_KWS_Mischer" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_Leistung_Verd" type="T_ARRAY__1__20__1__4__OF_WORD" access="ReadWrite" />
+        <Node name="Gar_Leistung_Verf" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="Gar_MaxDreh_Verf" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="Gar_MKzuRaum" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_ModVerd" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_N2_Ventil" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_O2Luefter" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_PCO2_15_init" type="T_ARRAY__1__2__OF_Struct_ArrOfPoints" access="ReadWrite" />
+        <Node name="Gar_PCO2_3_init" type="T_ARRAY__1__2__OF_Struct_ArrOfPoints" access="ReadWrite" />
+        <Node name="Gar_PCO2_9_init" type="T_ARRAY__1__2__OF_Struct_ArrOfPoints" access="ReadWrite" />
+        <Node name="Gar_RaumAusFunktion" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_RaumDruckSens" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_RaumFuehl" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_SchaltFixVerd" type="T_ARRAY__1__20__1__4__OF_WORD" access="ReadWrite" />
+        <Node name="Gar_SchaltSchwVerd" type="T_ARRAY__1__6__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="Gar_ScrubZuRaum" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_Tauwasser" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_TauwMenge" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="Gar_VerdaFuehl" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_Verdampfer" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="Gar_VerdHysterese" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="Gar_VerdZuAgg" type="T_ARRAY__1__20__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_VerfZuAgg" type="T_ARRAY__1__20__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_Zuordnung_MK1" type="T_ARRAY__1__21__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_Zuordnung_MK2" type="T_ARRAY__1__21__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_Zuordnung_Verd" type="T_ARRAY__1__20__OF_BYTE" access="ReadWrite" />
+        <Node name="Gar_Zuordnung_Verf" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="Garb_CO2_Sensortyp" type="T_ARRAY__1__2__OF_BYTE" access="ReadWrite" />
+        <Node name="Garx_VerdaDigiAna" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="gb_AggExt" type="T_BYTE" access="ReadWrite" />
+        <Node name="Gb_Anzahl_Aggregate" type="T_BYTE" access="ReadWrite" />
+        <Node name="Gb_Anzahl_Messkreis" type="T_BYTE" access="ReadWrite" />
+        <Node name="Gb_Anzahl_Raeume" type="T_BYTE" access="ReadWrite" />
+        <Node name="Gb_Anzahl_Scrubberkreis" type="T_BYTE" access="ReadWrite" />
+        <Node name="Gb_Anzahl_Verd" type="T_BYTE" access="ReadWrite" />
+        <Node name="Gb_Anzahl_Verf" type="T_BYTE" access="ReadWrite" />
+        <Node name="Gs_KaltTabelle" type="T_ARRAY__1__6__OF_STRING" access="ReadWrite" />
+        <Node name="Gs_KaltTabOhneCSV" type="T_ARRAY__1__6__OF_STRING" access="ReadWrite" />
+        <Node name="Gs_Kunde" type="T_STRING" access="ReadWrite" />
+        <Node name="gs_Raumnummer" type="T_STRING_255_" access="ReadWrite" />
+        <Node name="Gs_Version" type="T_STRING" access="ReadWrite" />
+        <Node name="Gw_MinDreh_Verd" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="Gx_KonfigLoadAktiv" type="T_BOOL" access="ReadWrite" />
+        <Node name="Gx_LoadCO2" type="T_BOOL" access="ReadWrite" />
+        <Node name="Gx_LoadKalt" type="T_BOOL" access="ReadWrite" />
+        <Node name="Gx_LoadKonfig" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="Out">
+        <Node name="QA_An01_VerfDreh_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_An02_VerdDreh_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_An03_Enthitz_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_An04_VerdDreh2_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_An05_S7_VerfDreh_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_An06_S7_VerdDreh_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_An07_S7_Enthitz_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_An08_S7_VerdDreh2_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_An09_S7_PCMSoll_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_An10_S7_Mischer_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_Cnn1_Verd_ar" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="QA_Enn1_SchrittmotorA" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="QA_Enn2_SchrittmotorB" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="QA_Rmm01_VerdaDreh" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="QA_Rmm02_VHGA" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QA_Rmm03_S7_VerdaDreh" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="QA_Rmm04_CO2_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="QA_Rmm04_S7_VHGA" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="QX_An1_VHGA_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_An2_BypassVerf_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_An3_NDBruecke_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_An4_EnthitzDigi_ar" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Cnn2_VerdV1_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Cnn3_VerdV2_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Cnn4_AnlaufEnt_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Cnn5_VerdV3_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Dn1_Scrub_V01_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Dn2_Scrub_V02_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Dn3_Scrub_V03_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Dn5_Scrub_V05_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Dn6_Scrub_V06_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Dn7_Scrub_V07_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Dn8_ScrubMot_ar" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Enn1_AlarmA" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Enn2_AlarmB" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Enn3_PulsVentil" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Knn1_VerfLuft_ar" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Mn1_MessVPruf_ar" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Mn2_MessPump_ar" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Mn3_MessV_ar" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm01_KaltV_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm02_VerdaLuft_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm03_O2Luft_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm04_CO2_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm05_TauMotor_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm06_MessV_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm07_N2V_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm08_AbtauHeiz_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm09_AbtauMagV_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm10_AbflussHeiz_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_Rmm11_Doppelklappe_ar" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="QX_S01_AlHupe" type="T_BOOL" access="ReadWrite" />
+        <Node name="QX_S02_KlappHeiz" type="T_BOOL" access="ReadWrite" />
+        <Node name="QX_S03_Steuerspannung" type="T_BOOL" access="ReadWrite" />
+        <Node name="true_dummy" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="P">
+        <Node name="PA_An01_VerzKaltMittel_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An02_AlVerzOelDruck_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An03_MinAnzRaumKuehlarw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An04_ModVerdichter_arb" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_An05_AlPuDoTakt_arb" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_An06_MaxZeitPuDo_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An07_ZeitNorEin_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An08_ZeitFastEin_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An09_ZeitNorRueck_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An10_ZeitFastRueck_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An11_SollKondDruck_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An12_IndexRaumVor_arb" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_An13_UberlastAgg_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An14_PrioGrenz_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An15_MinZeitStill_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An16_SammelVordruck_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An17_WinBypassZeit_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An18_SollVerfMin_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An19_PuDoSchwelle_arb" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_An20_FakAbtau_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An21_StartOpenGrad_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An22_StartOpenZeit_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An23_FastOpenGrad_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An24_FastOpenTime_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An25_SollSaugDruck_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An26_ZeitVerrND_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An27_HDSchwOben1B_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An28_HDSchwOben2B_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An29_HDSchwUnten2B_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An30_HDSchwUnten1B_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An31_WattBetrag_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An32_WarVerzHitze_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An33_AlVerzHitze_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An35_DiffNachKuehl_arb" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_An36_ModVerf_arb" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_An37_SchwelleSaug_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An38_DeltaTVerf_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An39_DeltaTSaug_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An40_MinVerdampf_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An41_MaxVerdampf_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An42_WarFluessSchlag_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An43_AlFluessSchlag_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An44_SaugTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An45_AnsaugTemp_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An46_KondDruckSchw2_arb" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_An47_KondDruckSchw1_arb" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_An48_HDSchwOben1C_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An49_HDSchwOben2C_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An50_HDSchwUnten2C_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An51_HDSchwUnten1C_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An52_NDSchweOben1B_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An53_NDSchweOben2B_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An54_NDSchweUnten2B_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An55_NDSchweUnten1B_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An56_NDSchweOben1C_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An57_NDSchweOben2C_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An58_NDSchweUnten2C_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An59_NDSchweUnten1C_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An60_HDUberdruck_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An61_EingabeHDC_arb" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_An62_EingabeNDC_arb" type="T_ARRAY__1__6__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_An63_ZeitNorEin_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An64_ZeitFastEin_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An65_ZeitNorRueck_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An66_ZeitFastRueck_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An67_PuDoStell_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An68_VerdAnlauf_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An69_VerdVerz_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An70_AbglFluess_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An71_AbglVerdiEnd_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An72_SchaltGesch_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An73_KWS_PCMsoll_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An74_KWS_PCMabsenk_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An75_MischerKP_arr" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="PA_An75_MischerSoll_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An76_MischerTN_arr" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="PA_An77_MischerTV_arr" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite" />
+        <Node name="PA_An78_MischerHandPos_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An79_VorlaufAlVerz" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An80_VorlaufAlLow_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An81_VorlaufAlHigh_ari" type="T_ARRAY__1__6__OF_INT" access="ReadWrite" />
+        <Node name="PA_An82_PCMSoll_0V_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An83_PCMSoll_10V_arw" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An84_AlVerzPumpe_arx" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An85_AlVerzKWS_Sammel_arx" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_An86_AlVerzGasAlarm_arx" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Enn01_Regelintervall" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Enn02_Sollwert" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Enn03_Startdauer" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Enn04_StartPuls" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Mn10_KorrNullCO2_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="PA_Mn11_KorrPruefCO2_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="PA_Mn12_KorrAussCO2_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="PA_Mn1_N2Vorrang_arb" type="T_ARRAY__1__2__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_Mn2_KorrNull_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="PA_Mn3_KorrPruef_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="PA_Mn4_KorrAuss_ari" type="T_ARRAY__1__2__OF_INT" access="ReadWrite" />
+        <Node name="PA_Mn5_RaumManu_arw" type="T_ARRAY__1__2__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_Mn6_KaliPruef_arw" type="T_ARRAY__1__2__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Mn7_KaliAuss_arw" type="T_ARRAY__1__2__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Mn8_KaliPruefCO2_arw" type="T_ARRAY__1__2__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Mn9_KaliAussCO2_arw" type="T_ARRAY__1__2__OF_WORD" access="ReadWrite" />
+        <Node name="PA_S01_MaxWarteKuehl_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S02_AusZeitNacht_b" type="T_BYTE" access="ReadWrite" />
+        <Node name="PA_S03_EinZeitNacht_b" type="T_BYTE" access="ReadWrite" />
+        <Node name="PA_S04_TauAblassZeit_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S05_TauVersuche_b" type="T_BYTE" access="ReadWrite" />
+        <Node name="PA_S06_Messzeit_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S07_MesszeitStart_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S08_O2DefektUnten_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S09_O2DefektOben_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S10_WarteKuhlende_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S11_LuefterNachlauf_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S12_AlVerzRaumKalt_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S13_AlVerzRaumWarm_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S14_AlTempDiffWarm_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S15_AlVerzVerdStoer_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S16_NiederdruckAbs_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S17_AlVerzFrost_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S18_AnsauAlsAussTemp_i" type="T_INT" access="ReadWrite" />
+        <Node name="PA_S19_Frostgrenze_i" type="T_INT" access="ReadWrite" />
+        <Node name="PA_S20_FrostgrenzeDiff_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S21_TempAbsenk_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S22_EnergieGesamt_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S23_ZeitBedarfs_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S24_Bedarfsschw_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S25_BadarfsWarnschw_w" type="T_WORD" access="ReadWrite" />
+        <Node name="PA_S26_FaktorDrehRed_r" type="T_REAL" access="ReadWrite" />
+        <Node name="PA_S27_RaumZuVerz" type="T_WORD" access="ReadWrite" />
+        <Node name="PX_An01_EinzRaumKuehl_arx" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_An02_ModVerfNVerd_arx" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_An03_NachKuehl_arx" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_An04_SaugVersch_arx" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_An05_VerfVersch_arx" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_An06_KWS_PCMabsenkHand_arx" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_An07_MischerHand_arx" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_An08_KWS_Absenkung_arx" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Dn01_ScrubberFreigabe" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Mn1_ScrubberAktiv_arx" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Mn2_N2RegelAktiv_arx" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Mn3_DiffDruckAktix_arx" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Mn4_KaliAktiv_arx" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Mn5_O2LuefterSperr_arx" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Mn6_N2EinzelRegelx" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_S01_ResetBuzz_x" type="T_BOOL" access="ReadWrite" />
+        <Node name="PX_S02_ResetAlarm_x" type="T_BOOL" access="ReadWrite" />
+        <Node name="PX_S03_AbsenkungAktiv_x" type="T_BOOL" access="ReadWrite" />
+        <Node name="PX_S04_AlleRaeumeAus" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="PR">
+        <Node name="PA_Rmm01_SumKuehl_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm02_Abtauzeit_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm03_ZeitScrubb_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm04_ZeitN2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm05_ZeitO2Lueft_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm06_PausUmluft_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm07_ZeitUmluft_arb" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_Rmm08_ZeitNachVerda_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm09_VerzVerdaAbtau_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm10_TauVol_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm11_SollTemp_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm11_SollTempAktiv_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm12_DiffRaumTemp_arb" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_Rmm13_AlRaumTLow_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm14_ALVerdsTLow_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm15_AbglRaumT_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm16_AbglKontT_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm17_AbglVerdaT_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm18_RaumLeistung_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm19_AbtauTemp_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm20_SumKuehlHGA_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm21_AbtauzeitHGA_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm22_AlFrostKontT_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm23_MinFeucht_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm29_ZeitBefeucht_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm30_PausBefeucht_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm31_O2Soll_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm32_AlO2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm33_CO2Soll_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm34_AlCO2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm35_DiffO2_arb" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_Rmm36_DiffCO2_arb" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_Rmm37_DiffN2_arb" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_Rmm38_DruckSoll_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm39_DiffDruck_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm40_MinVerdaDreh_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm41_MaxVerdaDreh_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm42_AbglTempAux1_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm43_AbglTempAux2_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm44_AbglTempAux3_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="PA_Rmm45_Dauer_LE_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm46_Dauer_N2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm47_Dauer_NI_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm48_Dauer_AD_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm49_Dauer_LF_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm50_Dauer_RE_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="PA_Rmm51_O2Luft_Ein_arb" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_Rmm52_O2Luft_Aus_arb" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_Rmm53_VLuft_Ein_arb" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="PA_Rmm54_VLuft_Aus_arb" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite" />
+        <Node name="PX_Rmm01_ModAbtau_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm02_AbtauEin_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm03_N2Ein_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm04_O2LueftAuto_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm05_O2LueftCO2_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm06_ULOEin_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm07_UmluftEin_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm08_VerdaAuto_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm09_TauEntleer_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm10_RaumAus_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm11_HandAbtau_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm12_TempSenkEin_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm13_AlRaumWarmEin_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+        <Node name="PX_Rmm14_VerdDrehRedu_arx" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="Vis">
+        <Node name="gb_AggregatAktuell" type="T_BYTE" access="ReadWrite" />
+        <Node name="gb_AktRaum" type="T_BYTE" access="ReadWrite" />
+        <Node name="gb_Cnn1_AlOlDruck" type="T_ARRAY__1__5__OF_BOOL" access="ReadWrite" />
+        <Node name="gb_Cnn3_AlMotor" type="T_ARRAY__1__5__OF_BOOL" access="ReadWrite" />
+        <Node name="gb_VerdOco" type="T_ARRAY__1__10__OF_BYTE" access="ReadWrite" />
+        <Node name="gb_VerfLufterOco" type="T_ARRAY__1__10__OF_BYTE" access="ReadWrite" />
+        <Node name="gb_VerzEinVerdCount" type="T_ARRAY__1__5__OF_BYTE" access="ReadWrite" />
+        <Node name="gw_VisAlTemp" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="gx_FU1" type="T_BOOL" access="ReadWrite" />
+        <Node name="gx_FU2" type="T_BOOL" access="ReadWrite" />
+        <Node name="gx_Update" type="T_BOOL" access="ReadWrite" />
+        <Node name="gx_VerdVis" type="T_ARRAY__1__5__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_VerdVis_1" type="T_ARRAY__1__5__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_VerdVis_2" type="T_ARRAY__1__5__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_VerdVis_3" type="T_ARRAY__1__5__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_VerdVis_4" type="T_ARRAY__1__5__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_VerdVis_Sperr" type="T_ARRAY__1__5__OF_BOOL" access="ReadWrite" />
+        <Node name="gx_VerfLufterVis" type="T_ARRAY__1__10__OF_BOOL" access="ReadWrite" />
+        <Node name="strLastChanges" type="T_STRING_255_" access="ReadWrite" />
+        <Node name="strProfile" type="T_STRING_255_" access="ReadWrite" />
+        <Node name="strProjectName" type="T_STRING_255_" access="ReadWrite" />
+        <Node name="strVersion" type="T_STRING_255_" access="ReadWrite" />
+      </Node>
+      <Node name="Z">
+        <Node name="Max_CO2_24h_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="Max_O2_24h_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="Max_Temp_24h_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="Min_CO2_24h_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="Min_O2_24h_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="Min_Temp_24h_ari" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
+        <Node name="x_RueckBS" type="T_BOOL" access="ReadWrite" />
+        <Node name="x_RueckZS" type="T_BOOL" access="ReadWrite" />
+        <Node name="ZA_Cnn2_BetrVerdV1_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZA_Cnn3_BetrVerdV2_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZA_Cnn4_BetrVerdV3_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZB_Cnn2_BetrVerdV1_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZB_Cnn3_BetrVerdV2_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZB_Cnn4_BetrVerdV3_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZB_Knn1_BetrKondLueft_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZB_Rmm11_BetrVerda_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Cnn1_SaiVerdAn_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Cnn2_SaiVerdV1_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Cnn3_SaiVerdV2_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Cnn4_SaiVerdV3_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Knn1_SaiKondLueft_arw" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm01_SaiAbtauEl_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm02_SaiCO2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm03_SaiO2Lueft_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm04_SaiN2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm05_SaiTau_ardw" type="T_ARRAY__1__40__OF_DWORD" access="ReadWrite" />
+        <Node name="ZS_Rmm06_SaiKaltVZeit_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm07_SaiKaltVTakt_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm08_SaiKaltFreiEx_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm09_SaiKaltSperInt_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm10_SaiFrostTakt_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm11_SaiVerdaZeit_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZS_Rmm12_SaiAbtauTakte_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm01_TagAbtauEl_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm02_TagCO2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm03_TagO2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm04_TagN2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm05_TagTau_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm06_TagKaltVZeit_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm07_TagKaltVTakt_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm08_TagKaltFreiEx_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm09_TagKaltSperInt_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm10_TagFrostTakt_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm11_TagVerdaZeit_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZT_Rmm12_TagAbtauTakte_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm01_24hAbtauEl_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm02_24hCO2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm03_24hO2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm04_24hN2_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm05_24hTau_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm06_24hKaltVZeit_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm07_24hKaltVTakt_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm08_24hKaltFreiEx_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm09_24hKaltSperInt_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm10_24hFrostTakt_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm11_24hVerdaZeit_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+        <Node name="ZV_Rmm12_24hAbtauTakt_arw" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite" />
+      </Node>
+    </Node>
+  </NodeList>
+</Symbolconfiguration>

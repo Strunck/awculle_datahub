@@ -16,7 +16,6 @@ import (
 func (gs *GlobalState) SetupFiles() (err error) {
 
 	settingsFileName := gs.Cfg.KoDataPath + "/" + gs.Cfg.SettingsFile
-	symbolConfigFileName := gs.Cfg.KoDataPath + "/" + gs.Cfg.Opcua.XmlFileName
 
 	//settings.json
 	fs, err := os.ReadFile(settingsFileName)
@@ -28,6 +27,11 @@ func (gs *GlobalState) SetupFiles() (err error) {
 	if err := json.Unmarshal(fs, &gs.Cfg); err != nil {
 		return fmt.Errorf("🪑 failed to unmarshal file %s: %w", settingsFileName, err)
 	}
+
+	if gs.Cfg.Plc.SymbolXML == "" {
+		return fmt.Errorf("🪑 failed to read SymbolXML from settings.json, please check the file %s", settingsFileName)
+	}
+	symbolConfigFileName := gs.Cfg.KoDataPath + "/" + gs.Cfg.Plc.SymbolXML
 
 	// Load Codesys Symbolkonfiguration, see sysmbolconfiguration.go
 	if err := gs.Cfg.Opcua.Symbole.parse(symbolConfigFileName); err != nil {

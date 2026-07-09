@@ -45,6 +45,7 @@ type OPCtopic struct {
 
 // .Plc ---------------------------------------------------------------------------------------------------------------------------------
 type PlcConfig struct {
+	SymbolXML   string                      `json:"SymbolXML"`   // SymbolXML is the filename of the Codesys symbol xml file
 	Base        string                      `json:"Base"`        // Important User Setting to indicate the customer site (base)
 	IPAddress   string                      `json:"IPAddress"`   // IP Address of the PLC
 	OpcUaPort   string                      `json:"OpcPort"`     // Port of the OPCUA server on the PLC, usually 4840
@@ -85,10 +86,10 @@ type DimScopeArray struct {
 // OPCUA stuff from the Codesys xml file -------------------------------------------------------------------------------------------------
 
 type OpcUaConfig struct {
-	Prefix      string              `json:"Prefix"`
-	XmlFileName string              `json:"XmlFileName"`
-	Url         string              `json:"Url"`
-	Symbole     SymbolConfiguration `json:"SymbolConfiguration"`
+	Prefix string `json:"Prefix"`
+	//XmlFileName string              `json:"XmlFileName"`
+	Url     string              `json:"Url"`
+	Symbole SymbolConfiguration `json:"SymbolConfiguration"`
 }
 
 type Comment struct {

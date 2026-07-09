@@ -1,46 +1,7 @@
 {
-  "Plc": {    
-    "Structs": [
-      {
-        "Group": "GTB",
-        "Name": "Vnn",
-        "Size": 160,
-        "Attr": [
-          ["xVorhanden", "T_BOOL"],
-          ["xInvertiert", "T_BOOL"],
-          ["byRaumzuordnung", "T_BYTE"],
-          ["sBezeichner", "T_STRING"]
-        ]
-      },
-      {
-        "Group": "GTB",
-        "Name": "Wn",
-        "Size": 20,
-        "Attr": [
-          ["xInput", "T_BOOL"],
-          ["xKonfigInvert", "T_BOOL"],
-          ["xStatus", "T_BOOL"],
-          ["xAlarm", "T_BOOL"],
-          ["sName", "T_STRING_40_"],
-          ["wAlVerz", "T_WORD"]
-        ]
-      },
-
-      {
-        "Group": "Konfig",
-        "Name": "EMeter",
-        "Size": 24,
-        "Attr": [
-          ["xVorhanden", "T_BOOL"],
-          ["rPulswertigkeit", "T_REAL"],
-          ["EMeterType", "T_EMT"],
-          ["bOrt", "T_BYTE"],
-          ["sShort", "T_STRING"],
-          ["sDescr", "T_STRING"]
-        ]
-      }
-    ]
-  },
+  "Plc": {
+    "SymbolXML": "ULOVisor_V0.18.08_AAE.04.Device.Application.xml"
+  },    
   "Nats": {
     "port": 4222,
     "url": "nats://127.0.0.1:4222",

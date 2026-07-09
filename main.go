@@ -28,7 +28,6 @@ func main() {
 	}
 
 	gs.Cfg.SettingsFile = globals.SETTINGSJSON
-	gs.Cfg.Opcua.XmlFileName = globals.SYMBOLXML
 
 	gs.Stats.InitDone = false
 	gs.Stats.Version = Version

@@ -21,7 +21,7 @@ func (gs *GlobalState) PlcConfigDone() {
 
 	gs.Stats.InitDone = true
 	gs.Stats.Reportdatum = "Noch nicht implementiert"
-	gs.Stats.Uv4Version = gs.Cfg.Opcua.XmlFileName
+	gs.Stats.Uv4Version = gs.Cfg.Plc.SymbolXML
 
 }
 

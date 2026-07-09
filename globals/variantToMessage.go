@@ -8,6 +8,7 @@ import (
 )
 
 func (v *VariantToMessage) ToString(msg ua.MonitoredItemNotification) (s string, err error) {
+
 	// if v.IsArray {
 	// 	return "", fmt.Errorf("ToString: arrays not supported")
 	// }
@@ -69,7 +70,20 @@ func scaleInt(val string, scale int8) (scaledVal string) {
 }
 
 func EnumEMTtoStr(val ua.DataValue) (s string) {
-	switch val.Value.(int32) {
+
+	var i32Val int32
+
+	switch val.Value.(type) {
+	case int16:
+		i32Val = int32(val.Value.(int16))
+	case int32:
+		i32Val = val.Value.(int32)
+	default:
+		return fmt.Sprintf("Invalid EMT type: %T", val.Value)
+
+	}
+
+	switch i32Val {
 	case 0:
 		s = "Sonderfall"
 	case 1:
@@ -97,13 +111,25 @@ func EnumEMTtoStr(val ua.DataValue) (s string) {
 	case 255:
 		s = "Undefiniert"
 	default:
-		s = fmt.Sprintf("Unknown EMT value: %d", val.Value.(int32))
+		s = fmt.Sprintf("Unknown EMT value: %d", i32Val)
 	}
 	return s
 }
 
 func EnumPVMODtoStr(val ua.DataValue) (s string) {
-	switch val.Value.(int32) {
+
+	var i32Val int32
+
+	switch val.Value.(type) {
+	case int16:
+		i32Val = int32(val.Value.(int16))
+	case int32:
+		i32Val = val.Value.(int32)
+	default:
+		return fmt.Sprintf("Invalid EMT type: %T", val.Value)
+
+	}
+	switch i32Val {
 	case 0:
 		s = "AUS"
 	case 1:
@@ -113,7 +139,7 @@ func EnumPVMODtoStr(val ua.DataValue) (s string) {
 	case 3:
 		s = "PV"
 	default:
-		s = fmt.Sprintf("Unknown PVMOD value: %d", val.Value.(int32))
+		s = fmt.Sprintf("Unknown PVMOD value: %d", i32Val)
 	}
 	return s
 }

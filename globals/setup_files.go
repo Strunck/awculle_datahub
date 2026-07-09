@@ -38,6 +38,9 @@ func (gs *GlobalState) SetupFiles() (err error) {
 		return fmt.Errorf("🪑 Konnte Symbolkonfiguration nicht parsen %w", err)
 	}
 
+	// Print profile and Compiler and name
+	log.Println(gs.Cfg.Opcua.Symbole.GetHeaderInfo())
+
 	return nil
 }
 

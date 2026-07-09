@@ -113,3 +113,10 @@ func (symbole *SymbolConfiguration) parse(symbolConfigFileName string) (err erro
 
 	return nil
 }
+
+func (symbole *SymbolConfiguration) GetHeaderInfo() string {
+	return fmt.Sprintf("\n🪑 Name: %s\n🪑 Compiler: %s\n🪑 Profile: %s\n",
+		symbole.Header.ProjectInfo.Name,
+		symbole.Header.SymbolConfigObject.Compiler,
+		symbole.Header.SymbolConfigObject.Profile)
+}

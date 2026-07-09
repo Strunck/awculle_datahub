@@ -1,4 +1,4 @@
-VERSION := 0.0.27
+VERSION := 0.0.28
 FNAME := uv4-middleware
 KO_DOCKER_REPO := strunck
 REGISTRY_NAME ?= local-registry

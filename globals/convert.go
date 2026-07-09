@@ -8,6 +8,11 @@ import (
 
 func ConvertSymbol(v ua.Variant, typ string) (res any) {
 
+	// Check if v is nil
+	if v == nil {
+		return nil
+	}
+
 	switch typ {
 
 	case "T_BOOL":

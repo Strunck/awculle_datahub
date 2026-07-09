@@ -3,7 +3,7 @@
   <Header>
     <Version>3.5.14.0</Version>
     <SymbolConfigObject version="4.4.0.0" runtimeid="3.5.19.20" libversion="4.4.0.0" compiler="3.5.19.70" lmm="3.5.19.70" profile="CODESYS V3.5 SP19 Patch 7+" settings="SupportOPCUA, IncludeComments, IncludeAttributes, IncludeTypeNodeAttributes, XmlIncludeNodeFlags, XmlIncludeComments, XmlIncludeAttributes, XmlIncludeTypeNodeAttributes, SymbolAttributeFilterType.All, SymbolCommentFilterType.PreferDocuComments, LayoutCalculator=OptimizedClientSideLayoutCalculator" />
-    <ProjectInfo name="ULOVisor_V0.18.00_AAB.08" devicename="Device" appname="Application" />
+    <ProjectInfo name="ULOVisor_V0.18.08_AAE.04" devicename="Device" appname="Application" />
   </Header>
   <TypeList>
     <TypeSimple name="T_BOOL" size="1" swapsize="0" typeclass="Bool" iecname="BOOL" />
@@ -108,6 +108,9 @@
       <ArrayDim minrange="1" maxrange="40" />
     </TypeArray>
     <TypeArray name="T_ARRAY__1__40__OF_INT" size="80" nativesize="80" typeclass="Array" iecname="ARRAY [1..40] OF INT" basetype="T_INT">
+      <ArrayDim minrange="1" maxrange="40" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__40__OF_REAL" size="160" nativesize="160" typeclass="Array" iecname="ARRAY [1..40] OF REAL" basetype="T_REAL">
       <ArrayDim minrange="1" maxrange="40" />
     </TypeArray>
     <TypeArray name="T_ARRAY__1__40__OF_UINT" size="80" nativesize="80" typeclass="Array" iecname="ARRAY [1..40] OF UINT" basetype="T_UINT">
@@ -228,8 +231,8 @@
       <UserDefElement type="T_H0A" iecname="HAND" enumvalue="2" />
     </TypeUserDef>
     <TypeUserDef name="T_LM_Type" size="2" nativesize="2" swapsize="2" typeclass="Enum" iecname="LM_Type" basetype="T_INT">
-      <Comment>{attribute 'strict'}</Comment>
       <Attribute>qualified_only:=</Attribute>
+      <Attribute>strict:=</Attribute>
       <UserDefElement type="T_LM_Type" iecname="EXT" enumvalue="0" />
       <UserDefElement type="T_LM_Type" iecname="C_A1" enumvalue="1" />
       <UserDefElement type="T_LM_Type" iecname="C_A2" enumvalue="2" />
@@ -882,37 +885,37 @@
           <Comment>#descr="Verdampfungstemp Sollwert eff." #short=VerdaTempSoll 	#scale=1 	#db=Aggregat	#metric=uva_prozess_celsius	#konfig=Gar_IA_An03</Comment>
         </Node>
         <Node name="BA_An20_Raum2Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="2. Raum nach Liste Kühlung" #short= "Raum2Kuhl" #scale=0</Comment>
+          <Comment>#descr="2. Raum nach Liste Kühlung" 	#short=Raum2Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An21_Raum3Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="3. Raum nach Liste Kühlung" #short= "Raum3Kuhl" #scale=0</Comment>
+          <Comment>#descr="3. Raum nach Liste Kühlung" 	#short=Raum3Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An22_Raum4Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="4. Raum nach Liste Kühlung" #short= "Raum4Kuhl" #scale=0</Comment>
+          <Comment>#descr="4. Raum nach Liste Kühlung" 	#short=Raum4Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An23_Raum5Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="5. Raum nach Liste Kühlung" #short= "Raum5Kuhl" #scale=0</Comment>
+          <Comment>#descr="5. Raum nach Liste Kühlung" 	#short=Raum5Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An24_Raum6Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="6. Raum nach Liste Kühlung" #short= "Raum6Kuhl" #scale=0</Comment>
+          <Comment>#descr="6. Raum nach Liste Kühlung" 	#short=Raum6Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An25_Raum7Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="7. Raum nach Liste Kühlung" #short= "Raum7Kuhl" #scale=0</Comment>
+          <Comment>#descr="7. Raum nach Liste Kühlung" 	#short=Raum7Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An26_Raum8Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="8. Raum nach Liste Kühlung" #short= "Raum8Kuhl" #scale=0</Comment>
+          <Comment>#descr="8. Raum nach Liste Kühlung" 	#short=Raum8Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An27_Raum9Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="9. Raum nach Liste Kühlung" #short= "Raum9Kuhl" #scale=0</Comment>
+          <Comment>#descr="9. Raum nach Liste Kühlung" 	#short=Raum9Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An28_Raum10Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="10. Raum nach Liste Kühlung" #short= "Raum10Kuhl" #scale=0</Comment>
+          <Comment>#descr="10. Raum nach Liste Kühlung" 	#short=Raum10Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An29_Raum11Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="11. Raum nach Liste Kühlung" #short= "Raum11Kuhl" #scale=0</Comment>
+          <Comment>#descr="11. Raum nach Liste Kühlung" 	#short=Raum11Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An30_Raum12Kuhl_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
-          <Comment>#descr="12. Raum nach Liste Kühlung " #short= "Raum12Kuhl" #scale=0</Comment>
+          <Comment>#descr="12. Raum nach Liste Kühlung" 	#short=Raum12Kuhl #scale=0</Comment>
         </Node>
         <Node name="BA_An31_TempDiff_ari" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_INT" access="ReadWrite">
           <Comment>#descr="Temperaturdifferenz von Verflüssigungstemperatur und Aussen- bzw. Ansaugtemperatur" 	#short="TempDiff" 		#scale=1  	#db=Aggregat</Comment>
@@ -952,52 +955,52 @@
         </Node>
         <Node name="BA_An43_KWS_Nachlauf_CntDwn" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite" />
         <Node name="BA_Cnn2_VerzEinVerdCount_arb" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BYTE" access="ReadWrite">
-          <Comment>#descr="Einschaltverzögerung Verdichter Countdown 0-100 für Grundverdichter" #short= "VerzEinVerdCount" #scale=0 </Comment>
+          <Comment>#descr="Einschaltverzögerung Verdichter Countdown 0-100 für Grundverdichter" 										#short="VerzEinVerdCount" #scale=0 </Comment>
         </Node>
         <Node name="BA_Cnn2a_VerzEinVerdCount_arb" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__1__4__OF_BYTE" access="ReadWrite">
-          <Comment>#descr="Einschaltverzögerung Verdichter Countdown 0-100 auch für Leistungsventile" #short= "VerzEinVerdCount" #scale=0</Comment>
+          <Comment>#descr="Einschaltverzögerung Verdichter Countdown 0-100 auch für Leistungsventile" 								#short="VerzEinVerdCount" #scale=0</Comment>
         </Node>
         <Node name="BA_Cnn4_HandAuto_arb" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BYTE" access="ReadWrite">
-          <Comment>#descr="Verdichter HandAuto 0:AUS/Veriegelt, 1:Automatik, 2:Hand" #short= "Comp_HandAuto" #scale=0 #db=Compressor	#metric=uvc_prozess_status	#konfig=Gar_Cnn4_H0A_Schalter_ar</Comment>
+          <Comment>#descr="Verdichter HandAuto 0:AUS/Veriegelt, 1:Automatik, 2:Hand" 												#short="Comp_HandAuto" #scale=0 #db=Compressor	#metric=uvc_prozess_status	#konfig=Gar_Cnn4_H0A_Schalter_ar</Comment>
         </Node>
         <Node name="BA_Dn1_ScrubberPhase_arb" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BYTE" access="ReadWrite">
-          <Comment>#descr="Phase des Scrubberprozess" #short= "ScrubberSchritt" #scale=0 </Comment>
+          <Comment>#descr="Phase des Scrubberprozess" 												#short="ScrubberSchritt" 		#scale=0 </Comment>
         </Node>
         <Node name="BA_Dn2_ScrubberCountDown_ati" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_TIME" access="ReadWrite">
-          <Comment>#descr="Countdown für die Scrubber-Phase" #short= "ScrubberCountDown" #scale=0 </Comment>
+          <Comment>#descr="Countdown für die Scrubber-Phase" 										#short="ScrubberCountDown" 		#scale=0 </Comment>
         </Node>
         <Node name="BA_Dn3_RaumNrAktiv_arb" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BYTE" access="ReadWrite">
-          <Comment>#descr="Akivierte Raumnummer" #short="RaumNrAktiv" #scale=0</Comment>
+          <Comment>#descr="Akivierte Raumnummer" 													#short="RaumNrAktiv" 			#scale=0</Comment>
         </Node>
         <Node name="BA_Dn4_ScubWartList_2d" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__1__40__OF_BYTE" access="ReadWrite">
-          <Comment>#descr="Warteliste [Scubber, Raum]" #short="ScubWartList" #scale=0</Comment>
+          <Comment>#descr="Warteliste [Scubber, Raum]" 												#short="ScubWartList" 			#scale=0</Comment>
         </Node>
         <Node name="BA_Dn5_ScubberRaeume_2d" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__1__40__OF_BYTE" access="ReadWrite">
-          <Comment>#descr="Liste der Raumnummern per Scrubberkreis" #short="ScubberRaeume" #scale=0</Comment>
+          <Comment>#descr="Liste der Raumnummern per Scrubberkreis" 									#short="ScubberRaeume" 			#scale=0</Comment>
         </Node>
         <Node name="BA_Dn6_ScruEditRaumNr_b" nodeflags="SigTypeGvl ExportedVariable" type="T_BYTE" access="ReadWrite">
-          <Comment>#descr="Raumnummer, die an Position der Liste geschrieben wird" #short= "ScruEditRaumNr" #scale=0</Comment>
+          <Comment>#descr="Raumnummer, die an Position der Liste geschrieben wird" 					#short="ScruEditRaumNr" 		#scale=0</Comment>
         </Node>
         <Node name="BA_Dn7_ScruEditPos_b" nodeflags="SigTypeGvl ExportedVariable" type="T_BYTE" access="ReadWrite">
-          <Comment>#descr="Position, an der die Liste verändert wird " #short="ScruEditPos" #scale=0</Comment>
+          <Comment>#descr="Position, an der die Liste verändert wird " 								#short="ScruEditPos" 			#scale=0</Comment>
         </Node>
         <Node name="BA_Dn8_ManRaumNr" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BYTE" access="ReadWrite">
-          <Comment>#descr="Raumnummer im Manuellen Modus" #short= "ScrubManModRnr" #scale=0</Comment>
+          <Comment>#descr="Raumnummer im Manuellen Modus" 											#short="ScrubManModRnr" 		#scale=0</Comment>
         </Node>
         <Node name="BA_Enn11_HitzeA" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
           <Comment>#descr="Ueberhitzung A" #short= "Enn11" #scale=1</Comment>
         </Node>
         <Node name="BA_Mn01_CO2_Scrubber_ari" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_INT" access="ReadWrite">
-          <Comment>#descr="CO2 Istwert Scrubberlunge" 												#short= "ScrubLungCO2ist" 	#scale=2 	#db=Messkreis	#metric=uvm_prozess_ratio	#konfig=</Comment>
+          <Comment>#descr="CO2 Istwert Scrubberlunge" 															#short="ScrubLungCO2ist" 	#scale=2 	#db=Messkreis	#metric=uvm_prozess_ratio	#konfig=</Comment>
         </Node>
         <Node name="BA_Mn02_O2_Scrubber_ari" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_INT" access="ReadWrite">
-          <Comment>#descr="O2 Istwert Scrubberlunge" 												#short= "ScrubLungO2ist" 	#scale=2 	#db=Messkreis	#metric=uvm_prozess_ratio	#konfig=</Comment>
+          <Comment>#descr="O2 Istwert Scrubberlunge" 															#short="ScrubLungO2ist" 	#scale=2 	#db=Messkreis	#metric=uvm_prozess_ratio	#konfig=</Comment>
         </Node>
         <Node name="BA_Mn03_RaumNrInMess_arb" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_BYTE" access="ReadWrite">
-          <Comment>#descr="RaumnNr in der Messung, letzter Raum ist Scrubberlunge " 					#short= "RaumNrInMess" 		#scale=0					#metric=uvm_prozess_status	#konfig=</Comment>
+          <Comment>#descr="RaumnNr in der Messung, letzter Raum ist Scrubberlunge " 								#short="RaumNrInMess" 		#scale=0					#metric=uvm_prozess_status	#konfig=</Comment>
         </Node>
         <Node name="BA_Mn04_MessCntDwn" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_WORD" access="ReadWrite">
-          <Comment>#descr="Countdown Messung. Zeit in sek, die verbleibt, bis Messung endet und Aktion auslöst" 	#short= "MessungCountCown" #scale=0</Comment>
+          <Comment>#descr="Countdown Messung. Zeit in sek, die verbleibt, bis Messung endet und Aktion auslöst" 	#short= "MessungCountCown" 	#scale=0</Comment>
         </Node>
         <Node name="BA_Mn05_CO2_ari" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_INT" access="ReadWrite">
           <Comment>#descr="Messwert CO2 Sonde" 			#short=CO2ist 				#scale=2	#db=Messkreis	#metric=uvm_prozess_ratio	</Comment>
@@ -1047,6 +1050,16 @@
         <Node name="BA_Rmm14_SollTemp_ari" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
           <Comment>#descr="Raumtemperatursollwert eff." 				#short=SollTempEff			#scale=1	#db=Raum_BD	#metric=uvr_prozess_celsius	#konfig=Gar_Kaelteventil</Comment>
         </Node>
+        <Node name="BA_Rmm15_MischerPos" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite">
+          <Comment>#descr="Stellung Raum-Mischerventil" 				#short=MischerPos 			#scale=1 				#metric=uvr_prozess_ratio	#konfig=Gar_MischerRaum</Comment>
+        </Node>
+        <Node name="BA_Rmm16_SoleVorlaufTemp" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
+          <Comment>#descr="Solevorlauftemperatur Luftkuehler"		#short=SoleVorlaufRaum		#scale=1				#metric=uvr_prozess_celsius	#konfig=Gar_MischerRaum</Comment>
+        </Node>
+        <Node name="BA_Rmm17_SoleRuecklfTemp" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
+          <Comment>#descr="Soleruecklauftemperatur Luftkuehler"		#short=SoleRuecklfRaum		#scale=1				#metric=uvr_prozess_celsius	#konfig=Gar_MischerRaum</Comment>
+        </Node>
+        <Node name="BA_Rmm18_SollTempNext" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite" />
         <Node name="BA_S01_CO2_ari" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_INT" access="ReadWrite">
           <Comment>Aus kompatibiltät hier gelassen, ändern, wenn die komplette Messung überarbeitet wird</Comment>
         </Node>
@@ -1160,88 +1173,88 @@
         </Node>
         <Node name="BX_An22_KWS_Nachlauf_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite" />
         <Node name="BX_Cnn1_AlOlDruck_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Öldruckstörung Verdichter	" #short= "AlOlDruck" #scale=0 #db=Compressor	#metric=uvc_prozess_status</Comment>
+          <Comment>#descr="Öldruckstörung Verdichter	" 																				#short="AlOlDruck" #scale=0 #db=Compressor	#metric=uvc_prozess_status</Comment>
         </Node>
         <Node name="BX_Cnn1_LastAbschalt_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Lastabschaltung intern Verdichter" #short= "LastAbschaltInt" #scale=0 #db=Compressor	#metric=uvc_prozess_status	</Comment>
+          <Comment>#descr="Lastabschaltung intern Verdichter" 																		#short="LastAbschaltInt" #scale=0 #db=Compressor	#metric=uvc_prozess_status	</Comment>
         </Node>
         <Node name="BX_Cnn2_VerdV1_Inv" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Verdichterventil 1 Normalisiertes Ausgangssignal" #short= "VerdV1" #scale=0 #db=Compressor	#metric=uvc_stell_status</Comment>
+          <Comment>#descr="Verdichterventil 1 Normalisiertes Ausgangssignal" 														#short="VerdV1" #scale=0 #db=Compressor	#metric=uvc_stell_status</Comment>
         </Node>
         <Node name="BX_Cnn3_AlMotor_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Motorstörung Verdichter" #short= "AlMotor" #scale=0 #db=Compressor	#metric=uvc_prozess_status</Comment>
+          <Comment>#descr="Motorstörung Verdichter" 																					#short="AlMotor" #scale=0 #db=Compressor	#metric=uvc_prozess_status</Comment>
         </Node>
         <Node name="BX_Cnn3_VerdV2_Inv" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Verdichterventil 2 Normalisiertes Ausgangssignal" #short= "VerdV2" #scale=0 #db=Compressor	#metric=uvc_stell_status</Comment>
+          <Comment>#descr="Verdichterventil 2 Normalisiertes Ausgangssignal" 														#short="VerdV2" #scale=0 #db=Compressor	#metric=uvc_stell_status</Comment>
         </Node>
         <Node name="BX_Cnn4_AnlaufEnt_Inv" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Anlaufentlastung Normalisiertes Ausgangssignal" #short= "AnlaufEnt" #scale=0 #db=Compressor	#metric=uvc_stell_status</Comment>
+          <Comment>#descr="Anlaufentlastung Normalisiertes Ausgangssignal" 															#short="AnlaufEnt" #scale=0 #db=Compressor	#metric=uvc_stell_status</Comment>
         </Node>
         <Node name="BX_Cnn5_VerdV3_Inv" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Verdichterventil 3 Normalisiertes Ausgangssignal" #short= "VerdV3" #scale=0 #db=Compressor	#metric=uvc_stell_status</Comment>
+          <Comment>#descr="Verdichterventil 3 Normalisiertes Ausgangssignal" 														#short="VerdV3" #scale=0 #db=Compressor	#metric=uvc_stell_status</Comment>
         </Node>
         <Node name="BX_Cnn6_OelLevel_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Normalisierter Eingang, ölLevel LOW/HIGH" #short= "AlOelLevel" #scale=0 #db=Compressor	#metric=uvc_prozess_status #konfig=Gar_Cnn6_OelLevelManager_ar</Comment>
+          <Comment>#descr="Normalisierter Eingang, ölLevel LOW/HIGH" 																#short="AlOelLevel" #scale=0 #db=Compressor	#metric=uvc_prozess_status #konfig=Gar_Cnn6_OelLevelManager_ar</Comment>
         </Node>
         <Node name="BX_Cnn7_AlFU_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Normalisierter Eingang Stoerung FU" #short= "AlFU" #scale=0 #db=Compressor	#metric=uvc_prozess_status	</Comment>
+          <Comment>#descr="Normalisierter Eingang Stoerung FU" 																		#short="AlFU" #scale=0 #db=Compressor	#metric=uvc_prozess_status	</Comment>
         </Node>
         <Node name="BX_Cnn8_AlSicherHD_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Normalisierter Eingang ALARM Hochdrucksicherheitspressostat, sperrt Verdichter zusätzlich hardwareseitig" #short= "AlSicherHD" #scale=0 #db=Compressor	#metric=uvc_prozess_status </Comment>
+          <Comment>#descr="Normalisierter Eingang ALARM Hochdrucksicherheitspressostat, sperrt Verdichter zusätzlich hardwareseitig" #short="AlSicherHD" 	#scale=0 #db=Compressor	#metric=uvc_prozess_status </Comment>
         </Node>
         <Node name="BX_Cnn9_Gesperrt_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Sperrung Verdichter durch Alarme, bzw. Hand-0-Auto-Schalter" #short= "Gesperrt" #scale=0 #db=Compressor	#metric=uvc_prozess_status</Comment>
+          <Comment>#descr="Sperrung Verdichter durch Alarme, bzw. Hand-0-Auto-Schalter" 												#short="Gesperrt" 		#scale=0 #db=Compressor	#metric=uvc_prozess_status</Comment>
         </Node>
         <Node name="BX_Dn12_ManMotorStop_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Motor Stoppen Manuell" #short= "ManMotorStop" #scale=0</Comment>
+          <Comment>#descr="Motor Stoppen Manuell" 													#short="ManMotorStop" 			#scale=0</Comment>
         </Node>
         <Node name="BX_Dn13_Manuell_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Manuelle Scrubbersteuerung" #short= "Manuell" #scale=0</Comment>
+          <Comment>#descr="Manuelle Scrubbersteuerung" 												#short="Manuell" 				#scale=0</Comment>
         </Node>
         <Node name="BX_Dn14_SFCTip" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Manuelles Weiterschalten um nächsten Prozessschritt	" #short= "SFCTip" #scale=0</Comment>
+          <Comment>#descr="Manuelles Weiterschalten um nächsten Prozessschritt" 						#short="SFCTip" 				#scale=0</Comment>
         </Node>
         <Node name="BX_Dn15_LMsperrIntScrb" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Lastabschaltung intern Scrubber" #short= "LmSperrScrub" #scale=0	</Comment>
+          <Comment>#descr="Lastabschaltung intern Scrubber" 											#short="LmSperrScrub" 			#scale=0	</Comment>
         </Node>
         <Node name="BX_Dn1_ScrDruckluftWaecht" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Anzeige Drucklufwächter (optional invertierter Eingang)" #short= "Dn1" #scale=0</Comment>
+          <Comment>#descr="Anzeige Drucklufwächter (optional invertierter Eingang)" 					#short="DruckluftW"				#scale=0</Comment>
         </Node>
         <Node name="BX_Dn1_ScrubberAktiv_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Scrubber ist aktiviert TODO Nr ändern" #short= "ScrubberAktiv" #scale=0</Comment>
+          <Comment>#descr="Scrubber ist aktiviert TODO Nr ändern" 									#short="ScrubberAktiv" 			#scale=0</Comment>
         </Node>
         <Node name="BX_Dn2_ScrMotorStoer" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Anzeige Motorstörung (optional invertierter Eingang)" #short= "Dn2" #scale=0</Comment>
+          <Comment>#descr="Anzeige Motorstörung (optional invertierter Eingang)" 					#short="Motorstoer" 			#scale=0</Comment>
         </Node>
         <Node name="BX_Dn2_VisuDoppelKlapp" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Doppelklappe wird angeteuert, für Visualisierung TODO Nr ändern " #short= "ScrubbDoppKlapp" #scale=0</Comment>
+          <Comment>#descr="Doppelklappe wird angeteuert, für Visualisierung TODO Nr ändern" 			#short="ScrubbDoppKlapp" 		#scale=0</Comment>
         </Node>
         <Node name="BX_Dn3_VisuLunge_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Lunge Aktiviert " #short= "ScrubLungeVis" #scale=0</Comment>
+          <Comment>#descr="Lunge Aktiviert" 															#short="ScrubLungeVis" 			#scale=0</Comment>
         </Node>
         <Node name="BX_Dn4_ListeLoeschen_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Löschen/Init der ScrubberListe" #short= "ListeLoeschen" #scale=0</Comment>
+          <Comment>#descr="Löschen/Init der ScrubberListe" 											#short="ListeLoeschen" 			#scale=0</Comment>
         </Node>
         <Node name="BX_Dn5_ListeAendern_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Anderung der Liste Triggern" #short= "ListeAendern" #scale=0</Comment>
+          <Comment>#descr="Anderung der Liste Triggern" 												#short="ListeAendern" 			#scale=0</Comment>
         </Node>
         <Node name="BX_Dn6_ManLL_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Manuelle Scrubbersteuerung, zum nächsten Baustein" #short= "ManLL" #scale=0</Comment>
+          <Comment>#descr="Manuelle Scrubbersteuerung, zum nächsten Baustein" 						#short="ManLL" 					#scale=0</Comment>
         </Node>
         <Node name="BX_Knn1_AlKondMotor_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
           <Comment>#descr="Alarmeingang Verflüssigermotor" 			#short= "AlKondMotor" 			#db=Kondensator 	#metric=uvk_prozess_status</Comment>
         </Node>
         <Node name="BX_Mn04_MessCntDwnVis" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Countdown Messung. Flag, ob CountDown sichtbar ist. TRUE, wenn sichtbar" 	#short= "MessungCountDownSichtbar" #scale=0</Comment>
+          <Comment>#descr="Countdown Messung. Flag, ob CountDown sichtbar ist. TRUE, wenn sichtbar" 	#short="MessungCountDownSichtbar" #scale=0</Comment>
         </Node>
         <Node name="BX_Mn06_N2FernHand" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="N2-Fernsteuerung Hand" 													#short= "N2FernHand" 					#db=Messkreis 	#metric=uvm_stell_status	#konfig=</Comment>
+          <Comment>#descr="N2-Fernsteuerung Hand" 													#short="N2FernHand" 					#db=Messkreis 	#metric=uvm_stell_status	#konfig=</Comment>
         </Node>
         <Node name="BX_Mn07_Durchfluss" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite">
           <Comment>#descr="Anzeige Durchflussstörung nach Invertierung" 								#short=ALDurchflSchlt 					#db=Messkreis	#metric=uvm_stell_status	#konfig=</Comment>
         </Node>
         <Node name="BX_Mn2_AlCO2_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Anzeige Sammelstörung Scrubber" 											#short= "AlCO2" 						#db=Messkreis	#metric=uvm_prozess_status	#konfig=</Comment>
+          <Comment>#descr="Anzeige Sammelstörung Scrubber" 											#short="AlCO2" 						#db=Messkreis	#metric=uvm_prozess_status	#konfig=</Comment>
         </Node>
         <Node name="BX_Rmm01_AbtauAnf_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
           <Comment>#descr="Status Abtauanforderung" 					#short=AbtauAnf 						#db=Raum_BD	#metric=uvr_prozess_status	#konfig=Gar_Verdampfer</Comment>
@@ -1271,7 +1284,7 @@
           <Comment>#descr="Temperaturabsenkung pro Raum akitviert" 	#short=TempAbsenkAkt					#db=Raum_BD	#metric=uvr_prozess_status	#konfig=Gar_Kaelteventil</Comment>
         </Node>
         <Node name="BX_Rmm11_LMsperr_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Lastmanagersperrung" 						#short=LMsperr							#db=Raum_BD	#metric=uvr_prozess_status	</Comment>
+          <Comment>#descr="Lastmanagersperrung" 						#short=LMsperr							#db=Raum_BD	#metric=uvr_prozess_status		</Comment>
         </Node>
         <Node name="BX_S01_Buzzer" nodeflags="SigTypeGvl ExportedVariable" type="T_BOOL" access="ReadWrite">
           <Comment>#descr="BUZZER" 						#short=Buzzer 					 </Comment>
@@ -1349,9 +1362,10 @@
         <Node name="Gar_Offset_Verd" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite">
           <Comment>#descr="Parameter PID Regler		#short=PIDniederOfst	#scale=1</Comment>
         </Node>
-        <Node name="Gar_Offset_Verf" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_REAL" access="ReadWrite">
+        <Node name="Gar_Offset_Verf" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_REAL" access="Read">
           <Comment>#descr="Parameter PID Regler"		#short=PIDhochOfst	#scale=1</Comment>
         </Node>
+        <Node name="Gar_PCO2_15" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_Struct_ArrOfPoints" access="Read" />
         <Node name="Gar_PO2_3" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__2__OF_Struct_ArrOfPoints" access="ReadWrite">
           <Comment>Eingabe O2 Sensorpunkte, Auflösung 100 - voreingestellt für S7 4..20mA</Comment>
         </Node>
@@ -1689,6 +1703,15 @@
         <Node name="gui_Gap2" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_UINT" access="ReadWrite">
           <Comment> Bereich von 14 Tagen </Comment>
         </Node>
+        <Node name="gui_MaxWertTage" nodeflags="SigTypeGvl ExportedVariable" type="T_UINT" access="ReadWrite">
+          <Comment> MaxGrenze der auszuwählenden Tage über das Keypad</Comment>
+        </Node>
+        <Node name="gui_MinAnzahlRaeume" nodeflags="SigTypeGvl ExportedVariable" type="T_UINT" access="ReadWrite">
+          <Comment> Mindestanzahl der Räume</Comment>
+        </Node>
+        <Node name="Gui_Minute" nodeflags="SigTypeGvl ExportedVariable" type="T_UINT" access="Read">
+          <Comment>Systemzeit Stunde in lokaler Zeitzone</Comment>
+        </Node>
         <Node name="gui_Month" nodeflags="SigTypeGvl ExportedVariable" type="T_UINT" access="ReadWrite">
           <Comment> Auswahl des Monats für den Monatsreport</Comment>
         </Node>
@@ -1700,6 +1723,9 @@
         </Node>
         <Node name="Gui_Stunde" nodeflags="SigTypeGvl ExportedVariable" type="T_UINT" access="ReadWrite">
           <Comment>Systemzeit Stunde in lokaler Zeitzone</Comment>
+        </Node>
+        <Node name="gui_Year" nodeflags="SigTypeGvl ExportedVariable" type="T_UINT" access="ReadWrite">
+          <Comment> Auswahl des Jahres für den Monatsreport</Comment>
         </Node>
         <Node name="gui_ZeileTag" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_UINT" access="ReadWrite">
           <Comment> Zeile im Gesamtdatenmenge</Comment>
@@ -1740,8 +1766,14 @@
         <Node name="gx_BackupErfolgreich" nodeflags="SigTypeGvl ExportedVariable" type="T_BOOL" access="ReadWrite">
           <Comment> Variable zur Benachrichtung, dass das Backup erfolgreich erstellt werden konnte	</Comment>
         </Node>
+        <Node name="gx_BlackScreen" nodeflags="SigTypeGvl ExportedVariable" type="T_BOOL" access="ReadWrite">
+          <Comment>Bildschirm einblenden bis Codesys Variablen aktiv</Comment>
+        </Node>
         <Node name="gx_CopyDirToUSB" nodeflags="SigTypeGvl ExportedVariable" type="T_BOOL" access="ReadWrite">
           <Comment> Freigabe der Backup-Funktion</Comment>
+        </Node>
+        <Node name="gx_DatenLaden" nodeflags="SigTypeGvl ExportedVariable" type="T_BOOL" access="ReadWrite">
+          <Comment> Bedingung, zur Aktualisierung der Tabelldaten auf dem Display</Comment>
         </Node>
         <Node name="gx_DatumNichtGefunden" nodeflags="SigTypeGvl ExportedVariable" type="T_BOOL" access="ReadWrite">
           <Comment> Variable zur Ausgabe einer Meldung auf dem Display</Comment>
@@ -1862,6 +1894,12 @@
         </Node>
         <Node name="IA_Rmm08_TempAux3_ari" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
           <Comment>Temperatur Aux3</Comment>
+        </Node>
+        <Node name="IA_Rmm09_SoleVorlaufTemp" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
+          <Comment>Solevorlauftemperatur als Regelfühler</Comment>
+        </Node>
+        <Node name="IA_Rmm10_SoleRueckTemp" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
+          <Comment>Soleruecklauftemperatur zur Kontrolle</Comment>
         </Node>
         <Node name="IA_S01_ELeistung_w" nodeflags="SigTypeGvl ExportedVariable" type="T_WORD" access="ReadWrite">
           <Comment>Elektrische Leistung Counter </Comment>
@@ -2233,6 +2271,12 @@
         <Node name="Gar_MaxDreh_Verf" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_WORD" access="ReadWrite">
           <Comment>#descr="028 Maximale Drehzahl Verflüssiger" #short=KondMaxDreh #scale=0</Comment>
         </Node>
+        <Node name="Gar_MischerRaum" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
+          <Comment>#descr="121 Mischerregler im Raum vorhanden" 				#short=MischerRaumVorhand 	#scale=0</Comment>
+        </Node>
+        <Node name="Gar_MischerRaumInv" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
+          <Comment>#descr="122 Mischerregler im Raum Wirksinn Invertiert" 	#short=MischerRaumInv 		#scale=0</Comment>
+        </Node>
         <Node name="Gar_MKzuRaum" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite">
           <Comment>#descr="032 Zuordnung Raum Messkreis" #short=MKzuRaum #scale=0</Comment>
         </Node>
@@ -2301,6 +2345,9 @@
         <Node name="Gar_VerdaFuehl" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
           <Comment>#descr="038 Verdampfer-Fühler vorhanden" #short=VerdaFuehl #scale=0</Comment>
         </Node>
+        <Node name="Gar_VerdaMotorTyp" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BYTE" access="ReadWrite">
+          <Comment>#descr="042 Luftkühlermotortyp nur für Darstellung HMI 0:Drehzahl, 1:Digital, 2:2Stufig" 	#short=VerdaDigiAnalog 	#scale=0</Comment>
+        </Node>
         <Node name="Gar_Verdampfer" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
           <Comment>#descr="043 Verdampfer vorhanden" #short=Verdampfer #scale=0</Comment>
         </Node>
@@ -2314,7 +2361,7 @@
           <Comment>#descr="031 Verflüssiger zu Aggregat #short=VerfZuAgg	#scale=0</Comment>
         </Node>
         <Node name="Gar_WarmSoleKreis" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="120 Warmsoletank für Wäremrückgewinnung vorhanden" #short=WarmSoleKreis</Comment>
+          <Comment>#descr="120 Warmsoletank für Wäremrückgewinnung vorhanden" #short=WarmSoleKreis		</Comment>
         </Node>
         <Node name="Gar_Zuordnung_MK1" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__23__OF_BYTE" access="ReadWrite">
           <Comment>#descr="Zuordnung Räume zu Messkreis 1 wird generiert" #short=RaumZuMK1 #scale=0</Comment>
@@ -2336,9 +2383,6 @@
         </Node>
         <Node name="Garx_QX_ResetAgg_Vorhand" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite">
           <Comment>#descr="104 Reset Aggregat vorhanden QX, Realais im Schaltschrank" #short=ResetCompQX #scale=0</Comment>
-        </Node>
-        <Node name="Garx_VerdaDigiAna" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="042 Verdampfer 0:Digital oder 1:Analog" #short=VerdaDigiAnalog #scale=0</Comment>
         </Node>
         <Node name="gb_AggExt" nodeflags="SigTypeGvl ExportedVariable" type="T_BYTE" access="ReadWrite">
           <Comment>#descr="009 Nummer extern geregeltes Aggregat, so dass nur Kälteregelung der Räume durchgeführt wird." #short=AggExt #scale=0</Comment>
@@ -2386,7 +2430,7 @@
           <Comment>#descr="001 freie Version" #short=Version #scale=0</Comment>
         </Node>
         <Node name="Gw_KonfigCheck" nodeflags="SigTypeGvl ExportedVariable" type="T_WORD" access="ReadWrite">
-          <Comment>#descr="121 Konfig korrekt - hier beliebige Zahl eintragen und auf Display kontrolieren" #short=KonfigCheck #scale=0	</Comment>
+          <Comment>#descr="123 Konfig korrekt - hier beliebige Zahl eintragen und auf Display kontrolieren" #short=KonfigCheck #scale=0</Comment>
         </Node>
         <Node name="Gw_MinDreh_Verd" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_WORD" access="ReadWrite">
           <Comment>#descr="023 Mnimale Leistung z.B. Volt Ausgang minimal" #short="CompMinLeist" #scale=0</Comment>
@@ -2509,14 +2553,17 @@
         <Node name="QA_Rmm04_S7_VHGA" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite">
           <Comment>Proportionalventil Heißgas S7-Format</Comment>
         </Node>
+        <Node name="QA_Rmm06_S7_Mischer" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite">
+          <Comment>Stellwert für den Raum-Mischer S7-Format</Comment>
+        </Node>
         <Node name="QA_S99_PCOchecksum" nodeflags="SigTypeGvl ExportedVariable" type="T_WORD" access="ReadWrite">
           <Comment>#descr="Checksum für Watchdog-Funktion PCO" 			#short=PCOchecksum 			#scale=0</Comment>
         </Node>
         <Node name="QX_An10_FlueLeitV_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Fluessigkeitsleitung Ventil" 			#short=FlueLeitV" 	#scale=0 #db=Aggregat_Q		#metric=uva_stell_status</Comment>
+          <Comment>#descr="Fluessigkeitsleitung Ventil" 			#short=FlueLeitV 	#scale=0 #db=Aggregat_Q		#metric=uva_stell_status</Comment>
         </Node>
         <Node name="QX_An11_FlueLeitVBypass_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Fluessigkeitsleitung Bypass Ventil" 	#short=FlueVeByp" 	#scale=0 #db=Aggregat_Q		#metric=uva_stell_status</Comment>
+          <Comment>#descr="Fluessigkeitsleitung Bypass Ventil" 	#short=FlueVeByp 	#scale=0 #db=Aggregat_Q		#metric=uva_stell_status</Comment>
         </Node>
         <Node name="QX_An1_VHGA_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite">
           <Comment>#descr="Hauptventil Heisgasabtauung" 			#short=VHGA 		#scale=0 #db=Aggregat_Q		#metric=uva_stell_status</Comment>
@@ -2543,7 +2590,7 @@
           <Comment>#descr="Resetrelais Aggregat" 				#short=ResetAgg 	#scale=0 #db=Aggregat_Q		#metric=uva_stell_status	#konfig=Garx_QX_ResetAgg_Vorhand</Comment>
         </Node>
         <Node name="QX_An9_BypassAnstauR_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__6__OF_BOOL" access="ReadWrite">
-          <Comment>#descr="Bypass Anstauregler Heissgass" 		#short=BypAnstau" 	#scale=0 #db=Aggregat_Q		#metric=uva_stell_status</Comment>
+          <Comment>#descr="Bypass Anstauregler Heissgass" 		#short=BypAnstau 	#scale=0 #db=Aggregat_Q		#metric=uva_stell_status</Comment>
         </Node>
         <Node name="QX_Cnn1_Verd_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__20__OF_BOOL" access="ReadWrite">
           <Comment>#descr="Verdichter" 							#short=Verd 			#scale=0	#db=Compressor_Q 	#metric=uvc_stell_status</Comment>
@@ -2652,6 +2699,18 @@
         </Node>
         <Node name="QX_Rmm14_SaugV_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
           <Comment>#descr="Saugleitungsventil HGA" 									#short=SaugV 					#scale=0	#db=Raum_Q		#metric=uvr_stell_status</Comment>
+        </Node>
+        <Node name="QX_Rmm15_MischerFreig" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
+          <Comment>#descr="Freigabe Mischerregler Raum"				 				#short=MischerRaumFrei 			#scale=0 					#metric=uvr_stell_status</Comment>
+        </Node>
+        <Node name="QX_Rmm16_BypassTEV" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
+          <Comment>#descr="Bypass-Ventil Therm.Einspritzventil"		 				#short=BypassTEV 				#scale=0 					#metric=uvr_stell_status</Comment>
+        </Node>
+        <Node name="QX_Rmm17_LuftStufe1_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
+          <Comment>#descr="Verdampferlüfter Stufe 1, kleine Drehzahl, Stern"			#short=LuftStufe1 			#scale=0	#db=Raum_Q		#metric=uvr_stell_status</Comment>
+        </Node>
+        <Node name="QX_Rmm18_LuftStufe2_ar" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
+          <Comment>#descr="Verdampferlüfter Stufe 2, hohe Drehzahl, Dreieck"			#short=LuftStufe2 		#scale=0	#db=Raum_Q		#metric=uvr_stell_status	</Comment>
         </Node>
         <Node name="QX_S01_AlHupe" nodeflags="SigTypeGvl ExportedVariable" type="T_BOOL" access="ReadWrite">
           <Comment>#descr="Alarmhupe" 									#short=AlHupe 				#scale=0	#db=System		#metric=uvs_stell_status</Comment>
@@ -3424,6 +3483,38 @@
         <Node name="PA_Rmm62_SollTemp2nd_ari" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
           <Comment>#descr="Zweite Solltemperatur"														#short=SollTemp2		#scale=1</Comment>
         </Node>
+        <Node name="PA_Rmm63_ZeitVorVerda_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite">
+          <Comment>#descr="Lüftervorlauf sek" 													#short=ZeitVorVerda 	#scale=0</Comment>
+        </Node>
+        <Node name="PA_Rmm64_SollTempStart" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
+          <Comment>#descr="Startsollwertvorgabe"														#short=SollTempStart		#scale=1</Comment>
+        </Node>
+        <Node name="PA_Rmm65_SollTempZiel" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
+          <Comment>#descr="Zielsollwertvorgabe"														#short=SollTempZiel			#scale=1</Comment>
+        </Node>
+        <Node name="PA_Rmm66_MischerSoll" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
+          <Comment>#descr="Mischer pro Raum Sollwert"				#short=MischerSoll		 	#scale=1</Comment>
+        </Node>
+        <Node name="PA_Rmm67_MischerKP" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_REAL" access="ReadWrite">
+          <Comment>#descr="Mischer pro Raum P-Anteil"				#short=MischerKP		 	#scale=0</Comment>
+        </Node>
+        <Node name="PA_Rmm68_MischerTN" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_REAL" access="ReadWrite">
+          <Comment>#descr="Mischer pro Raum I-Anteil" 				#short=MischerTN		 	#scale=0</Comment>
+        </Node>
+        <Node name="PA_Rmm69_MischerTV" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_REAL" access="ReadWrite">
+          <Comment>#descr="Mischer pro Raum D-Anteil" 				#short=MischerTV		 	#scale=0</Comment>
+        </Node>
+        <Node name="PA_Rmm70_MischerHandPos" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite">
+          <Comment>#descr="Mischer pro Raum Handstellwert" 			#short=MischerHandPos		#scale=1</Comment>
+        </Node>
+        <Node name="PA_Rmm71_AbglSoleVorlauf" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
+          <Comment>#descr="Abgleichwert Solevorlauftemperatur"		#short=AbglSoleVor			#scale=1</Comment>
+        </Node>
+        <Node name="PA_Rmm72_AbglSoleRueck" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_INT" access="ReadWrite">
+          <Comment>#descr="Abgleichwert Soleruecklauftemperatur"		#short=AbglSoleRueck 		#scale=1</Comment>
+        </Node>
+        <Node name="PA_Rmm74_StartDatum" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_DATE_AND_TIME" access="ReadWrite" />
+        <Node name="PA_Rmm75_ZielDatum" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_DATE_AND_TIME" access="ReadWrite" />
         <Node name="PX_Rmm01_ModAbtau_arx" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
           <Comment>#descr="Umschalter Abtauung" 						#lb0=Umluft #lb1=Heizung			#short=ModAbtau 		#scale=0</Comment>
         </Node>
@@ -3477,6 +3568,15 @@
         </Node>
         <Node name="PX_Rmm18_IntvAktLK" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
           <Comment>#descr="Intervallschaltung Luftkühler"		 	#lb0=Aus 	#lb1=Ein				#short=IntvAktLK 		#scale=0</Comment>
+        </Node>
+        <Node name="PX_Rmm19_VerdDrehVari" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
+          <Comment>#descr="Schalter variierende Lüfterdrehzahl"		#lb0=gleichbleibend	#lb1=variierend	#short=VerdDrehVari		#scale=0</Comment>
+        </Node>
+        <Node name="PX_Rmm20_MischerHand" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
+          <Comment>#descr="Schalter Mischer Auto/Hand"			 	#lb0=Auto 	#lb1=Hand				#short=MischerHand 		#scale=0</Comment>
+        </Node>
+        <Node name="PX_Rmm21_SollVorgEin" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_BOOL" access="ReadWrite">
+          <Comment>#descr="Schalter Sollwertvorgabe Aus/Ein"			 #lb0=Aus 	#lb1=Ein				#short=SollVorgEin		#scale=0</Comment>
         </Node>
       </Node>
       <Node name="Vis" nodeflags="NodeTypeBranchNode SigTypeGvl">

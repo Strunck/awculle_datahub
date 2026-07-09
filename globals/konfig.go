@@ -286,7 +286,7 @@ func (cfg *Config) setupKonfigGroup(client *client.Client, bgctx context.Context
 	ctx, cancel := context.WithCancel(bgctx)
 	defer cancel()
 
-	m := make(map[string]any)
+	m := make(map[string]any) //map for cfg.Plc.Konfig
 
 	readlistCount := len(opcReadReqList)
 	idx := 0
@@ -399,7 +399,7 @@ func (cfg *Config) initSWSettings() (err error) {
 
 	s.Profil = cfg.Opcua.Symbole.Header.Version
 
-	s.Archive = cfg.Opcua.XmlFileName
+	s.Archive = cfg.Plc.SymbolXML
 
 	cfg.Plc.SWSettings = *s
 

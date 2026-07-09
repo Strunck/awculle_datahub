@@ -84,7 +84,9 @@ func (gs *GlobalState) InitMonitorOpcUa(pctx context.Context) (err error) {
 
 		for idx, res := range monRes.Results {
 			if !res.StatusCode.IsGood() {
-				return fmt.Errorf("🔱 OPC UA monitored item creation failed for client handle %d with status: %v", mimi[start+idx].RequestedParameters.ClientHandle, res.StatusCode)
+				midi := mimi[start+idx].ItemToMonitor.NodeID
+				fmt.Printf("🔱 OPC UA monitored item %v creation failed for client handle %d with status: %v\n", midi, mimi[start+idx].RequestedParameters.ClientHandle, res.StatusCode)
+				// return fmt.Errorf("🔱 OPC UA monitored item %v creation failed for client handle %d with status: %v", midi, mimi[start+idx].RequestedParameters.ClientHandle, res.StatusCode)
 			}
 			gs.OpcUa.ItemIds = append(gs.OpcUa.ItemIds, res.MonitoredItemID)
 		}

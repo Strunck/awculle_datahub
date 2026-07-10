@@ -1,6 +1,6 @@
 {
   "Plc": {
-    "SymbolXML": "ULOVisor_V0.18.08_AAE.04.Device.Application.xml"
+    "SymbolXML": "ULOVisor_V0.10.13_BOD.04.Device.Application.xml"
   },    
   "Nats": {
     "port": 4222,

@@ -21,7 +21,7 @@ func makeNodeHelperArray(count int, attr string, typ string, name string, prefix
 		}
 		h.NodeId = ua.ParseNodeID(prefix + "." + h.Name)
 		if h.NodeId == nil {
-			log.Printf("invalid node id of %s", h.Name)
+			log.Printf("🪑 invalid node id of %s", h.Name)
 		}
 		res = append(res, h)
 	}
@@ -178,9 +178,26 @@ func (cfg *Config) ComposeArrayFromObjects() (err error) {
 
 	// Add Gb_AnzahlEMeter which counts the true values in EMeterVorhanden
 	count := 0
-	for _, e := range cfg.Plc.Konfig["EMeterVorhanden"].([]any) {
-		if e.(bool) {
-			count++
+	emeter, ok := cfg.Plc.Konfig["EMeterVorhanden"]
+	emeterType, okType := emeter.([]any)
+
+	if !okType {
+		log.Printf("🪑 EMeterVorhanden is not an array, but %T", emeter)
+
+	} else if len(emeterType) != 24 {
+		log.Printf("🪑 EMeterVorhanden has %d elements, but expected 24", len(emeterType))
+
+	} else if !ok {
+		log.Printf("🪑 EMeterVorhanden not found in config")
+
+	} else {
+		for _, e := range emeter.([]any) {
+			elemType, elemTok := e.(bool)
+			if !elemTok {
+				log.Printf("🪑 EMeterVorhanden element is not a bool, but %T", e)
+			} else if elemType {
+				count++
+			}
 
 		}
 	}

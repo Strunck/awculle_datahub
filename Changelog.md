@@ -12,3 +12,6 @@
 - add value nil check
 - Better error
 
+## Release v0.0.29
+- If EMeter is not in the PLC, programm just ignores it
+- avoid panic, when tape casting fails in compose.go

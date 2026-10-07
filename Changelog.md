@@ -14,4 +14,8 @@
 
 ## Release v0.0.29
 - If EMeter is not in the PLC, programm just ignores it
-- avoid panic, when tape casting fails in compose.go
+- avoid panic, when type casting fails in compose.go
+
+## Release v0.0.30
+- Extend Report api, so it is more like uv3
+- Add preperation for weekly report

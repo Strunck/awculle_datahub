@@ -14,6 +14,7 @@
     "Symbolconfiguration": {}
   },
   "Metrics": {
+    "Tsdb_Url": "http://localhost:8086",
     "Defaults": [
       {
         "id": "68a6d902e49177ae",

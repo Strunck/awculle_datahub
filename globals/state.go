@@ -39,6 +39,7 @@ type OpcUaState struct {
 }
 
 type Metrics struct {
+	Tsdb_Url string
 	Registry *prometheus.Registry
 	Count    uint16 // Counter für registered metritcs
 }

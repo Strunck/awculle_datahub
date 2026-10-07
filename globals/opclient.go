@@ -69,7 +69,13 @@ func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
 		}
 
 	} else {
-		log.Println("Reusing existing session name", gs.OpcUa.SessionName, gs.OpcUa.Client.SessionID())
+		sn := gs.OpcUa.SessionName
+		if sn == "" {
+			sn = "-no-session-name-"
+		}
+		sid := gs.OpcUa.Client.SessionID()
+
+		log.Println("Reusing existing session name", sn, sid)
 		isNewSession = false
 	}
 

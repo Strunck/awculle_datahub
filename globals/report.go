@@ -2,10 +2,41 @@ package globals
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"strconv"
 	"time"
 )
+
+/*
+  "kundenname": "Herzapfelhof Luehs",
+  "Reportdatum": "07.10.2025",
+  "uvhost": "RLU",
+  "sps_hostname": "RLU-UV4",
+  "version": "RLU.05_PJ",
+  "docker_name": "Rolf Lühs, Herzapefelhof",
+  "show": {
+    "RT": true,
+    "KT": true,
+    "TW": true,
+    "O2": true,
+    "CO2": true
+  },
+  "data": []
+
+*/
+
+type DailyReportResponse struct {
+	Kundenname  string                 `json:"kundenname"`
+	Reportdatum string                 `json:"Reportdatum"`
+	Uvhost      string                 `json:"uvhost"`
+	SpsHostname string                 `json:"sps_hostname"`
+	Version     string                 `json:"version"`
+	DockerName  string                 `json:"docker_name"`
+	Show        map[string]bool        `json:"show"`
+	AussenTemp  string                 `json:"Aussen"`
+	Data        []DailyReportExtension `json:"data"`
+}
 
 type ReportCsvLine struct {
 	Datum   string `csv:"Datum"`
@@ -32,29 +63,51 @@ type ReportCsvLine struct {
 }
 
 type DailyReportExtension struct {
-	RTavg   string `csv:"RTavg"`
-	KTavg   string `csv:"KTavg"`
-	Kzeit   string `csv:"Kzeit"`
-	Ktakt   string `csv:"Ktakt"`
-	ZT      string `csv:"ZT"`
-	TW      string `csv:"TW"`
-	CO2takt string `csv:"CO2takt"`
-	O2takt  string `csv:"O2takt"`
-	RTsoll  string `csv:"RTsoll"`
-	RTmax   string `csv:"RTmax"`
-	RTmin   string `csv:"RTmin"`
-	KTmax   string `csv:"KTmax"`
-	KTmin   string `csv:"KTmin"`
-	O2max   string `csv:"O2max"`
-	O2min   string `csv:"O2min"`
-	CO2max  string `csv:"CO2max"`
-	CO2min  string `csv:"CO2min"`
-	LM      string `csv:"LM"`
-	Frost   string `csv:"Frost"`
-	Lzeit   string `csv:"Lzeit"`
-	Index   int
-	Raum    string
+	RTavg           string
+	KTavg           string
+	Kzeit           string
+	Ktakt           string
+	ZT              string
+	TW              string
+	CO2takt         string
+	O2takt          string
+	RTsoll          string
+	RTmax           string
+	RTmin           string
+	KTmax           string
+	KTmin           string
+	O2max           string
+	O2min           string
+	CO2max          string
+	CO2min          string
+	LM              string
+	Frost           string
+	Lzeit           string
+	Index           int
+	Raum            string
+	LagerungDatum   string // Datum der Einlagerung
+	Sorte           string // Sorte, die Eingleaget wurde
+	Schaltdifferenz string // Schaltdifferenz
+	TwSoll          string // Tauwasser Sollwert
+	CO2Soll         string // CO2 Sollwert
+	O2Soll          string // O2 Sollwert
+	Menge           string // Menge Ware im Lager
+
 }
+
+// // Extension to the csv logData_R01.csv, this data is gatered from victoriametrics
+// type MetricsReportData struct {
+// 	OutTempAvg      string // Average outside temperature
+// 	OutTempMin      string // Minimum outside temperature
+// 	OutTempMax      string // Maximum outside temperature
+// 	AbtauTkt        string // Abtau Takte
+// 	AbtauZt         string // Abtau Zeit
+// 	AbtElTkt        string // Abtau Elektro Takte
+// 	AbtElzt         string // Abtau Elektro Zeit
+// 	LagerungDatum   string // Datum der Einlagerung
+// 	Sorte           string // Sorte, die Einglagert wurde
+// 	Schaltdifferenz string // Schaltdifferenz
+// }
 
 // DailyReportGatherer acquires yesterdays date für the report and data from the Plc from the global data structure.
 func (gs *GlobalState) DailyReportGatherer() (err error) {
@@ -97,6 +150,15 @@ func (gs *GlobalState) DailyReportGatherer() (err error) {
 	mapFrost := gs.Plc.GetArrayString("Z.ZV_Rmm10_24hFrostTakt_arw")
 	mapLzeit := gs.Plc.GetArrayString("Z.ZV_Rmm11_24hVerdaZeit_arw")
 
+	//mapJahr := gs.Plc.GetArrayString("GVL.garw_Jahr")
+	mapMonat := gs.Plc.GetArrayString("GVL.garw_Monat")
+	mapTag := gs.Plc.GetArrayString("GVL.garw_Tag")
+	mapDiffRaumTemp := gs.Plc.GetArrayString("PR.PA_Rmm12_DiffRaumTemp_arb")
+	mapTwSoll := gs.Plc.GetArrayString("GVL.gw_Sollentfeuchtung")
+	mapCO2Soll := gs.Plc.GetArrayString("PR.PA_Rmm33_CO2Soll_arw")
+	mapO2Soll := gs.Plc.GetArrayString("PR.PA_Rmm31_O2Soll_arw")
+	mapMenge := gs.Plc.GetArrayString("GVL.gw_E_Menge")
+
 	for i := 0; i < gs.Cfg.Plc.SWSettings.Raumanzahl; i++ {
 		e.Index = i
 		e.Raum = gs.Cfg.Plc.SWSettings.Raumnummer[i]
@@ -121,6 +183,15 @@ func (gs *GlobalState) DailyReportGatherer() (err error) {
 		e.LM = unMapArrayString(mapLM, i)
 		e.Frost = unMapArrayString(mapFrost, i)
 		e.Lzeit = unMapArrayString(mapLzeit, i)
+
+		//Einlagerungsdatum mit Jahrsangabe, ist aber zu lang
+		//e.LagerungDatum = fmt.Sprintf("%s.%s.%s", unMapArrayString(mapTag, i), unMapArrayString(mapMonat, i), unMapArrayString(mapJahr, i))
+		e.LagerungDatum = fmt.Sprintf("%s.%s", unMapArrayString(mapTag, i), unMapArrayString(mapMonat, i))
+		e.Schaltdifferenz = unMapArrayString(mapDiffRaumTemp, i)
+		e.TwSoll = unMapArrayString(mapTwSoll, i)
+		e.CO2Soll = unMapArrayString(mapCO2Soll, i)
+		e.O2Soll = unMapArrayString(mapO2Soll, i)
+		e.Menge = unMapArrayString(mapMenge, i)
 
 		/*
 			Not used in the moment, but usefull for future extensions
@@ -196,35 +267,6 @@ func divideFloatStrings(z string, n string) (res string) {
 	return strconv.FormatFloat(fr, 'f', 1, 64)
 }
 
-/*
-  "kundenname": "Herzapfelhof Luehs",
-  "Reportdatum": "07.10.2025",
-  "uvhost": "RLU",
-  "sps_hostname": "RLU-UV4",
-  "version": "RLU.05_PJ",
-  "docker_name": "Rolf Lühs, Herzapefelhof",
-  "show": {
-    "RT": true,
-    "KT": true,
-    "TW": true,
-    "O2": true,
-    "CO2": true
-  },
-  "data": []
-
-*/
-
-type DailyReportResponse struct {
-	Kundenname  string                 `json:"kundenname"`
-	Reportdatum string                 `json:"Reportdatum"`
-	Uvhost      string                 `json:"uvhost"`
-	SpsHostname string                 `json:"sps_hostname"`
-	Version     string                 `json:"version"`
-	DockerName  string                 `json:"docker_name"`
-	Show        map[string]bool        `json:"show"`
-	Data        []DailyReportExtension `json:"data"`
-}
-
 func (gs *GlobalState) ToDailyReportJson() []byte {
 	var d DailyReportResponse
 
@@ -239,9 +281,9 @@ func (gs *GlobalState) ToDailyReportJson() []byte {
 	d.Kundenname = gs.Cfg.Plc.SWSettings.Kunde
 	d.Reportdatum = gs.Stats.Reportdatum
 	d.Uvhost = gs.Cfg.Plc.Base
-	d.SpsHostname = ""
-	d.Version = ""
-	d.DockerName = ""
+	d.SpsHostname = "" // TODO herausfinden, wie man den Hostnamen der SPS bekommt
+	d.Version = ""     // TODO herausfinden, wie man die Version der SPS bekommt
+	d.DockerName = ""  // TODO herausfinden, wie man den Dockernamen bekommt
 
 	/* // Add keys if report section shoud be shown. e.g. if there is no o2 measurement, do not show that section
 	const g = global.get("Konfig");

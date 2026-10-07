@@ -18,7 +18,7 @@ fi
 VERSION=$1-dev
 echo "dev Container für middleware $VERSION starten...."
 
-podman run -it --rm \
+podman run -it --replace \
     --name middelware-dev \
     --pod=uv4pod \
     --workdir="/go/src/github.com/strunck/uv4-middleware" \

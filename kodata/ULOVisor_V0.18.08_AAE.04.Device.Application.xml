@@ -3883,7 +3883,7 @@
           <Comment>#descr="24h N2-Takte Vortag Rnn"													#short=24hN2			#scale=0	#db=Raum_Z</Comment>
         </Node>
         <Node name="ZV_Rmm05_24hTau_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite">
-          <Comment>#descr="24h Tauwassermenge Vortag Rnn"												#short=24hTau			#scale=0	#db=Raum_Z</Comment>
+          <Comment>#descr="24h Tauwassermenge Vortag Rnn"												#short=24hTau			#scale=1	#db=Raum_Z</Comment>
         </Node>
         <Node name="ZV_Rmm06_24hKaltVZeit_arw" nodeflags="SigTypeGvl ExportedVariable" type="T_ARRAY__1__40__OF_WORD" access="ReadWrite">
           <Comment>#descr="24h Kälteventillaufzeit Vortag Rnn (min)"									#short=24hKaltVZeit		#scale=0	#db=Raum_Z</Comment>

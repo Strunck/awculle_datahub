@@ -154,7 +154,7 @@ func (gs *GlobalState) DailyReportGatherer() (err error) {
 	mapMonat := gs.Plc.GetArrayString("GVL.garw_Monat")
 	mapTag := gs.Plc.GetArrayString("GVL.garw_Tag")
 	mapDiffRaumTemp := gs.Plc.GetArrayString("PR.PA_Rmm12_DiffRaumTemp_arb")
-	mapTwSoll := gs.Plc.GetArrayString("GVL.gw_Sollentfeuchtung")
+	mapTwSoll := gs.Plc.GetArrayString("BD.BA_Rmm08_TauMax_arw")
 	mapCO2Soll := gs.Plc.GetArrayString("PR.PA_Rmm33_CO2Soll_arw")
 	mapO2Soll := gs.Plc.GetArrayString("PR.PA_Rmm31_O2Soll_arw")
 	mapMenge := gs.Plc.GetArrayString("GVL.gw_E_Menge")

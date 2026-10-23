@@ -43,6 +43,34 @@ func (gs *GlobalState) PlcConfigRead(ctx context.Context) (err error) {
 	return nil
 }
 
+// PlcConfigVersion reads the PLC version information.
+func (gs *GlobalState) PlcConfigVersion(ctx context.Context) (err error) {
+	name := fmt.Sprintf("|vprop|%s.Application.SoftwareRevision", gs.Cfg.Opcua.Prefix)
+	nid := ua.NewNodeIDString(4, name)
+
+	req := &ua.ReadRequest{
+		NodesToRead: []ua.ReadValueID{
+			{
+				NodeID:      nid,
+				AttributeID: ua.AttributeIDValue,
+			},
+		},
+	}
+
+	if gs.OpcUa.Client == nil {
+		return fmt.Errorf("OPC UA client is not initialized")
+	}
+
+	res, err := gs.OpcUa.Client.Read(ctx, req)
+	if err != nil {
+		return fmt.Errorf("error reading SoftwareRevision: %w", err)
+	}
+
+	gs.Stats.CodesysVersion = fmt.Sprintf("%v", res.Results[0].Value)
+
+	return nil
+}
+
 // Dial_OPCUA establishes a connection to the OPCUA server of the PLC.
 func (gs *GlobalState) Dial_OPCUA(ctx context.Context) (err error) {
 
@@ -99,10 +127,16 @@ func (gs *GlobalState) GetOpcPrefix(ctx context.Context) (err error) {
 	// 	-> EXOR ARM32-Linux QT5
 	//  -> EXOR ARM64-Linux QT5
 	nid := ua.NewNodeIDNumeric(0, 2261)
+	nid_CodesysVersion := ua.NewNodeIDNumeric(0, 2264)
+
 	req := &ua.ReadRequest{
 		NodesToRead: []ua.ReadValueID{
 			{
 				NodeID:      nid,
+				AttributeID: ua.AttributeIDValue,
+			},
+			{
+				NodeID:      nid_CodesysVersion,
 				AttributeID: ua.AttributeIDValue,
 			},
 		},
@@ -120,6 +154,7 @@ func (gs *GlobalState) GetOpcPrefix(ctx context.Context) (err error) {
 	}
 
 	gs.Cfg.Opcua.Prefix = fmt.Sprintf("ns=4;s=|var|%s.Application.", res.Results[0].Value)
+	gs.Stats.CodesysVersion = fmt.Sprintf("%v", res.Results[1].Value)
 
 	return nil
 }

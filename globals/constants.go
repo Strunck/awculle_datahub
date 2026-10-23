@@ -15,6 +15,7 @@ const (
 	CONNECTED                           // Connected to the OPC UA server
 	PLC_PREFIX                          // Read PLC prefix from the OPC UA server
 	PLC_CONFIG_READ                     // Read PLC configuration
+	PLC_CONFIG_VERSION                  // Read PLC version information
 	PLC_CONFIG_ALARMS                   // Read PLC alarm configuration
 	PLC_CONFIG_METRICS                  // Registers Prometheus Metrics
 	PLC_CONFIG_DONE                     // PLC configuration is read

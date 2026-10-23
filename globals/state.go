@@ -51,14 +51,15 @@ type ReportData struct {
 }
 
 type Stats struct {
-	InitDone    bool      `json:"init_done"`
-	Reportdatum string    `json:"Reportdatum"`
-	Uv4Version  string    `json:"uv4_version"`
-	Version     string    `json:"middleware_version"`
-	Developer   bool      `json:"developer_mode"`
-	NatsHealth  MsgHealth `json:"nats_health"`
-	OpcHealth   MsgHealth `json:"opc_health"`
-	Attempts    int       `json:"attempts"`
+	InitDone       bool      `json:"init_done"`
+	Reportdatum    string    `json:"Reportdatum"`
+	Uv4Version     string    `json:"uv4_version"`
+	CodesysVersion string    `json:"codesys_version"`
+	Version        string    `json:"middleware_version"`
+	Developer      bool      `json:"developer_mode"`
+	NatsHealth     MsgHealth `json:"nats_health"`
+	OpcHealth      MsgHealth `json:"opc_health"`
+	Attempts       int       `json:"attempts"`
 }
 
 func (stats *Stats) ToJson() []byte {
@@ -114,6 +115,8 @@ func (gs *GlobalState) PrintState() {
 		log.Println("🥅 INIT_TOPICS 🥅")
 	case PLC_CONFIG_READ:
 		log.Println("🪑 PLC_CONFIG_READ 🪑")
+	case PLC_CONFIG_VERSION:
+		log.Println("🪑 PLC_CONFIG_VERSION 🪑")
 	case PLC_CONFIG_ALARMS:
 		log.Println("🪑 PLC_CONFIG_ALARMS 🪑")
 	case PLC_CONFIG_METRICS:

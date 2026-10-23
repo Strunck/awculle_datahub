@@ -145,6 +145,14 @@ func runGuard(ctx context.Context, gs *globals.GlobalState) {
 			log.Printf("⏳ Error reading PLC configuration: %v\nExiting...", err)
 			gs.SetState(globals.RETRY)
 		} else {
+			gs.SetState(globals.PLC_CONFIG_VERSION)
+		}
+
+	case globals.PLC_CONFIG_VERSION:
+		if err := gs.PlcConfigVersion(ctx); err != nil {
+			log.Printf("⏳ Error reading PLC version: %v\nExiting...", err)
+			gs.SetState(globals.RETRY)
+		} else {
 			gs.SetState(globals.PLC_CONFIG_ALARMS)
 		}
 

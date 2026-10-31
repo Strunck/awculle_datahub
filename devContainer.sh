@@ -25,7 +25,7 @@ podman run -it --replace \
     -e "VERSION=$VERSION" \
     -e "air_wd=/go/src/github.com/strunck/uv4-middleware/" \
     -e "KO_DATA_PATH=/go/src/github.com/strunck/uv4-middleware/kodata" \
-    --env-file="kodata/.env_AAB" \
+    --env-file="kodata/.env_AAD" \
     -v "/opt/uv4/shared:/shared:z" \
     -v $(pwd):/go/src/github.com/strunck/uv4-middleware:Z \
     localhost/swair:v1.63.4 -c air-in-pod.toml

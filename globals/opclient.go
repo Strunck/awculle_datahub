@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/awcullen/opcua/client"
@@ -45,9 +46,10 @@ func (gs *GlobalState) PlcConfigRead(ctx context.Context) (err error) {
 
 // PlcConfigVersion reads the PLC version information.
 func (gs *GlobalState) PlcConfigVersion(ctx context.Context) (err error) {
-	name := fmt.Sprintf("|vprop|%s.Application.SoftwareRevision", gs.Cfg.Opcua.Prefix)
-	nid := ua.NewNodeIDString(4, name)
 
+	tprf := strings.Replace(gs.Cfg.Opcua.Prefix, "var", "vprop", 1)
+	name := fmt.Sprintf("%sSoftwareRevision", tprf)
+	nid := ua.ParseNodeID(name)
 	req := &ua.ReadRequest{
 		NodesToRead: []ua.ReadValueID{
 			{
@@ -66,7 +68,7 @@ func (gs *GlobalState) PlcConfigVersion(ctx context.Context) (err error) {
 		return fmt.Errorf("error reading SoftwareRevision: %w", err)
 	}
 
-	gs.Stats.CodesysVersion = fmt.Sprintf("%v", res.Results[0].Value)
+	gs.Stats.CodesysVersion = fmt.Sprintf("%s", res.Results[0].Value)
 
 	return nil
 }

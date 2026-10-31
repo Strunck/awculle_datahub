@@ -1,6 +1,6 @@
 {
   "Plc": {
-    "SymbolXML": "ULOVisor_V0.10.13_BOD.04.Device.Application.xml"
+    "SymbolXML": "ULOVisorM_V0.18.18_AAE.04.Device.Application.xml"
   },    
   "Nats": {
     "port": 4222,
@@ -14,7 +14,7 @@
     "Symbolconfiguration": {}
   },
   "Metrics": {
-    "Tsdb_Url": "http://localhost:8086",
+    "Tsdb_Url": "http://localhost:8428",
     "Defaults": [
       {
         "id": "68a6d902e49177ae",

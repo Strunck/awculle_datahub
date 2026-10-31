@@ -1,0 +1,59 @@
+### check localhost is up
+GET https://localhost/vm/api/v1/query?query=up
+###
+GET https://localhost/vm/api/v1/query?query=uvr_takte_total{short='KaelteTakte', ort=~'1|2'}
+###
+GET https://eoa-pi5.uv4.sw/vm/api/v1/query
+    ?query=uvr_takte_total{short='KaelteTakte', ort=~'1|2'}    
+
+HTTP/1.1 200  - OK
+access-control-allow-headers: *
+access-control-allow-methods: *
+access-control-allow-origin: *
+alt-svc: h3=":443"; ma=2592000
+content-length: 559
+content-type: application/json
+date: Thu, 29 Oct 2026 09:05:40 GMT
+vary: Accept-Encoding
+via: 1.1 Caddy
+x-server-hostname: uv4pod
+connection: close
+###
+GET https://eoa-pi5.uv4.sw/vm/api/v1/query
+    ?query=delta(uvr_takte_total{short='KaelteTakte', ort='1'})
+    &time=2026-10-10
+    &step=4d
+###
+GET https://eoa-pi5.uv4.sw/vm/api/v1/query
+    ?query=delta(uvr_takte_total{short='KaelteTakte', ort='1'})    
+    &step=1d
+    &time=2026-10-28
+###
+GET https://eoa-pi5.uv4.sw/vm/api/v1/query
+    ?query=delta(uvr_menge_liter{short='SaiTau', ort='7'})
+    &step=30d
+###
+GET https://eoa-pi5.uv4.sw/vm/api/v1/query
+    ?query=delta(uvr_menge_liter{short='SaiTau'})
+    &step=30d
+
+
+### check saisonreport query
+GET http://localhost/middleware/report/saison
+
+###
+GET https://eoa-pi5.uv4.sw/vm/api/v1/query
+    ?query=delta(uvr_takte_total{short='KaelteTakte', ort='7'})
+    &step=49d&time=2026-10-29
+
+###
+GET https://localhost/vm/api/v1/query
+    ?query=delta(uvr_takte_total{short='KaelteTakte', ort='1'})
+    &step=1d&time=2026-10-29
+
+
+###
+GET https://aad-onc.uv4.sw/vm/api/v1/query
+    ?query=delta(uvr_takte_total{short='KaelteTakte', ort='1'})
+    &step=1d&time=2026-10-29
+

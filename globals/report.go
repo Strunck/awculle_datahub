@@ -9,33 +9,39 @@ import (
 )
 
 /*
-  "kundenname": "Herzapfelhof Luehs",
-  "Reportdatum": "07.10.2025",
-  "uvhost": "RLU",
-  "sps_hostname": "RLU-UV4",
-  "version": "RLU.05_PJ",
-  "docker_name": "Rolf Lühs, Herzapefelhof",
-  "show": {
-    "RT": true,
-    "KT": true,
-    "TW": true,
-    "O2": true,
-    "CO2": true
-  },
-  "data": []
+"kundenname": "Herzapfelhof Luehs",
+"Reportdatum": "07.10.2025",
+"uvhost": "RLU",
+"sps_hostname": "RLU-UV4",
+"version": "RLU.05_PJ",
+"docker_name": "Rolf Lühs, Herzapefelhof",
 
+	"show": {
+	  "RT": true,
+	  "KT": true,
+	  "TW": true,
+	  "O2": true,
+	  "CO2": true
+	},
+
+"data": []
 */
-
-type DailyReportResponse struct {
-	Kundenname  string                 `json:"kundenname"`
+type ReportGeneral struct {
+	Kundenname  string          `json:"kundenname"`
+	Uvhost      string          `json:"uvhost"`
+	SpsHostname string          `json:"sps_hostname"`
+	Version     string          `json:"version"`
+	DockerName  string          `json:"docker_name"`
+	Show        map[string]bool `json:"show"`
+}
+type DailyReportData struct {
 	Reportdatum string                 `json:"Reportdatum"`
-	Uvhost      string                 `json:"uvhost"`
-	SpsHostname string                 `json:"sps_hostname"`
-	Version     string                 `json:"version"`
-	DockerName  string                 `json:"docker_name"`
-	Show        map[string]bool        `json:"show"`
 	AussenTemp  string                 `json:"Aussen"`
 	Data        []DailyReportExtension `json:"data"`
+}
+type DailyReportResponse struct {
+	ReportGeneral
+	DailyReportData
 }
 
 type ReportCsvLine struct {
@@ -223,6 +229,7 @@ func unMapArrayString(m map[string]string, idx int) string {
 	return val
 }
 
+// GetArrayString gets an array of strings from the Flat keys map. It returns a map where the keys are the indices as strings and the values are the corresponding array elements.
 func (ps *PlcState) GetArrayString(key string) (sval map[string]string) {
 	v, ok := ps.Flat[key]
 	if !ok {
@@ -267,47 +274,39 @@ func divideFloatStrings(z string, n string) (res string) {
 	return strconv.FormatFloat(fr, 'f', 1, 64)
 }
 
+func (gs *GlobalState) getGeneralReportInfo() ReportGeneral {
+
+	show := make(map[string]bool)
+	show["RT"] = getKonfigBooleans("Gar_RaumFuehl", gs)
+	show["KT"] = getKonfigBooleans("Gar_Kontroll", gs)
+	show["TW"] = getKonfigBooleans("Gar_Tauwasser", gs)
+	show["O2"] = getKonfigBooleans("Gar_O2Luefter", gs)
+	show["CO2"] = getKonfigBooleans("Gar_CO2_Aktion", gs)
+
+	return ReportGeneral{
+		Kundenname:  gs.Cfg.Plc.SWSettings.Kunde,
+		Uvhost:      gs.Cfg.Plc.Base,
+		SpsHostname: "",                      // TODO herausfinden, wie man den Hostnamen der SPS bekommt
+		Version:     gs.Stats.CodesysVersion, // Version der Codesys SPS
+		DockerName:  "",                      // TODO herausfinden, wie man den Dockernamen bekommt
+		Show:        show,
+	}
+}
+
 func (gs *GlobalState) ToDailyReportJson() []byte {
 	var d DailyReportResponse
 
 	gs.Report.mu.Lock()
 	defer gs.Report.mu.Unlock()
+
+	// Data for Daily Report
 	d.Data = make([]DailyReportExtension, gs.Cfg.Plc.SWSettings.Raumanzahl)
 	for _, val := range gs.Report.Daily {
-		//log.Printf("📃 ToDailyReportJson key: %s, val: %#v", key, val)
 		d.Data[val.Index] = val
 	}
 
-	d.Kundenname = gs.Cfg.Plc.SWSettings.Kunde
+	d.ReportGeneral = gs.getGeneralReportInfo()
 	d.Reportdatum = gs.Stats.Reportdatum
-	d.Uvhost = gs.Cfg.Plc.Base
-	d.SpsHostname = "" // TODO herausfinden, wie man den Hostnamen der SPS bekommt
-	d.Version = ""     // TODO herausfinden, wie man die Version der SPS bekommt
-	d.DockerName = ""  // TODO herausfinden, wie man den Dockernamen bekommt
-
-	/* // Add keys if report section shoud be shown. e.g. if there is no o2 measurement, do not show that section
-	const g = global.get("Konfig");
-	const anz = g.Gb_Anzahl_Raeume;
-	const show_RT = g.Gar_RaumFuehl.slice(0, anz).includes(true);
-	const show_KT = g.Gar_Kontroll.slice(0, anz).includes(true);
-	const show_TW = g.Gar_Tauwasser.slice(0,anz).includes(true);
-	const show_O2 = g.Gar_O2Luefter.slice(0, anz).includes(true);
-	const show_CO2 = g.Gar_CO2_Aktion.slice(0, anz).includes(true);
-
-	msg.payload.show = {
-		RT: show_RT,
-		KT: show_KT,
-		TW: show_TW,
-		O2: show_O2,
-		CO2: show_CO2
-	}*/
-	d.Show = make(map[string]bool)
-
-	d.Show["RT"] = getKonfigBooleans("Gar_RaumFuehl", gs)
-	d.Show["KT"] = getKonfigBooleans("Gar_Kontroll", gs)
-	d.Show["TW"] = getKonfigBooleans("Gar_Tauwasser", gs)
-	d.Show["O2"] = getKonfigBooleans("Gar_O2Luefter", gs)
-	d.Show["CO2"] = getKonfigBooleans("Gar_CO2_Aktion", gs)
 
 	json, _ := json.MarshalIndent(d, "", "  ")
 
@@ -355,3 +354,197 @@ func (report *ReportData) GetAllOrt(idx int) []ReportCsvLine {
 	defer report.mu.Unlock()
 	return report.All[idx]
 }
+
+type SaisonReportRow struct {
+	Raumnummer     string `json:"raumnummer"`
+	Raumtemperatur string `json:"raumtemperatur"`
+	O2_Wert        string `json:"o2_wert"`
+	CO2_Wert       string `json:"co2_wert"`
+	Tauwasser      string `json:"tauwasser"`
+	Kuehlzeit      string `json:"kuehlzeit"`
+	Kuehltakte     string `json:"kuehltakte"`
+}
+
+type SaisonReportResponse struct {
+	ReportGeneral    ReportGeneral              `json:"report_general"`
+	SaisonReportRows map[string]SaisonReportRow `json:"saison_report_rows"`
+	StartDates       map[string]string          `json:"start_date"`
+	EndDate          string                     `json:"end_date"`
+	TypstData        []string                   `json:"typst_data"`
+}
+
+// reportStringMap stores a string key and a fixed-length array of two strings.
+var reportStringMap = map[string][2]string{
+	"Raumtemperatur": {"uvr_prozess_celsius", "Temp"},
+	"O2_Wert":        {"uvr_prozess_ratio", "O2ist"},
+	"CO2_Wert":       {"uvr_prozess_ratio", "CO2ist"},
+	"Tauwasser":      {"uvr_menge_liter", "SaiTau"},
+	"Kuehlzeit":      {"uvr_seconds_total", "KaelteVentil"},
+	"Kuehltakte":     {"uvr_takte_total", "KaelteTakte"},
+}
+
+// ToSaisonReportJson gathers data for saisonreport and generates JSON, that is meant to be a html response
+func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []byte {
+	gs.Report.mu.Lock()
+	defer gs.Report.mu.Unlock()
+
+	// We need startData and endDate to compose the query. However, dates are optional. Thus followin default behavior:
+	// endDate defaults to now if not provided
+	if endDate == "" {
+		endDate = time.Now().Format("2006-01-02")
+	}
+	// startDate defaults to what is set in the PLC
+	mStartDates := gs.getLagerdatenMap()
+	// Otherwise, override startDate with the provided value if it's valid
+	if validateDateString(startDate) {
+		for k := range mStartDates {
+			mStartDates[k] = startDate
+		}
+
+	}
+
+	sr := SaisonReportResponse{
+		ReportGeneral:    gs.getGeneralReportInfo(),
+		SaisonReportRows: make(map[string]SaisonReportRow),
+		StartDates:       mStartDates,
+		EndDate:          endDate,
+	}
+	for ort := range mStartDates {
+		i, err := strconv.Atoi(ort)
+		if err != nil {
+			log.Printf("Error converting ort to int: %v", err)
+			continue
+		}
+		if i-1 < 0 || i-1 >= len(gs.Cfg.Plc.SWSettings.Raumnummer) {
+			log.Printf("Error: Raumnummer index out of range for ort %s", ort)
+			continue
+		}
+		sr.SaisonReportRows[ort] = SaisonReportRow{Raumnummer: gs.Cfg.Plc.SWSettings.Raumnummer[i-1]}
+	}
+
+	for kind, ar := range reportStringMap {
+
+		for ort, date := range mStartDates {
+
+			queryStr := composeDeltaQueryString(ar[0], ar[1], ort, date, endDate)
+			res, err := gs.QueryMetrics(queryStr)
+			if err != nil || len(res) == 0 {
+				log.Printf("Error in SaisonReport querying metrics: %v, query: %s", err, queryStr)
+				log.Printf("SaisonReport Query result for ort %s: %v", ort, res)
+			}
+			//log.Printf("DEBUG SaisonReport Query result for ort %s: %v", ort, res)
+
+			valArray, ok := res[0]["value"].([]any)
+			if !ok || len(valArray) < 2 {
+				log.Printf("Error extracting value from result for ort %s: %v", ort, res)
+				continue
+			}
+			valStr, ok := valArray[1].(string)
+			if !ok {
+				log.Printf("Error converting value to string for ort %s: %v", ort, valArray[1])
+				continue
+			}
+
+			// TODO Umrechnung anwenden
+			row := sr.SaisonReportRows[ort]
+			switch kind {
+			case "Raumtemperatur":
+				row.Raumtemperatur = valStr
+			case "O2_Wert":
+				row.O2_Wert = valStr
+			case "CO2_Wert":
+				row.CO2_Wert = valStr
+			case "Kuehltakte":
+				row.Kuehltakte = valStr
+			case "Kuehlzeit":
+				row.Kuehlzeit = valStr
+			case "Tauwasser":
+				row.Tauwasser = valStr
+			}
+			sr.SaisonReportRows[ort] = row
+		}
+
+	}
+
+	json, _ := json.MarshalIndent(sr, "", "  ")
+
+	return json
+}
+
+// getLagedatenMap retrieves the start dates for each room from the PLC and returns them as a map with keys that represent the room index begining with 1.
+func (gs *GlobalState) getLagerdatenMap() map[string]string {
+
+	m := make(map[string]string)
+
+	mapJahr := gs.Plc.GetArrayString("GVL.garw_Jahr")
+	mapMonat := gs.Plc.GetArrayString("GVL.garw_Monat")
+	mapTag := gs.Plc.GetArrayString("GVL.garw_Tag")
+
+	log.Printf("DEBUG Einlagerungsdatum Jahre:\n%v", mapJahr)
+	log.Printf("DEBUG Einlagerungsdatum Monate:\n%v", mapMonat)
+	log.Printf("DEBUG Einlagerungsdatum Tage:\n%v", mapTag)
+
+	// k is index as string beginning with 0
+	for k, jahr := range mapJahr {
+
+		monat, err := strconv.Atoi(mapMonat[k])
+		if err != nil {
+			log.Printf("📃 Error converting month to int: %v", err)
+			continue
+		}
+		tag, err := strconv.Atoi(mapTag[k])
+		if err != nil {
+			log.Printf("📃 Error converting tag to int: %v", err)
+			continue
+		}
+
+		// convert k to int and add 1 and convert back to string
+		kInt, err := strconv.Atoi(k)
+		if err != nil {
+			log.Printf("📃 Error converting key to int: %v", err)
+			continue
+		}
+		kInt++
+		kfrom1 := strconv.Itoa(kInt)
+
+		m[kfrom1] = fmt.Sprintf("%s-%02d-%02d", jahr, monat, tag)
+	}
+	return m
+}
+
+/* example for the query
+https://eoa-pi5.uv4.sw/vm/api/v1/query
+    ?query=delta(uvr_takte_total{short='KaelteTakte', ort='1'})
+    &step=30d
+    &time=2026-10-28
+time=2026-10-28 looking start date, if omitted now() is used
+step=30d means 30 days lookbehind. If step is larger than the availabe date range, we get 2 results!
+
+{
+  "status": "success",
+  "data": {
+    "resultType": "vector",
+    "result": [
+      {
+        "metric": {
+          "base": "EOA",
+          "descr": "Saison Tauwassermenge",
+          "instance": "nodered:1881",
+          "job": "ulovisor",
+          "ort": "7",
+          "short": "SaiTau",
+          "symbol": "ZS_Rmm05_SaiTau_ardw"
+        },
+        "value": [
+          1793265827,
+          "7150"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "seriesFetched": "1",
+    "executionTimeMsec": 11
+  }
+}
+*/

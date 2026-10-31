@@ -2,10 +2,12 @@ package web
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 	"strunck/uv4-middleware/globals"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -21,13 +23,21 @@ func reportSubRouter(gs *globals.GlobalState) func(r chi.Router) {
 	return func(r chi.Router) {
 		r.Get("/", PathReportDaily(gs))
 		r.Get("/{ort}", PathReportOrt(gs))
+		r.Get("/saison", PathReportSaison(gs))
 	}
 }
 
 type ReportOrtResponse struct {
-	Success bool                    `json:"success"`
-	Message string                  `json:"message"`
-	Data    []globals.ReportCsvLine `json:"data"`
+	Success     bool                    `json:"success"`
+	Message     string                  `json:"message"`
+	Raumnummer  string                  `json:"raumnummer"`
+	Kundenname  string                  `json:"kundenname"`
+	Reportdatum string                  `json:"Reportdatum"`
+	Uvhost      string                  `json:"uvhost"`
+	SpsHostname string                  `json:"sps_hostname"`
+	Version     string                  `json:"version"`
+	DockerName  string                  `json:"docker_name"`
+	Data        []globals.ReportCsvLine `json:"data"`
 }
 
 func (r ReportOrtResponse) ToJson() []byte {
@@ -54,7 +64,7 @@ func PathReportOrt(gs *globals.GlobalState) http.HandlerFunc {
 		repRes.Data = make([]globals.ReportCsvLine, 0)
 
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
+		w.WriteHeader(http.StatusOK)
 
 		dlen := gs.Report.LenAll()
 
@@ -70,6 +80,13 @@ func PathReportOrt(gs *globals.GlobalState) http.HandlerFunc {
 				anz := gs.Report.LenAllOrt(ortPlus1 - 1)
 				repRes.Success = true
 				repRes.Message = "OK Anzahl Datensätze " + strconv.Itoa(anz)
+				repRes.Raumnummer = gs.Cfg.Plc.SWSettings.Raumnummer[ortPlus1-1]
+				repRes.Kundenname = gs.Cfg.Plc.SWSettings.Kunde
+				repRes.Reportdatum = fmt.Sprintf("%s", time.Now().Format("2.Jan 2006 15:04"))
+				repRes.Uvhost = gs.Cfg.Plc.Base
+				repRes.SpsHostname = "" // TODO herausfinden, wie man den Hostnamen der SPS bekommt
+				repRes.Version = gs.Stats.CodesysVersion
+				repRes.DockerName = "" // TODO herausfinden, wie man den Dockernamen bekommt
 				repRes.Data = gs.Report.GetAllOrt(ortPlus1 - 1)
 			} else {
 				repRes.Success = false
@@ -87,7 +104,7 @@ func PathReportOrt(gs *globals.GlobalState) http.HandlerFunc {
 func PathReportDaily(gs *globals.GlobalState) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
+		w.WriteHeader(http.StatusOK)
 		if _, err := w.Write(gs.ToDailyReportJson()); err != nil {
 			http.Error(w, "Error writing response", http.StatusInternalServerError)
 			return
@@ -162,5 +179,19 @@ Example Response for /middleware/report?query=json
   }
 }
 
-
 */
+
+func PathReportSaison(gs *globals.GlobalState) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		endDate := r.URL.Query().Get("end")
+		startDate := r.URL.Query().Get("start")
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		if _, err := w.Write(gs.ToSaisonReportJson(startDate, endDate)); err != nil {
+			http.Error(w, "Error writing response", http.StatusInternalServerError)
+			return
+		}
+	}
+}

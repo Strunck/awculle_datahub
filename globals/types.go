@@ -116,6 +116,7 @@ type Comment struct {
 // Metrics ---------------------------------------------------------------------------------------------------------------------------------
 // for prometheus endpoint /metrics
 type MetricsConfig struct {
+	Tsdb_Url string
 	Defaults []MetricsPreset          `json:"Defaults"`
 	Results  map[string]MetricSetting `json:"results"`
 }

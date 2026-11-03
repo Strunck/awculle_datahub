@@ -369,8 +369,11 @@ type SaisonReportResponse struct {
 	ReportGeneral    ReportGeneral              `json:"report_general"`
 	SaisonReportRows map[string]SaisonReportRow `json:"saison_report_rows"`
 	StartDates       map[string]string          `json:"start_date"`
+	StartTimesOfDay  map[string]string          `json:"start_times_of_day"`
 	EndDate          string                     `json:"end_date"`
+	EndTimeOfDay     string                     `json:"end_time_of_day"`
 	TypstData        []string                   `json:"typst_data"`
+	colCount         int
 }
 
 // reportStringMap stores a string key and a fixed-length array of two strings.
@@ -388,27 +391,35 @@ func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []by
 	gs.Report.mu.Lock()
 	defer gs.Report.mu.Unlock()
 
+	sr := SaisonReportResponse{
+		ReportGeneral:    gs.getGeneralReportInfo(),
+		SaisonReportRows: make(map[string]SaisonReportRow),
+		StartDates:       make(map[string]string),
+		colCount:         7 + 1, // SaisonReportRow + Date field
+	}
 	// We need startData and endDate to compose the query. However, dates are optional. Thus followin default behavior:
 	// endDate defaults to now if not provided
-	if endDate == "" {
-		endDate = time.Now().Format("2006-01-02")
+	var endTime time.Time
+
+	if !validateDateString(endDate) {
+		endTime = time.Now()
+		sr.EndDate = endTime.Format("2006-01-02")
+		sr.EndTimeOfDay = endTime.Format("15:04:05")
+
+	} else {
+		sr.EndDate = endDate
+		sr.EndTimeOfDay = "23:59:59"
 	}
 	// startDate defaults to what is set in the PLC
 	mStartDates := gs.getLagerdatenMap()
-	// Otherwise, override startDate with the provided value if it's valid
 	if validateDateString(startDate) {
 		for k := range mStartDates {
 			mStartDates[k] = startDate
 		}
-
+	} else {
+		log.Printf("📃 Info: Using default startDate with 'Einlagerungsdatum'")
 	}
 
-	sr := SaisonReportResponse{
-		ReportGeneral:    gs.getGeneralReportInfo(),
-		SaisonReportRows: make(map[string]SaisonReportRow),
-		StartDates:       mStartDates,
-		EndDate:          endDate,
-	}
 	for ort := range mStartDates {
 		i, err := strconv.Atoi(ort)
 		if err != nil {
@@ -426,45 +437,74 @@ func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []by
 
 		for ort, date := range mStartDates {
 
-			queryStr := composeDeltaQueryString(ar[0], ar[1], ort, date, endDate)
+			queryStr := composeDeltaQueryString(ar[0], ar[1], ort, date, sr.EndDate, sr.EndTimeOfDay)
 			res, err := gs.QueryMetrics(queryStr)
 			if err != nil || len(res) == 0 {
 				log.Printf("Error in SaisonReport querying metrics: %v, query: %s", err, queryStr)
 				log.Printf("SaisonReport Query result for ort %s: %v", ort, res)
 			}
-			//log.Printf("DEBUG SaisonReport Query result for ort %s: %v", ort, res)
+			//log.Printf("DEBUG SaisonReport Query:\n%s\nRes\n%v", queryStr, res)
 
-			valArray, ok := res[0]["value"].([]any)
-			if !ok || len(valArray) < 2 {
-				log.Printf("Error extracting value from result for ort %s: %v", ort, res)
-				continue
-			}
-			valStr, ok := valArray[1].(string)
-			if !ok {
-				log.Printf("Error converting value to string for ort %s: %v", ort, valArray[1])
-				continue
+			var valStr string
+
+			lastResultIndex := len(res) - 1
+			if len(res) <= 0 {
+				log.Printf("Error: empty result for ort %s", ort)
+				valStr = "---"
+			} else {
+				valArray, ok := res[lastResultIndex]["value"].([]any)
+				if !ok || len(valArray) < 2 {
+					log.Printf("Error extracting value from result for ort %s: %v", ort, res)
+					continue
+				}
+				valStr, ok = valArray[1].(string)
+				if !ok {
+					log.Printf("Error converting value to string for ort %s: %v", ort, valArray[1])
+					continue
+				}
 			}
 
 			// TODO Umrechnung anwenden
 			row := sr.SaisonReportRows[ort]
 			switch kind {
 			case "Raumtemperatur":
-				row.Raumtemperatur = valStr
+				row.Raumtemperatur = formatFlint1(valStr)
 			case "O2_Wert":
-				row.O2_Wert = valStr
+				row.O2_Wert = formatFlint2(valStr)
 			case "CO2_Wert":
-				row.CO2_Wert = valStr
+				row.CO2_Wert = formatFlint2(valStr)
 			case "Kuehltakte":
 				row.Kuehltakte = valStr
 			case "Kuehlzeit":
-				row.Kuehlzeit = valStr
+				row.Kuehlzeit = formatSekundenToDayHoursMinutes(valStr)
 			case "Tauwasser":
-				row.Tauwasser = valStr
+				row.Tauwasser = formatFlint1(valStr)
 			}
 			sr.SaisonReportRows[ort] = row
 		}
-
 	}
+
+	typst_data := make([]string, sr.colCount*gs.Cfg.Plc.SWSettings.Raumanzahl)
+
+	for rk, rObj := range sr.SaisonReportRows {
+		// log.Printf("DEBUG Report Row for rk %s: %v", rk, rObj)
+		i, err := strconv.Atoi(rk)
+		if err != nil {
+			log.Printf("Error converting rk to int: %v", err)
+			continue
+		}
+		i = (i - 1) * sr.colCount
+
+		typst_data[i] = rObj.Raumnummer
+		typst_data[i+1] = mStartDates[rk]
+		typst_data[i+2] = rObj.Raumtemperatur
+		typst_data[i+3] = rObj.O2_Wert
+		typst_data[i+4] = rObj.CO2_Wert
+		typst_data[i+5] = rObj.Tauwasser
+		typst_data[i+6] = rObj.Kuehlzeit
+		typst_data[i+7] = rObj.Kuehltakte
+	}
+	sr.TypstData = typst_data
 
 	json, _ := json.MarshalIndent(sr, "", "  ")
 
@@ -479,10 +519,6 @@ func (gs *GlobalState) getLagerdatenMap() map[string]string {
 	mapJahr := gs.Plc.GetArrayString("GVL.garw_Jahr")
 	mapMonat := gs.Plc.GetArrayString("GVL.garw_Monat")
 	mapTag := gs.Plc.GetArrayString("GVL.garw_Tag")
-
-	log.Printf("DEBUG Einlagerungsdatum Jahre:\n%v", mapJahr)
-	log.Printf("DEBUG Einlagerungsdatum Monate:\n%v", mapMonat)
-	log.Printf("DEBUG Einlagerungsdatum Tage:\n%v", mapTag)
 
 	// k is index as string beginning with 0
 	for k, jahr := range mapJahr {
@@ -512,39 +548,72 @@ func (gs *GlobalState) getLagerdatenMap() map[string]string {
 	return m
 }
 
-/* example for the query
+/*
+	example for the query
+
 https://eoa-pi5.uv4.sw/vm/api/v1/query
-    ?query=delta(uvr_takte_total{short='KaelteTakte', ort='1'})
-    &step=30d
-    &time=2026-10-28
+
+	?query=delta(uvr_takte_total{short='KaelteTakte', ort='1'})
+	&step=30d
+	&time=2026-10-28
+
 time=2026-10-28 looking start date, if omitted now() is used
 step=30d means 30 days lookbehind. If step is larger than the availabe date range, we get 2 results!
 
-{
-  "status": "success",
-  "data": {
-    "resultType": "vector",
-    "result": [
-      {
-        "metric": {
-          "base": "EOA",
-          "descr": "Saison Tauwassermenge",
-          "instance": "nodered:1881",
-          "job": "ulovisor",
-          "ort": "7",
-          "short": "SaiTau",
-          "symbol": "ZS_Rmm05_SaiTau_ardw"
-        },
-        "value": [
-          1793265827,
-          "7150"
-        ]
-      }
-    ]
-  },
-  "stats": {
-    "seriesFetched": "1",
-    "executionTimeMsec": 11
-  }
-}
+	{
+	  "status": "success",
+	  "data": {
+	    "resultType": "vector",
+	    "result": [
+	      {
+	        "metric": {
+	          "base": "EOA",
+	          "descr": "Saison Tauwassermenge",
+	          "instance": "nodered:1881",
+	          "job": "ulovisor",
+	          "ort": "7",
+	          "short": "SaiTau",
+	          "symbol": "ZS_Rmm05_SaiTau_ardw"
+	        },
+	        "value": [
+	          1793265827,
+	          "7150"
+	        ]
+	      }
+	    ]
+	  },
+	  "stats": {
+	    "seriesFetched": "1",
+	    "executionTimeMsec": 11
+	  }
+	}
 */
+func formatSekundenToDayHoursMinutes(sekStr string) string {
+	sek, err := strconv.Atoi(sekStr)
+	if err != nil {
+		return "---"
+	}
+	days := sek / 86400
+	hours := (sek % 86400) / 3600
+	minutes := (sek % 3600) / 60
+	if days == 0 {
+		return fmt.Sprintf("%dh %dm", hours, minutes)
+	}
+	return fmt.Sprintf("%dd %dh %dm", days, hours, minutes)
+}
+
+func formatFlint1(valStr string) string {
+	val, err := strconv.ParseFloat(valStr, 64)
+	if err != nil {
+		return "---"
+	}
+	return fmt.Sprintf("%.1f", val)
+}
+
+func formatFlint2(valStr string) string {
+	val, err := strconv.ParseFloat(valStr, 64)
+	if err != nil {
+		return "---"
+	}
+	return fmt.Sprintf("%.2f", val)
+}

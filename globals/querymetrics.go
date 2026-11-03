@@ -66,7 +66,7 @@ func validateDateString(dateStr string) bool {
 	_, err := time.Parse("2006-01-02", dateStr)
 
 	if err != nil {
-		log.Printf("📃 Error: invalid date string: %v", err)
+		//log.Printf("📃 Error validateDateString: invalid date string: %v", err)
 		return false
 	} else {
 		return true
@@ -91,19 +91,25 @@ func checkDateRange(firstDate string, checkDate string, lastDate string) bool {
 	return true
 }
 
-func composeDeltaQueryString(metric string, short string, ort string, startDate string, endDate string) string {
-	stepStr := convertToStep(startDate, endDate)
-	q := fmt.Sprintf("delta(%s{short='%s',ort='%s'})%s&time=%s", metric, short, ort, stepStr, endDate)
+func composeDeltaQueryString(metric string, short string, ort string, startDate string, endDate string, endTimeOfDay string) string {
+
+	stepStr := convertToStep(startDate, endDate, endTimeOfDay)
+	q := fmt.Sprintf("delta(%s{short='%s',ort='%s'})%s&time=%sT%s", metric, short, ort, stepStr, endDate, endTimeOfDay)
 	return q
 }
 
-func convertToStep(startDate string, endDate string) string {
-	const layout = "2006-01-02"
-	start, err1 := time.Parse(layout, startDate)
-	end, err2 := time.Parse(layout, endDate)
+func convertToStep(startDate string, endDate string, endTimeOfDay string) string {
 
-	if err1 != nil || err2 != nil {
-		log.Printf("📃 Error: invalid date string in convertToStep: Start: '%s', End: '%s'", startDate, endDate)
+	start, err1 := time.Parse("2006-01-02", startDate)
+	end, err2 := time.Parse("2006-01-02T15:04:05", endDate+"T"+endTimeOfDay)
+
+	if err1 != nil {
+		log.Printf("📃 Error convertToStep: invalid startDate string: '%s', error: %v", startDate, err1)
+		return ""
+	}
+
+	if err2 != nil {
+		log.Printf("📃 Error convertToStep: invalid endDate string: '%s', error: %v", endDate, err2)
 		return ""
 	}
 

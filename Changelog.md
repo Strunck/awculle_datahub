@@ -19,3 +19,6 @@
 ## Release v0.0.30
 - Extend Report api, so it is more like uv3
 - Add preperation for weekly report
+
+# Release v0.0.31
+- Add Saison Report from H.H.Pohl (EOA) spec

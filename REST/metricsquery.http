@@ -36,24 +36,45 @@ GET https://eoa-pi5.uv4.sw/vm/api/v1/query
 GET https://eoa-pi5.uv4.sw/vm/api/v1/query
     ?query=delta(uvr_menge_liter{short='SaiTau'})
     &step=30d
-
-
-### check saisonreport query
+###
 GET http://localhost/middleware/report/saison
+
+### use standard start and end dates
+GET http://localhost/middleware/report/saison?start=&end=
+
+
+### Replace only end date
+GET http://localhost/middleware/report/saison?start=&end=2026-11-01
+
+
+### Replace start and end date
+GET http://localhost/middleware/report/saison?start=2026-10-01&end=2026-11-01
+
 
 ###
 GET https://eoa-pi5.uv4.sw/vm/api/v1/query
     ?query=delta(uvr_takte_total{short='KaelteTakte', ort='7'})
     &step=49d&time=2026-10-29
-
 ###
 GET https://localhost/vm/api/v1/query
     ?query=delta(uvr_takte_total{short='KaelteTakte', ort='1'})
     &step=1d&time=2026-10-29
-
-
 ###
 GET https://aad-onc.uv4.sw/vm/api/v1/query
     ?query=delta(uvr_takte_total{short='KaelteTakte', ort='1'})
     &step=1d&time=2026-10-29
 
+### 
+GET https://localhost/vm/api/v1/query
+    ?query=delta(uvr_takte_total{short='KaelteTakte',ort='4'})
+    &step=62d&time=2026-11-02T11:16:39
+
+###
+GET https://localhost/vm/api/v1/query
+    ?query=delta(uvr_prozess_celsius{short='Temp',ort='4'})
+    &step=62d&time=2026-11-02T11:16:39
+
+###
+GET https://localhost/vm/api/v1/query
+    ?query=delta(uvr_takte_total{short='KaelteTakte',ort='4'})
+    &step=30d&time=2026-11-02T11:52:17

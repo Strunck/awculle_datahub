@@ -38,19 +38,27 @@ GET https://eoa-pi5.uv4.sw/vm/api/v1/query
     &step=30d
 ###
 GET http://localhost/middleware/report/saison
-
-### use standard start and end dates
+###
 GET http://localhost/middleware/report/saison?start=&end=
 
+HTTP/1.1 308  - Permanent Redirect
+connection: close
+location: https://localhost/middleware/report/saison?start=&end=
+server: Caddy
+date: Wed, 04 Nov 2026 06:58:01 GMT
+content-length: 0
 
-### Replace only end date
+HTTP/1.1 200  - OK
+alt-svc: h3=":443"; ma=2592000
+content-length: 1649
+content-type: application/json
+date: Wed, 04 Nov 2026 06:58:01 GMT
+via: 1.1 Caddy
+connection: close
+###
 GET http://localhost/middleware/report/saison?start=&end=2026-11-01
-
-
-### Replace start and end date
+###
 GET http://localhost/middleware/report/saison?start=2026-10-01&end=2026-11-01
-
-
 ###
 GET https://eoa-pi5.uv4.sw/vm/api/v1/query
     ?query=delta(uvr_takte_total{short='KaelteTakte', ort='7'})
@@ -63,18 +71,57 @@ GET https://localhost/vm/api/v1/query
 GET https://aad-onc.uv4.sw/vm/api/v1/query
     ?query=delta(uvr_takte_total{short='KaelteTakte', ort='1'})
     &step=1d&time=2026-10-29
-
-### 
+###
 GET https://localhost/vm/api/v1/query
     ?query=delta(uvr_takte_total{short='KaelteTakte',ort='4'})
     &step=62d&time=2026-11-02T11:16:39
-
 ###
 GET https://localhost/vm/api/v1/query
     ?query=delta(uvr_prozess_celsius{short='Temp',ort='4'})
     &step=62d&time=2026-11-02T11:16:39
-
 ###
 GET https://localhost/vm/api/v1/query
     ?query=delta(uvr_takte_total{short='KaelteTakte',ort='4'})
     &step=30d&time=2026-11-02T11:52:17
+###
+GET https://localhost/vm/api/v1/query
+    ?query=uvr_prozess_celsius{short='Temp',ort='4'}
+    &time=2026-11-02T11:52:17
+###
+GET https://localhost/vm/api/v1/query
+    ?query=uvr_prozess_celsius{short='Temp',ort='4'}
+    &time=2026-11-03T19:30:00-01:00
+###
+GET https://eoa-pi5.uv4.sw/vm/api/v1/query
+    ?query=uvr_prozess_celsius{short='Temp',ort='4'}
+    &time=2026-11-03T18:30:00Z
+
+HTTP/1.1 200  - OK
+access-control-allow-headers: *
+access-control-allow-methods: *
+access-control-allow-origin: *
+alt-svc: h3=":443"; ma=2592000
+content-length: 323
+content-type: application/json
+date: Tue, 03 Nov 2026 18:43:44 GMT
+vary: Accept-Encoding
+via: 1.1 Caddy
+x-server-hostname: uv4pod
+connection: close
+###
+GET https://eoa-pi5.uv4.sw/vm/api/v1/query
+    ?query=uvr_prozess_celsius{short='Temp',ort='4'}
+    &time=2026-11-03T19:30:00%2B01:00
+
+HTTP/1.1 200  - OK
+access-control-allow-headers: *
+access-control-allow-methods: *
+access-control-allow-origin: *
+alt-svc: h3=":443"; ma=2592000
+content-length: 323
+content-type: application/json
+date: Tue, 03 Nov 2026 18:46:12 GMT
+vary: Accept-Encoding
+via: 1.1 Caddy
+x-server-hostname: uv4pod
+connection: close

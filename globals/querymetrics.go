@@ -73,47 +73,16 @@ func validateDateString(dateStr string) bool {
 	}
 }
 
-func checkDateRange(firstDate string, checkDate string, lastDate string) bool {
-	first, err1 := time.Parse("2006-01-02", firstDate)
-	check, err2 := time.Parse("2006-01-02", checkDate)
-	last, err3 := time.Parse("2006-01-02", lastDate)
+func composeDeltaQueryString(metric string, short string, ort string, startDateUnix int64, endDateUnix int64) string {
 
-	if err1 != nil || err2 != nil || err3 != nil {
-		log.Printf("📃 Error: invalid date string in date range: First: '%s', Check: '%s', Last: '%s'", firstDate, checkDate, lastDate)
-		return false
-	}
-
-	if check.Before(first) || check.After(last) {
-		log.Printf("📃 Error: check date '%s' is out of range ('%s' - '%s')", checkDate, firstDate, lastDate)
-		return false
-	}
-
-	return true
-}
-
-func composeDeltaQueryString(metric string, short string, ort string, startDate string, endDate string, endTimeOfDay string) string {
-
-	stepStr := convertToStep(startDate, endDate, endTimeOfDay)
-	q := fmt.Sprintf("delta(%s{short='%s',ort='%s'})%s&time=%sT%s", metric, short, ort, stepStr, endDate, endTimeOfDay)
+	stepStr := convertToStep(startDateUnix, endDateUnix)
+	q := fmt.Sprintf("delta(%s{short='%s',ort='%s'})%s&time=%d", metric, short, ort, stepStr, endDateUnix)
 	return q
 }
 
-func convertToStep(startDate string, endDate string, endTimeOfDay string) string {
+func convertToStep(startDateUnix int64, endDateUnix int64) string {
 
-	start, err1 := time.Parse("2006-01-02", startDate)
-	end, err2 := time.Parse("2006-01-02T15:04:05", endDate+"T"+endTimeOfDay)
-
-	if err1 != nil {
-		log.Printf("📃 Error convertToStep: invalid startDate string: '%s', error: %v", startDate, err1)
-		return ""
-	}
-
-	if err2 != nil {
-		log.Printf("📃 Error convertToStep: invalid endDate string: '%s', error: %v", endDate, err2)
-		return ""
-	}
-
-	duration := end.Sub(start)
+	duration := time.Duration(endDateUnix-startDateUnix) * time.Second
 	days := int(duration.Hours() / 24)
 	return fmt.Sprintf("&step=%dd", days)
 }

@@ -386,7 +386,7 @@ var reportStringMap = map[string][2]string{
 	"Kuehltakte":     {"uvr_takte_total", "KaelteTakte"},
 }
 
-// ToSaisonReportJson gathers data for saisonreport and generates JSON, that is meant to be a html response
+// ToSaisonReportJson gathers data for saisonreport and generates JSON
 func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []byte {
 	gs.Report.mu.Lock()
 	defer gs.Report.mu.Unlock()
@@ -409,6 +409,7 @@ func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []by
 	} else {
 		sr.EndDate = endDate
 		sr.EndTimeOfDay = "23:59:59"
+		endTime, _ = time.ParseInLocation("2006-01-02T15:04:05", sr.EndDate+"T"+sr.EndTimeOfDay, time.Local)
 	}
 	// startDate defaults to what is set in the PLC
 	mStartDates := gs.getLagerdatenMap()
@@ -416,7 +417,7 @@ func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []by
 		for k := range mStartDates {
 			mStartDates[k] = startDate
 		}
-	} else {
+	} else { // no startDate provided, use default from PLC
 		log.Printf("📃 Info: Using default startDate with 'Einlagerungsdatum'")
 	}
 
@@ -433,11 +434,26 @@ func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []by
 		sr.SaisonReportRows[ort] = SaisonReportRow{Raumnummer: gs.Cfg.Plc.SWSettings.Raumnummer[i-1]}
 	}
 
+	deltaQueryList := []string{"uvr_menge_liter", "uvr_seconds_total", "uvr_takte_total"}
+	var queryStr string
+
 	for kind, ar := range reportStringMap {
 
-		for ort, date := range mStartDates {
+		doDeltaQuery := contains(deltaQueryList, ar[0])
 
-			queryStr := composeDeltaQueryString(ar[0], ar[1], ort, date, sr.EndDate, sr.EndTimeOfDay)
+		for ort, startDateStr := range mStartDates {
+			startDateUTC, err := time.ParseInLocation("2006-01-02T15:04:05", startDateStr+"T00:00:00", time.Local)
+			if err != nil {
+				log.Printf("Error in SaisonReport parsing startDate '%s' for ort %s : %v", startDateStr, ort, err)
+				continue
+			}
+
+			if doDeltaQuery {
+				queryStr = composeDeltaQueryString(ar[0], ar[1], ort, startDateUTC.Unix(), endTime.Unix())
+			} else {
+				queryStr = fmt.Sprintf("%s{short='%s',ort='%s'}&time=%d", ar[0], ar[1], ort, endTime.Unix())
+			}
+
 			res, err := gs.QueryMetrics(queryStr)
 			if err != nil || len(res) == 0 {
 				log.Printf("Error in SaisonReport querying metrics: %v, query: %s", err, queryStr)
@@ -600,6 +616,15 @@ func formatSekundenToDayHoursMinutes(sekStr string) string {
 		return fmt.Sprintf("%dh %dm", hours, minutes)
 	}
 	return fmt.Sprintf("%dd %dh %dm", days, hours, minutes)
+}
+
+// Achtung: Hacky, because the Tauwasser value is not set correctly in the PLC, scale=1 is missing
+func formatTauwasser(valStr string) string {
+	val, err := strconv.ParseFloat(valStr, 64)
+	if err != nil {
+		return "---"
+	}
+	return fmt.Sprintf("%.1f", val/10)
 }
 
 func formatFlint1(valStr string) string {

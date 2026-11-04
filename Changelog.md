@@ -22,3 +22,7 @@
 
 # Release v0.0.31
 - Add Saison Report from H.H.Pohl (EOA) spec
+
+# Release v0.0.32
+- Unix Timestamp instead of partial RFC3339
+

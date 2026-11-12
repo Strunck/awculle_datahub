@@ -17,9 +17,19 @@ func reportSubRouter(gs *globals.GlobalState) func(r chi.Router) {
 
 func PathReportDaily(gs *globals.GlobalState) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		startDate := r.URL.Query().Get("start")
+
+		jsonb := gs.ToDailyReportJson(startDate)
+
+		if jsonb == nil {
+			http.Error(w, "Error gathering data report", http.StatusInternalServerError)
+			return
+		}
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		if _, err := w.Write(gs.ToDailyReportJson()); err != nil {
+
+		if _, err := w.Write(jsonb); err != nil {
 			http.Error(w, "Error writing response", http.StatusInternalServerError)
 			return
 		}
@@ -45,6 +55,9 @@ func PathReportOrt(gs *globals.GlobalState) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Get the "ort" URL parameter
 		ort := chi.URLParam(r, "ort")
+
+		endDate := r.URL.Query().Get("end")
+		startDate := r.URL.Query().Get("start")
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)

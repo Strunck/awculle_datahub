@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"reflect"
 	"strconv"
 	"time"
 )
@@ -42,37 +43,41 @@ type ReportCsvLine struct {
 	Lzeit   string `csv:"Lzeit"`
 }
 
+// DailyReportExtension holds data needed for the daily report
+// reflect package is used to compose the VictoriaMetrics MetricQL query string
+// metric and short must be a find a metric, see middleware/metrics
+// the method tag has to be a valid VictoriaMetrics MetricQL rollup function
+// Additional Info: only gauges are used, even for counters
 type DailyReportExtension struct {
-	RTavg           string
-	KTavg           string
-	Kzeit           string
-	Ktakt           string
-	ZT              string
-	TW              string
-	CO2takt         string
-	O2takt          string
-	RTsoll          string
-	RTmax           string
-	RTmin           string
-	KTmax           string
-	KTmin           string
-	O2max           string
-	O2min           string
-	CO2max          string
-	CO2min          string
-	LM              string
-	Frost           string
-	Lzeit           string
-	Index           int
-	Raum            string
-	LagerungDatum   string // Datum der Einlagerung
-	Sorte           string // Sorte, die Eingleaget wurde
-	Schaltdifferenz string // Schaltdifferenz
-	TwSoll          string // Tauwasser Sollwert
-	CO2Soll         string // CO2 Sollwert
-	O2Soll          string // O2 Sollwert
-	Menge           string // Menge Ware im Lager
-
+	RTavg           string `metric:"uvr_prozess_celsius" short:"Temp" method:"avg_over_time"`
+	KTavg           string `metric:"uvr_prozess_celsius" short:"TempKontroll" method:"avg_over_time"`
+	Kzeit           string `metric:"uvr_seconds_total" short:"KaelteVentil" method:"delta"`
+	Ktakt           string `metric:"uvr_takte_total" short:"KaelteTakte" method:"delta"`
+	ZT              string `method:"ZeitPerTakt"`
+	TW              string `metric:"uvr_menge_liter" short:"SaiTau" method:"delta"`
+	CO2takt         string `metric:"uvr_takte_saison" short:"SaiCo2" method:"delta"`
+	O2takt          string `metric:"uvr_takte_saison" short:"SaiO2" method:"delta"`
+	RTsoll          string `metric:"uvr_prozess_celsius" short:"SollTempEff" method:"avg_over_time"`
+	RTmax           string `metric:"uvr_prozess_celsius" short:"Temp" method:"max_over_time"`
+	RTmin           string `metric:"uvr_prozess_celsius" short:"Temp" method:"min_over_time"`
+	KTmax           string `metric:"uvr_prozess_celsius" short:"TempKontroll" method:"max_over_time"`
+	KTmin           string `metric:"uvr_prozess_celsius" short:"TempKontroll" method:"min_over_time"`
+	O2max           string `metric:"uvr_prozess_ratio" short:"O2" method:"max_over_time"`
+	O2min           string `metric:"uvr_prozess_ratio" short:"O2" method:"min_over_time"`
+	CO2max          string `metric:"uvr_prozess_ratio" short:"CO2" method:"max_over_time"`
+	CO2min          string `metric:"uvr_prozess_ratio" short:"CO2" method:"min_over_time"`
+	LM              string `metric:"uvr_prozess_status" short:"LMsperr" method:"count"`
+	Frost           string `metric:"uvr_prozess_status" short:"AlFrost" method:"count"`
+	Lzeit           string `metric:"uvr_takte_total" short:"LuefterZeit" method:"delta"`
+	Index           int    `method:"Index"`
+	Raum            string `method:"Raum"`
+	LagerungDatum   string `method:"LagerungDatum"`   // Datum der Einlagerung
+	Sorte           string `method:"Sorte"`           // Sorte, die Einglagert wurde
+	Schaltdifferenz string `method:"Schaltdifferenz"` // Schaltdifferenz
+	TwSoll          string `method:"TwSoll"`          // Tauwasser Sollwert
+	CO2Soll         string `method:"CO2Soll"`         // CO2 Sollwert
+	O2Soll          string `method:"O2Soll"`          // O2 Sollwert
+	Menge           string `method:"Menge"`           // Menge Ware im Lager
 }
 
 // // Extension to the csv logData_R01.csv, this data is gatered from victoriametrics
@@ -193,7 +198,7 @@ func (gs *GlobalState) DailyReportGatherer() (err error) {
 
 }
 
-func (gs *GlobalState) ToDailyReportJson() []byte {
+func (gs *GlobalState) ToDailyReportJson(startDate string) []byte {
 	var d DailyReportResponse
 
 	gs.Report.mu.Lock()
@@ -201,14 +206,94 @@ func (gs *GlobalState) ToDailyReportJson() []byte {
 
 	// Data for Daily Report
 	d.Data = make([]DailyReportExtension, gs.Cfg.Plc.SWSettings.Raumanzahl)
-	for _, val := range gs.Report.Daily {
-		d.Data[val.Index] = val
-	}
 
 	d.ReportGeneral = gs.getGeneralReportInfo()
-	d.Reportdatum = gs.Stats.Reportdatum
+	fmt.Println("Fetching daily report data for start date:", startDate)
+	if startDate != "" {
+		d.Reportdatum = startDate
+		gs.getDailyReportDataFromDB(d.Data, startDate)
+
+	} else {
+		for _, val := range gs.Report.Daily {
+			d.Data[val.Index] = val
+		}
+		d.Reportdatum = gs.Stats.Reportdatum
+	}
 
 	json, _ := json.MarshalIndent(d, "", "  ")
 
 	return json
+}
+
+/*
+	{
+		"metric": {
+			"base": "EOA",
+			"descr": "Saison Tauwassermenge",
+			"instance": "nodered:1881",
+			"job": "ulovisor",
+			"ort": "1",
+			"short": "SaiTau",
+			"symbol": "ZS_Rmm05_SaiTau_ardw"
+		},
+		"value": [
+			1793573999,
+			"0"
+		]
+	},
+*/
+type RangeQueryResult struct {
+	Metric string `json:"metric"`
+	Value  []any  `json:"value"`
+}
+
+type RangeQueryMetricMap struct {
+	Base     string `json:"base"`
+	Descr    string `json:"descr"`
+	Instance string `json:"instance"`
+	Job      string `json:"job"`
+	Ort      string `json:"ort"`
+	Short    string `json:"short"`
+	Symbol   string `json:"symbol"`
+}
+
+// Historischer oder Aktueller Tagesreport aus SPS oder historischer aus der Datenbank
+func (gs *GlobalState) getDailyReportDataFromDB(data []DailyReportExtension, startDate string) {
+	refl := reflect.TypeOf(data[0])
+	fields := reflect.VisibleFields(refl)
+
+	ortPart := ortString(len(data))
+
+	for _, field := range fields {
+		// Ignore special fields without metric tag
+		if _, ok := field.Tag.Lookup("metric"); !ok {
+			continue
+		}
+		timeUnix, err := time.ParseInLocation("2006-01-02T15:04:05", startDate+"T23:59:59", time.Local)
+		if err != nil {
+			fmt.Printf("Error parsing time '%sT23:59:59': %v\n", startDate, err)
+			continue
+		}
+		query := fmt.Sprintf("query?query=%s(%s{short=\"%s\",%s})&step=1d&time=%d", field.Tag.Get("method"), field.Tag.Get("metric"), field.Tag.Get("short"), ortPart, timeUnix.Unix())
+		res, err := gs.QueryMetrics(query)
+		if err != nil {
+			fmt.Printf("Error querying metrics for '%s': %s\n%s\n", field.Name, query, err)
+			continue
+		}
+		fmt.Printf("%s: %s\n%v\n", field.Name, query, res)
+		for _, r := range res {
+			fmt.Printf("metric: %v\n", r)
+		}
+	}
+}
+
+func ortString(anz int) (s string) {
+	s = "ort=~\""
+	for i := range anz {
+		s += strconv.Itoa(i + 1)
+		if i < anz-1 {
+			s += "|"
+		}
+	}
+	return s + "\""
 }

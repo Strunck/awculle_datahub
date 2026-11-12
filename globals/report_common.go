@@ -44,6 +44,8 @@ func unMapArrayString(m map[string]string, idx int) string {
 
 // GetArrayString gets an array of strings from the Flat keys map. It returns a map where the keys are the indices as strings and the values are the corresponding array elements.
 func (ps *PlcState) GetArrayString(key string) (sval map[string]string) {
+	ps.mu.Lock()
+	defer ps.mu.Unlock()
 	v, ok := ps.Flat[key]
 	if !ok {
 		log.Printf("📃 Error findVal. %s is not found in Plc.Flat...", key)

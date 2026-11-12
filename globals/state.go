@@ -73,6 +73,7 @@ func (stats *Stats) ToJson() []byte {
 }
 
 type PlcState struct {
+	mu   sync.Mutex
 	Flat map[string]HMIVariableTyped
 }
 

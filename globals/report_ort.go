@@ -8,22 +8,15 @@ import (
 	"time"
 )
 
-func (report *ReportData) LenAll() int {
-	report.mu.Lock()
-	defer report.mu.Unlock()
+func (report *ReportData) lenAll() int {
 	return len(report.All)
 }
 
-func (report *ReportData) LenAllOrt(idx int) int {
-	report.mu.Lock()
-	defer report.mu.Unlock()
-
+func (report *ReportData) lenAllOrt(idx int) int {
 	return len(report.All[idx])
 }
 
-func (report *ReportData) GetAllOrt(idx int) []ReportCsvLine {
-	report.mu.Lock()
-	defer report.mu.Unlock()
+func (report *ReportData) getAllOrt(idx int) []ReportCsvLine {
 	return report.All[idx]
 }
 
@@ -40,7 +33,7 @@ type ReportOrtResponse struct {
 	Data        []ReportCsvLine `json:"data"`
 }
 
-func (gs *GlobalState) ToJson(ort string) []byte {
+func (gs *GlobalState) OrtToJson(ort string, startDate, endDate string) []byte {
 	gs.Report.mu.Lock()
 	defer gs.Report.mu.Unlock()
 
@@ -51,10 +44,11 @@ func (gs *GlobalState) ToJson(ort string) []byte {
 	}
 	log.Println("Requested Report for Ort:", ort, "-> ortplus1:", ortPlus1)
 
-	var repRes ReportOrtResponse
-	repRes.Data = make([]ReportCsvLine, 0)
+	dlen := gs.Report.lenAllOrt(ortPlus1 - 1)
+	log.Println("Total Report Tage:", dlen)
 
-	dlen := gs.Report.LenAll()
+	var repRes ReportOrtResponse
+	repRes.Data = make([]ReportCsvLine, dlen)
 
 	log.Println("Report Data Length:", dlen)
 	if dlen == 0 {
@@ -65,7 +59,7 @@ func (gs *GlobalState) ToJson(ort string) []byte {
 	} else { // Report data should be available
 
 		if ortPlus1 > 0 && ortPlus1 <= dlen {
-			anz := gs.Report.LenAllOrt(ortPlus1 - 1)
+			anz := gs.Report.lenAllOrt(ortPlus1 - 1)
 			repRes.Success = true
 			repRes.Message = "OK Anzahl Datensätze " + strconv.Itoa(anz)
 			repRes.Raumnummer = gs.Cfg.Plc.SWSettings.Raumnummer[ortPlus1-1]
@@ -75,11 +69,11 @@ func (gs *GlobalState) ToJson(ort string) []byte {
 			repRes.SpsHostname = "" // TODO herausfinden, wie man den Hostnamen der SPS bekommt
 			repRes.Version = gs.Stats.CodesysVersion
 			repRes.DockerName = "" // TODO herausfinden, wie man den Dockernamen bekommt
-			repRes.Data = gs.Report.GetAllOrt(ortPlus1 - 1)
+			repRes.Data = gs.Report.getAllOrt(ortPlus1 - 1)
 		} else {
 			repRes.Success = false
 			repRes.Message = "Parameter Ort " + ort + " out of range, must be between 1 and " + strconv.Itoa(dlen)
-			repRes.Data = gs.Report.GetAllOrt(ortPlus1 - 1)
+			repRes.Data = gs.Report.getAllOrt(ortPlus1 - 1)
 		}
 	}
 

@@ -86,3 +86,36 @@ func convertToStep(startDateUnix int64, endDateUnix int64) string {
 	days := int(duration.Hours() / 24)
 	return fmt.Sprintf("&step=%dd", days)
 }
+
+// ProcessQueryResultsByRollup takes query results and returns a map keyed by rollup type
+// with values being arrays of value strings from values[*][1]
+func ProcessQueryResultsByRollup(queryResults []map[string]any) (map[string][]string, error) {
+	result := make(map[string][]string)
+
+	for _, item := range queryResults {
+		metric, ok := item["metric"].(map[string]any)
+		if !ok {
+			continue
+		}
+
+		rollup, ok := metric["rollup"].(string)
+		if !ok {
+			continue
+		}
+
+		values, ok := item["values"].([]any)
+		if !ok {
+			continue
+		}
+
+		for _, v := range values {
+			if pair, ok := v.([]any); ok && len(pair) >= 2 {
+				if valueStr, ok := pair[1].(string); ok {
+					result[rollup] = append(result[rollup], formatFlint1(valueStr))
+				}
+			}
+		}
+	}
+
+	return result, nil
+}

@@ -48,7 +48,7 @@ func PathReportOrt(gs *globals.GlobalState) http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		if _, err := w.Write(gs.ToJson(ort)); err != nil {
+		if _, err := w.Write(gs.OrtToJson(ort, startDate, endDate)); err != nil {
 			http.Error(w, "Error writing response", http.StatusInternalServerError)
 			return
 		}

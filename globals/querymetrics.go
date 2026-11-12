@@ -76,7 +76,7 @@ func validateDateString(dateStr string) bool {
 func composeDeltaQueryString(metric string, short string, ort string, startDateUnix int64, endDateUnix int64) string {
 
 	stepStr := convertToStep(startDateUnix, endDateUnix)
-	q := fmt.Sprintf("delta(%s{short='%s',ort='%s'})%s&time=%d", metric, short, ort, stepStr, endDateUnix)
+	q := fmt.Sprintf("query?query=delta(%s{short='%s',ort='%s'})%s&time=%d", metric, short, ort, stepStr, endDateUnix)
 	return q
 }
 

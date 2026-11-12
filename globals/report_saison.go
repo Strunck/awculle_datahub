@@ -104,7 +104,7 @@ func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []by
 			if doDeltaQuery {
 				queryStr = composeDeltaQueryString(ar[0], ar[1], ort, startDateUTC.Unix(), endTime.Unix())
 			} else {
-				queryStr = fmt.Sprintf("%s{short='%s',ort='%s'}&time=%d", ar[0], ar[1], ort, endTime.Unix())
+				queryStr = fmt.Sprintf("query?query=%s{short='%s',ort='%s'}&time=%d", ar[0], ar[1], ort, endTime.Unix())
 			}
 
 			res, err := gs.QueryMetrics(queryStr)

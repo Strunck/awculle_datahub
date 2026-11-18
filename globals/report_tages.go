@@ -49,49 +49,43 @@ type ReportCsvLine struct {
 // the method tag has to be a valid VictoriaMetrics MetricQL rollup function
 // Additional Info: only gauges are used, even for counters
 type DailyReportExtension struct {
-	RTavg           string `metric:"uvr_prozess_celsius" short:"Temp" method:"avg_over_time"`
-	KTavg           string `metric:"uvr_prozess_celsius" short:"TempKontroll" method:"avg_over_time"`
-	Kzeit           string `metric:"uvr_seconds_total" short:"KaelteVentil" method:"delta"`
-	Ktakt           string `metric:"uvr_takte_total" short:"KaelteTakte" method:"delta"`
-	ZT              string `method:"ZeitPerTakt"`
-	TW              string `metric:"uvr_menge_liter" short:"SaiTau" method:"delta"`
-	CO2takt         string `metric:"uvr_takte_saison" short:"SaiCo2" method:"delta"`
-	O2takt          string `metric:"uvr_takte_saison" short:"SaiO2" method:"delta"`
-	RTsoll          string `metric:"uvr_prozess_celsius" short:"SollTempEff" method:"avg_over_time"`
-	RTmax           string `metric:"uvr_prozess_celsius" short:"Temp" method:"max_over_time"`
-	RTmin           string `metric:"uvr_prozess_celsius" short:"Temp" method:"min_over_time"`
-	KTmax           string `metric:"uvr_prozess_celsius" short:"TempKontroll" method:"max_over_time"`
-	KTmin           string `metric:"uvr_prozess_celsius" short:"TempKontroll" method:"min_over_time"`
-	O2max           string `metric:"uvr_prozess_ratio" short:"O2" method:"max_over_time"`
-	O2min           string `metric:"uvr_prozess_ratio" short:"O2" method:"min_over_time"`
-	CO2max          string `metric:"uvr_prozess_ratio" short:"CO2" method:"max_over_time"`
-	CO2min          string `metric:"uvr_prozess_ratio" short:"CO2" method:"min_over_time"`
-	LM              string `metric:"uvr_prozess_status" short:"LMsperr" method:"count"`
-	Frost           string `metric:"uvr_prozess_status" short:"AlFrost" method:"count"`
-	Lzeit           string `metric:"uvr_takte_total" short:"LuefterZeit" method:"delta"`
+	RTavg           string `metric:"uvr_prozess_celsius" short:"Temp" method:"avg_over_time" scale:"1"`
+	KTavg           string `metric:"uvr_prozess_celsius" short:"TempKontroll" method:"avg_over_time" scale:"1"`
+	Kzeit           string `metric:"uvr_seconds_total" short:"KaelteVentil" method:"delta" scale:"0"`
+	Ktakt           string `metric:"uvr_takte_total" short:"KaelteTakte" method:"delta" scale:"0"`
+	ZT              string `method:"ZeitPerTakt" scale:"1"`
+	TW              string `metric:"uvr_menge_liter" short:"SaiTau" method:"delta" scale:"1"`
+	CO2takt         string `metric:"uvr_takte_saison" short:"SaiCO2" method:"delta" scale:"0"`
+	O2takt          string `metric:"uvr_takte_saison" short:"SaiO2Lft" method:"delta" scale:"0"`
+	RTsoll          string `metric:"uvr_prozess_celsius" short:"SollTempEff" method:"avg_over_time" scale:"1"`
+	RTmax           string `metric:"uvr_prozess_celsius" short:"Temp" method:"max_over_time" scale:"1"`
+	RTmin           string `metric:"uvr_prozess_celsius" short:"Temp" method:"min_over_time" scale:"1"`
+	KTmax           string `metric:"uvr_prozess_celsius" short:"TempKontroll" method:"max_over_time" scale:"1"`
+	KTmin           string `metric:"uvr_prozess_celsius" short:"TempKontroll" method:"min_over_time" scale:"1"`
+	O2max           string `metric:"uvr_prozess_ratio" short:"O2" method:"max_over_time" scale:"2"`
+	O2min           string `metric:"uvr_prozess_ratio" short:"O2" method:"min_over_time" scale:"2"`
+	CO2max          string `metric:"uvr_prozess_ratio" short:"CO2" method:"max_over_time" scale:"2"`
+	CO2min          string `metric:"uvr_prozess_ratio" short:"CO2" method:"min_over_time" scale:"2"`
+	LM              string `metric:"uvr_prozess_status" short:"LMsperr" method:"count" scale:"0"`
+	Frost           string `metric:"uvr_prozess_status" short:"AlFrost" method:"count" scale:"0"`
+	Lzeit           string `metric:"uvr_takte_total" short:"LuefterZeit" method:"delta" scale:"0"`
 	Index           int    `method:"Index"`
 	Raum            string `method:"Raum"`
-	LagerungDatum   string `method:"LagerungDatum"`   // Datum der Einlagerung
-	Sorte           string `method:"Sorte"`           // Sorte, die Einglagert wurde
-	Schaltdifferenz string `method:"Schaltdifferenz"` // Schaltdifferenz
-	TwSoll          string `method:"TwSoll"`          // Tauwasser Sollwert
-	CO2Soll         string `method:"CO2Soll"`         // CO2 Sollwert
-	O2Soll          string `method:"O2Soll"`          // O2 Sollwert
-	Menge           string `method:"Menge"`           // Menge Ware im Lager
+	LagerungDatum   string `method:"LagerungDatum"`             // Datum der Einlagerung
+	Sorte           string `method:"Sorte"`                     // Sorte, die Einglagert wurde
+	Schaltdifferenz string `method:"Schaltdifferenz" scale:"1"` // Schaltdifferenz
+	TwSoll          string `method:"TwSoll" scale:"1"`          // Tauwasser Sollwert
+	CO2Soll         string `method:"CO2Soll" scale:"2"`         // CO2 Sollwert
+	O2Soll          string `method:"O2Soll" scale:"2"`          // O2 Sollwert
+	Menge           string `method:"Menge" scale:"0"`           // Menge Ware im Lager
 }
 
 // // Extension to the csv logData_R01.csv, this data is gatered from victoriametrics
 // type MetricsReportData struct {
-// 	OutTempAvg      string // Average outside temperature
-// 	OutTempMin      string // Minimum outside temperature
-// 	OutTempMax      string // Maximum outside temperature
 // 	AbtauTkt        string // Abtau Takte
 // 	AbtauZt         string // Abtau Zeit
 // 	AbtElTkt        string // Abtau Elektro Takte
 // 	AbtElzt         string // Abtau Elektro Zeit
-// 	LagerungDatum   string // Datum der Einlagerung
-// 	Sorte           string // Sorte, die Einglagert wurde
-// 	Schaltdifferenz string // Schaltdifferenz
 // }
 
 // DailyReportGatherer acquires yesterdays date für the report and data from the Plc from the global data structure.
@@ -264,6 +258,7 @@ func (gs *GlobalState) getDailyReportDataFromDB(data []DailyReportExtension, sta
 
 	ortPart := ortString(len(data))
 
+	// First Run for metrics
 	for _, field := range fields {
 		// Ignore special fields without metric tag
 		if _, ok := field.Tag.Lookup("metric"); !ok {
@@ -280,11 +275,55 @@ func (gs *GlobalState) getDailyReportDataFromDB(data []DailyReportExtension, sta
 			fmt.Printf("Error querying metrics for '%s': %s\n%s\n", field.Name, query, err)
 			continue
 		}
-		fmt.Printf("%s: %s\n%v\n", field.Name, query, res)
+
 		for _, r := range res {
-			fmt.Printf("metric: %v\n", r)
+			ortStr, ok := r["metric"].(map[string]any)["ort"].(string)
+			if !ok {
+				fmt.Printf("Error: 'ort' field not found in metric\n")
+				continue
+			}
+			ortNr, err := strconv.Atoi(ortStr)
+			if err != nil {
+				fmt.Printf("Error converting 'ort' to int: %v\n", err)
+				continue
+			}
+			valarray, ok := r["value"].([]any)
+			if !ok {
+				fmt.Printf("Error: 'value' field not found or invalid\n")
+				continue
+			}
+			var valstr string
+			if len(valarray) >= 2 {
+				valstr = valarray[1].(string)
+			}
+			valFloat, err := strconv.ParseFloat(valstr, 64)
+
+			scale := field.Tag.Get("scale")
+			switch scale {
+			case "0":
+				valstr = fmt.Sprintf("%d", int(valFloat))
+			case "1":
+				valstr = fmt.Sprintf("%.1f", valFloat)
+			case "2":
+				valstr = fmt.Sprintf("%.2f", valFloat)
+			}
+
+			ortIdx := ortNr - 1
+			if ortIdx < 0 || ortIdx >= len(data) {
+				fmt.Printf("Error: 'ort' index %d out of range for data length %d\n", ortIdx, len(data))
+				continue
+			}
+			fieldValue := reflect.ValueOf(&data[ortIdx]).Elem().FieldByName(field.Name)
+			if !fieldValue.IsValid() || !fieldValue.CanSet() || fieldValue.Kind() != reflect.String {
+				fmt.Printf("Error: cannot set field '%s' on DailyReportExtension\n", field.Name)
+				continue
+			}
+			fieldValue.SetString(valstr)
 		}
 	}
+
+	// Second Run for hacky stuff
+
 }
 
 func ortString(anz int) (s string) {

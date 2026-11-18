@@ -41,29 +41,15 @@ GET https://localhost/middleware/report/saison
 
 HTTP/1.1 200  - OK
 alt-svc: h3=":443"; ma=2592000
-content-length: 1657
+content-length: 1637
 content-type: application/json
-date: Mon, 09 Nov 2026 14:21:00 GMT
+date: Tue, 17 Nov 2026 13:05:42 GMT
 via: 1.1 Caddy
 connection: close
 ###
-GET http://localhost/middleware/report/saison?start=&end=
-
-HTTP/1.1 308  - Permanent Redirect
-connection: close
-location: https://localhost/middleware/report/saison?start=&end=
-server: Caddy
-date: Mon, 09 Nov 2026 14:13:54 GMT
-content-length: 0
+GET https://localhost/middleware/report/saison?start=&end=
 ###
-GET http://localhost/middleware/report/saison?start=&end=2026-11-01
-
-HTTP/1.1 308  - Permanent Redirect
-connection: close
-location: https://localhost/middleware/report/saison?start=&end=2026-11-01
-server: Caddy
-date: Mon, 09 Nov 2026 14:14:42 GMT
-content-length: 0
+GET https://localhost/middleware/report/saison?start=&end=2026-11-01
 ###
 GET http://localhost/middleware/report/saison?start=2026-10-01&end=2026-11-01
 ###

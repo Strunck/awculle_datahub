@@ -2,54 +2,18 @@ GET https://eoa-pi5.uv4.sw/vm/api/v1/query
     ?query=delta(uvr_menge_liter{short="SaiTau",ort=~"1|2|3|4|10"})
     &step=1d
     &time=1793573999
-
-HTTP/1.1 200  - OK
-access-control-allow-headers: *
-access-control-allow-methods: *
-access-control-allow-origin: *
-alt-svc: h3=":443"; ma=2592000
-content-encoding: gzip
-content-length: 275
-content-type: application/json
-date: Thu, 12 Nov 2026 08:53:08 GMT
-vary: Accept-Encoding
-via: 1.1 Caddy
-x-server-hostname: uv4pod
-connection: close
 ###
 GET https://eoa-pi5.uv4.sw/vm/api/v1/query
     ?query=avg(uvr_prozess_celsius{short="Temp"})
     &step=1d
     &time=1793573999
-
-HTTP/1.1 200  - OK
-access-control-allow-headers: *
-access-control-allow-methods: *
-access-control-allow-origin: *
-alt-svc: h3=":443"; ma=2592000
-content-length: 171
-content-type: application/json
-date: Thu, 12 Nov 2026 07:22:09 GMT
-vary: Accept-Encoding
-via: 1.1 Caddy
-x-server-hostname: uv4pod
-connection: close
 ###
 GET https://eoa-pi5.uv4.sw/vm/api/v1/query
     ?query=avg_over_time(uvr_prozess_celsius{short="Temp"})
     &step=1d
     &time=1793573999
-
-HTTP/1.1 200  - OK
-access-control-allow-headers: *
-access-control-allow-methods: *
-access-control-allow-origin: *
-alt-svc: h3=":443"; ma=2592000
-content-encoding: gzip
-content-length: 473
-content-type: application/json
-date: Thu, 12 Nov 2026 07:28:24 GMT
-vary: Accept-Encoding
-via: 1.1 Caddy
-x-server-hostname: uv4pod
-connection: close
+###
+GET https://localhost/vm/api/v1/query
+    ?query=delta(uvr_takte_saison{short="SaiO2Lft",ort=~"1|2|3|4"})
+    # &step=1d
+    # &time=1793055599

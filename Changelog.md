@@ -26,3 +26,9 @@
 # Release v0.0.32
 - Unix Timestamp instead of partial RFC3339
 
+# Release v0.0.33
+- Fix wrong Tauwasser scale with hacky solution
+- Rearange Report functionallity to improve seperation of concerns
+- Ort Report can have start and end date
+- Historical Tagesreport
+- Fix race condition

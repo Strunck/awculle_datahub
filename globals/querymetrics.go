@@ -14,8 +14,8 @@ import (
 func (gs *GlobalState) QueryMetrics(query string) (result []map[string]any, err error) {
 
 	// build the URL for the query
-	url := fmt.Sprintf("%s/api/v1/query?query=%s", gs.Cfg.Metrics.Tsdb_Url, query)
-	// log.Printf("📃 DEBUG Query URL: %s", url)
+	url := fmt.Sprintf("%s/api/v1/%s", gs.Cfg.Metrics.Tsdb_Url, query)
+	log.Printf("\n---------------------------------------------------------------------------------------\n📃 DEBUG Query URL: %s\n", url)
 
 	// make the HTTP GET request
 	resp, err := http.Get(url)
@@ -87,6 +87,7 @@ func convertToStep(startDateUnix int64, endDateUnix int64) string {
 	return fmt.Sprintf("&step=%dd", days)
 }
 
+// Aussentemperatur
 // ProcessQueryResultsByRollup takes query results and returns a map keyed by rollup type
 // with values being arrays of value strings from values[*][1]
 func ProcessQueryResultsByRollup(queryResults []map[string]any) (map[string][]string, error) {

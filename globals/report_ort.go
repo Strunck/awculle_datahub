@@ -8,10 +8,6 @@ import (
 	"time"
 )
 
-func (report *ReportData) lenAll() int {
-	return len(report.All)
-}
-
 func (report *ReportData) lenAllOrt(idx int) int {
 	return len(report.All[idx])
 }
@@ -24,20 +20,52 @@ type ReportOrtResponse struct {
 	Success     bool            `json:"success"`
 	Message     string          `json:"message"`
 	Raumnummer  string          `json:"raumnummer"`
-	Kundenname  string          `json:"kundenname"`
 	Reportdatum string          `json:"Reportdatum"`
-	Uvhost      string          `json:"uvhost"`
-	SpsHostname string          `json:"sps_hostname"`
-	Version     string          `json:"version"`
-	DockerName  string          `json:"docker_name"`
+	General     ReportGeneral   `json:"general"`
 	Data        []ReportCsvLine `json:"data"`
 }
 
-func (gs *GlobalState) OrtToJson(ort string, startDate, endDate string) []byte {
+func (gs *GlobalState) OrtToJson(ort, query, startDate string) []byte {
 	gs.Report.mu.Lock()
 	defer gs.Report.mu.Unlock()
 
-	ortPlus1, err := strconv.Atoi(ort)
+	log.Printf("DEBUG OrtToJson called with ort: %s, query: %s, startDate: %s", ort, query, startDate)
+
+	var err error
+	var endDate string
+	var ortPlus1 int
+	var days time.Duration
+	var repRes ReportOrtResponse
+
+	repRes.General = gs.getGeneralReportInfo()
+
+	switch query {
+	case "wochenreport":
+		days = 7 * 24 * time.Hour
+	case "monatsreport":
+		days = 30 * 24 * time.Hour
+	case "zweiwochendiagramm":
+		days = 14 * 24 * time.Hour
+	case "zweiwochenreport":
+		days = 14 * 24 * time.Hour
+	}
+
+	// Default to yesterday for the endDate String
+	enddt := time.Now().Add(-24 * time.Hour)
+
+	endDate = fmt.Sprintf("%02d.%02d.%4d", enddt.Day(), enddt.Month(), enddt.Year())
+	log.Printf("DEBUG OrtToJson: default endDate: %s\n", endDate)
+
+	startdt, err := time.ParseInLocation(time.DateOnly, startDate, time.Local)
+	if err != nil {
+		log.Printf("Invalid startDate: '%s' parameter. Using yesterday as endDate: %s", startDate, endDate)
+	} else {
+		enddt = startdt.Add(days)
+		endDate = fmt.Sprintf("%02d.%02d.%4d", enddt.Day(), enddt.Month(), enddt.Year())
+	}
+	log.Printf("DEBUG OrtToJson: startDate: %s, endDate: %s\n", startDate, endDate)
+
+	ortPlus1, err = strconv.Atoi(ort)
 	if err != nil {
 		log.Println("Invalid ort parameter:", ort)
 		return []byte("{\"success\":false,\"message\":\"invalid ort parameter\", \"data\":[]}")
@@ -47,7 +75,6 @@ func (gs *GlobalState) OrtToJson(ort string, startDate, endDate string) []byte {
 	dlen := gs.Report.lenAllOrt(ortPlus1 - 1)
 	log.Println("Total Report Tage:", dlen)
 
-	var repRes ReportOrtResponse
 	repRes.Data = make([]ReportCsvLine, dlen)
 
 	log.Println("Report Data Length:", dlen)
@@ -60,16 +87,16 @@ func (gs *GlobalState) OrtToJson(ort string, startDate, endDate string) []byte {
 
 		if ortPlus1 > 0 && ortPlus1 <= dlen {
 			anz := gs.Report.lenAllOrt(ortPlus1 - 1)
+
 			repRes.Success = true
-			repRes.Message = "OK Anzahl Datensätze " + strconv.Itoa(anz)
 			repRes.Raumnummer = gs.Cfg.Plc.SWSettings.Raumnummer[ortPlus1-1]
-			repRes.Kundenname = gs.Cfg.Plc.SWSettings.Kunde
+			repRes.Message = "OK Anzahl Datensätze " + strconv.Itoa(anz)
 			repRes.Reportdatum = fmt.Sprintf("%s", time.Now().Format("2.Jan 2006 15:04"))
-			repRes.Uvhost = gs.Cfg.Plc.Base
-			repRes.SpsHostname = "" // TODO herausfinden, wie man den Hostnamen der SPS bekommt
-			repRes.Version = gs.Stats.CodesysVersion
-			repRes.DockerName = "" // TODO herausfinden, wie man den Dockernamen bekommt
+
 			repRes.Data = gs.Report.getAllOrt(ortPlus1 - 1)
+
+			repRes.Data = findReportData(repRes.Data, endDate)
+
 		} else {
 			repRes.Success = false
 			repRes.Message = "Parameter Ort " + ort + " out of range, must be between 1 and " + strconv.Itoa(dlen)
@@ -83,4 +110,25 @@ func (gs *GlobalState) OrtToJson(ort string, startDate, endDate string) []byte {
 		return []byte("{\"success\":false,\"message\":\"error marshalling ReportOrtResponse to JSON\", \"data\":[]}")
 	}
 	return res
+}
+
+func findReportData(lines []ReportCsvLine, endDate string) []ReportCsvLine {
+	log.Printf("DEBUG findReportData: len: %d, endDate: %s\n", len(lines), endDate)
+
+	var foundi int
+	for i, l := range lines {
+		if endDate == l.Datum {
+			foundi = i
+			break
+		}
+	}
+	r := lines[:foundi]
+	log.Printf("DEBUG findReportData: data found before endDate: %s, result length: %d\n", endDate, len(r))
+
+	if len(r) > 0 {
+		return r
+	} else {
+		return lines
+	}
+
 }

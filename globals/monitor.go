@@ -212,6 +212,9 @@ func (gs *GlobalState) storeAndPublish(item ua.MonitoredItemNotification) (err e
 	gs.Stats.NatsHealth.Update()
 
 	// Store to flat map
+	gs.Plc.mu.Lock()
+	defer gs.Plc.mu.Unlock()
+
 	fr, ok := gs.Plc.Flat[p.FlatRef]
 	if !ok {
 		return fmt.Errorf("🔱 FlatRef %s not found in Flat map\nClientHandleNo: %d\nPublishConfig: %+v\n------------------------", p.FlatRef, item.ClientHandle, p)

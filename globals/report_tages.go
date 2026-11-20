@@ -93,6 +93,7 @@ func (gs *GlobalState) DailyReportGatherer() (err error) {
 	time.Sleep(7 * time.Second) // Wait a bit to ensure that PLC values are updated
 
 	gs.Report.mu.Lock()
+	defer gs.Report.mu.Unlock()
 
 	log.Println("📃 DailyReportGatherer started...")
 

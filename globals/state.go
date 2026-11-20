@@ -78,6 +78,8 @@ type PlcState struct {
 }
 
 func (ps *PlcState) ToJson() []byte {
+	ps.mu.Lock()
+	defer ps.mu.Unlock()
 	res, err := json.MarshalIndent(ps.Flat, "", "  ")
 	if err != nil {
 		log.Println("Error marshalling PlcState to JSON:", err)

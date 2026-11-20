@@ -32,3 +32,22 @@
 - Ort Report can have start and end date
 - Historical Tagesreport
 - Fix race condition
+
+# Release v0.0.34 (TODO)
+- Ort-Reporte: 
+    - O2/CO2 have 2 digits fixed
+    - "Takte" no digits
+- Aussentemperatur for wochenreport, zweiwochenreport
+- zweiwochendiagramm
+- Tagesreport: 
+    - Tauwasser-Zuwachs 1-digit /10
+- Fix race conditions in DailyReportGaterer and RecieveOpcUaMessage -> storeAndPublish
+
+TODO:
+Wochenreport:
+    - Sorte
+    - Einlagerumgsmenge
+    - Einlagerungsdatum
+Saisonreport
+    - Datum als dd.mm.yyyyy
+Möglichkeit für Kundenlogo

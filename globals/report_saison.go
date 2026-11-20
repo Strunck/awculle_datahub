@@ -52,17 +52,21 @@ func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []by
 	}
 	// We need startData and endDate to compose the query. However, dates are optional. Thus followin default behavior:
 	// endDate defaults to now if not provided
+	// endTime is used to compose the query range for the report
 	var endTime time.Time
 
 	if !validateDateString(endDate) {
 		endTime = time.Now()
-		sr.EndDate = endTime.Format("2006-01-02")
+		// for the saison report print
+		sr.EndDate = fmt.Sprintf("%02d.%02d.%d", endTime.Day(), endTime.Month(), endTime.Year())
 		sr.EndTimeOfDay = endTime.Format("15:04:05")
 
 	} else {
 		sr.EndDate = endDate
 		sr.EndTimeOfDay = "23:59:59"
 		endTime, _ = time.ParseInLocation("2006-01-02T15:04:05", sr.EndDate+"T"+sr.EndTimeOfDay, time.Local)
+		// Reformat after parsing so it shows in the saisonreport
+		sr.EndDate = formatRFCdateToDayMonthYear(endDate)
 	}
 	// startDate defaults to what is set in the PLC
 	mStartDates := gs.getLagerdatenMap()
@@ -165,7 +169,7 @@ func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []by
 		i = (i - 1) * sr.colCount
 
 		typst_data[i] = rObj.Raumnummer
-		typst_data[i+1] = mStartDates[rk]
+		typst_data[i+1] = formatRFCdateToDayMonthYear(mStartDates[rk])
 		typst_data[i+2] = rObj.Raumtemperatur
 		typst_data[i+3] = rObj.O2_Wert
 		typst_data[i+4] = rObj.CO2_Wert
@@ -178,6 +182,15 @@ func (gs *GlobalState) ToSaisonReportJson(startDate string, endDate string) []by
 	json, _ := json.MarshalIndent(sr, "", "  ")
 
 	return json
+}
+
+func formatRFCdateToDayMonthYear(dateStr string) string {
+	t, err := time.Parse(time.DateOnly, dateStr)
+	if err != nil {
+		log.Printf("Error parsing date: %v", err)
+		return dateStr
+	}
+	return fmt.Sprintf("%02d.%02d.%d", t.Day(), t.Month(), t.Year())
 }
 
 // getLagedatenMap retrieves the start dates for each room from the PLC and returns them as a map with keys that represent the room index begining with 1.

@@ -57,20 +57,6 @@ func (ps *PlcState) GetArrayString(key string) (sval map[string]string) {
 	return v.Values.ArrayString
 }
 
-func (gs *GlobalState) findVal(key string) (sval map[string]string) {
-	v, ok := gs.Plc.Flat[key]
-	if !ok {
-		log.Printf("📃 Error findVal. %s is not found in Plc.Flat...", key)
-	}
-
-	//check if there are enough elemets in the values map
-	if len(v.Values.ArrayString) != v.Length {
-		log.Printf("📃 Error findVal. %s has not enough elements in Values.ArrayString... expected: %d, got: %d", key, v.Length, len(v.Values.ArrayString))
-	}
-
-	return v.Values.ArrayString
-}
-
 func divideFloatStrings(z string, n string) (res string) {
 	fz, err := strconv.ParseFloat(z, 64)
 	if err != nil {
@@ -151,7 +137,7 @@ func formatTauwasser(valStr string) string {
 	if err != nil {
 		return "---"
 	}
-	return fmt.Sprintf("%d", int(val/10))
+	return fmt.Sprintf("%.1f", val/10)
 }
 
 func formatFlint1(valStr string) string {
@@ -168,4 +154,12 @@ func formatFlint2(valStr string) string {
 		return "---"
 	}
 	return fmt.Sprintf("%.2f", val)
+}
+
+func formatNoDigit(valStr string) string {
+	val, err := strconv.ParseFloat(valStr, 64)
+	if err != nil {
+		return "---"
+	}
+	return fmt.Sprintf("%d", int(val))
 }

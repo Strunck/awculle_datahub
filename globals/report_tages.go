@@ -148,7 +148,7 @@ func (gs *GlobalState) DailyReportGatherer() (err error) {
 		e.Kzeit = unMapArrayString(mapKzeit, i)
 		e.Ktakt = unMapArrayString(mapKtakt, i)
 		e.ZT = divideFloatStrings(e.Ktakt, e.Kzeit)
-		e.TW = unMapArrayString(mapTW, i)
+		e.TW = formatTauwasser(unMapArrayString(mapTW, i))
 		e.CO2takt = unMapArrayString(mapCO2takt, i)
 		e.O2takt = unMapArrayString(mapO2takt, i)
 		e.RTsoll = unMapArrayString(mapRTsoll, i)
@@ -186,8 +186,6 @@ func (gs *GlobalState) DailyReportGatherer() (err error) {
 	}
 
 	log.Println("📃 DailyReportGatherer finished...")
-
-	gs.Report.mu.Unlock()
 
 	return nil
 

@@ -102,6 +102,17 @@ func (gs *GlobalState) OrtToJson(ort, query, startDate string) []byte {
 			repRes.Message = "Parameter Ort " + ort + " out of range, must be between 1 and " + strconv.Itoa(dlen)
 			repRes.Data = gs.Report.getAllOrt(ortPlus1 - 1)
 		}
+
+		// Reformat response, O2/CO2-Takte no digits,  O2/CO2 Takte 2-digits
+		for i, el := range repRes.Data {
+			repRes.Data[i].O2takt = formatNoDigit(el.O2takt)
+			repRes.Data[i].CO2takt = formatNoDigit(el.CO2takt)
+			repRes.Data[i].CO2max = formatFlint2(el.CO2max)
+			repRes.Data[i].CO2min = formatFlint2(el.CO2min)
+			repRes.Data[i].O2max = formatFlint2(el.O2max)
+			repRes.Data[i].O2min = formatFlint2(el.O2min)
+		}
+
 	}
 
 	res, err := json.MarshalIndent(repRes, "", "  ")

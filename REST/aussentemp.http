@@ -3,17 +3,9 @@ GET https://eoa-pi5.uv4.sw/vm/api/v1/query_range
     &start=2026-11-03T19:30:00%2B01:00
     &end=2026-11-17T19:30:00%2B01:00
     &step=1d
-
-HTTP/1.1 200  - OK
-access-control-allow-headers: *
-access-control-allow-methods: *
-access-control-allow-origin: *
-alt-svc: h3=":443"; ma=2592000
-content-encoding: gzip
-content-length: 715
-content-type: application/json
-date: Tue, 17 Nov 2026 13:29:24 GMT
-vary: Accept-Encoding
-via: 1.1 Caddy
-x-server-hostname: uv4pod
-connection: close
+###
+GET https://localhost/vm/api/v1/query_range
+    ?query=rollup(uvs_prozess_celsius{short='AussenTemp'})
+    &start=2026-11-03T19:30:00%2B01:00
+    &end=2026-11-17T19:30:00%2B01:00
+    &step=1d

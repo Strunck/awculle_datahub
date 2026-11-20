@@ -1,12 +1,17 @@
 GET https://localhost/middleware/report/ort
-    ?ort=1
     &query=wochenreport
-    &endedate=2024-06-30
+    ?ort=1
+    &start=2024-06-30
+###
+https://eoj-pi5.uv4.sw/middleware/report/ort
+?query=wochenreport
+&start=2026-11-01
+&ort=10
 
 HTTP/1.1 200  - OK
 alt-svc: h3=":443"; ma=2592000
-content-length: 63
 content-type: application/json
-date: Tue, 17 Nov 2026 14:06:53 GMT
+date: Thu, 19 Nov 2026 08:00:08 GMT
 via: 1.1 Caddy
 connection: close
+transfer-encoding: chunked
